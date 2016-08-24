@@ -19,8 +19,8 @@ export class SocketManager {
         this.socket.on("remove player", this.onRemovePlayer.bind(this));    // Player removed message received
     }
 
-    public requestPlayerMove(path: any[]) {
-        this.socket.emit("move player", { path: path });
+    public requestPlayerMove(vector: { x: number, y: number }) {
+        this.socket.emit("move player", { vector: vector });
     }
 
 

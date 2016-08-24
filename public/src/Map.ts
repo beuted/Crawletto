@@ -101,7 +101,7 @@ export class Map {
         return true;
     }
 
-    public findPath(fromPoint: Phaser.Point, toPoint: Phaser.Point): Q.Promise<any[]> {
+/*    public findPath(fromPoint: Phaser.Point, toPoint: Phaser.Point): Q.Promise<any[]> {
         var deferred: Q.Deferred<any[]> = Q.defer<any[]>();
         this.easystar.findPath(fromPoint.x, fromPoint.y, toPoint.x, toPoint.y, function(path: any[]) {
             if (path === null) {
@@ -120,7 +120,7 @@ export class Map {
         this.easystar.calculate();
 
         return deferred.promise;
-    }
+    }*/
 
     public isCaseOpaque(point: Phaser.Point) {
         // collision handling

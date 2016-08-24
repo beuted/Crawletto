@@ -15,24 +15,19 @@ export class Player {
     public gridPosition: Geo.IPoint;
     public id: string;
 
-    private actionQueue: Action.IAction[];
+    private turnAction: Action.IAction = null;
     private actionScheduler: NodeJS.Timer;
     private actionTime: number; // time it takes to perform an action in second
 
     constructor(position: Geo.IPoint) {
         this.mapPosition = { x: 0, y: 0 };
         this.gridPosition = { x: position.x, y: position.y };
-        this.actionQueue = [];
         //TODO: this should be in a global class handling every player actions
-        this.actionTime = 0.25;
+        this.actionTime = 1;
         this.actionScheduler = setInterval(
             (function(self) {
                 return function() { self.executeAction() }
             })(this), this.actionTime * 1000);
-    }
-
-    public get idle(): boolean {
-        return this.actionQueue.length === 0;
     }
 
     public get map(): Map {
@@ -44,15 +39,15 @@ export class Player {
     }
 
     public planAction(action: Action.IAction) {
-       this.actionQueue.push(action);
+       this.turnAction = action;
     }
 
     public executeAction() {
-        if (!this.actionQueue.length)
+        if (!this.turnAction)
             return;
 
-        var action: Action.IAction = this.actionQueue.shift();
-        action.execute(this);
+        this.turnAction.execute(this);
+        this.turnAction = null;
 
         this.update();
     }
@@ -66,9 +61,6 @@ export class Player {
         var mapSize: Geo.IPoint = this.map.getSize();
         var newMapPosition: Geo.IPoint = { x: this.mapPosition.x, y: this.mapPosition.y }
         var newGridPosition: Geo.IPoint = { x: this.gridPosition.x, y: this.gridPosition.y }
-
-        if (this.actionQueue.length !== 0)
-            return;
 
         if (this.gridPosition.x <= 0) {
             newMapPosition.x--;

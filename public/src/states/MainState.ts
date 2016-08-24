@@ -31,34 +31,41 @@ export class MainState {
     }
 
     //TODO: this should be in a class handling current player actions
-    private movePlayer(toPoint: Phaser.Point) {
-        if (!toPoint || GameContext.remotePlayersManager.arePresentAt(toPoint))
-            return;
-
-        GameContext.map.findPath(GameContext.player.gridPosition, toPoint)
-            .then((path: any[]) => {
-                GameContext.socketManager.requestPlayerMove(path);
-            })
-            .catch((error: string) => {
-                console.debug("[movePlayer] Could not find path to point: (" + toPoint.x + ", " + toPoint.y + ") : " + error);
-            })
+    private movePlayer(vector: Phaser.Point) {
+        console.log("requets move player: " + vector.x + ", " + vector.y);
+        GameContext.socketManager.requestPlayerMove({ x: vector.x, y: vector.y });
     }
 
     private initKeyboardInteraction() {
         GameContext.instance.input.keyboard.addKeyCapture([
             Phaser.Keyboard.D,
-            Phaser.Keyboard.SPACEBAR
+            Phaser.Keyboard.LEFT,
+            Phaser.Keyboard.RIGHT,
+            Phaser.Keyboard.UP,
+            Phaser.Keyboard.DOWN
         ]);
+
+        var leftKey = GameContext.instance.input.keyboard.addKey(Phaser.Keyboard.LEFT);
+        leftKey.onDown.add(() => this.movePlayer(new Phaser.Point(-1, 0)));
+
+        var rightKey = GameContext.instance.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
+        rightKey.onDown.add(() => this.movePlayer(new Phaser.Point(1, 0)));
+
+        var upKey = GameContext.instance.input.keyboard.addKey(Phaser.Keyboard.UP);
+        upKey.onDown.add(() => this.movePlayer(new Phaser.Point(0, -1)));
+
+        var downKey = GameContext.instance.input.keyboard.addKey(Phaser.Keyboard.DOWN);
+        downKey.onDown.add(() => this.movePlayer(new Phaser.Point(0, 1)));
 
         // press D to enter debugmode
         var dKey = GameContext.instance.input.keyboard.addKey(Phaser.Keyboard.D);
-        dKey.onDown.add(function() {
-            GameContext.debugActivated = !GameContext.debugActivated;
-        }, this);
+        dKey.onDown.add(() => GameContext.debugActivated = !GameContext.debugActivated);
+
+
     }
 
     private initMouseInteraction() {
         // Capture click
-        GameContext.instance.input.onUp.add(() => this.movePlayer(GameContext.map.selectedTileGridCoord), this);
+        //GameContext.instance.input.onUp.add(() => this.movePlayer(GameContext.map.selectedTileGridCoord), this);
     }
 }

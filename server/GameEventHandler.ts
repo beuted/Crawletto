@@ -85,33 +85,28 @@ export class GameEventHandler {
     }
 
     // Player has moved
-    private static onMoveRequest(pathObject) {
+    private static onMoveRequest(msg: {vector: Geo.IPoint }) {
         var socket: SocketIO.Socket = <any>this;
 
         // Find player in array
-        var movePlayer: Player = GameEventHandler.playersHandler.getPlayer(socket.id);
+        var movedPlayer: Player = GameEventHandler.playersHandler.getPlayer(socket.id);
 
         // Player should exist
-        if (!movePlayer) {
+        if (!movedPlayer) {
             util.log('[Error: "move player"] Player not found: ' + socket.id);
             return;
         }
 
-        // For the moment accept only moves from player without any actions left
-        if (!movePlayer.idle)
-            return;
+        var newPosition: Geo.IPoint = { x: movedPlayer.gridPosition.x + msg.vector.x, y: movedPlayer.gridPosition.y + msg.vector.y };
 
-        // Every case in path should be walkable and less that 1 tile away
+        // next case should be walkable
         Geo.Tools.distance
-        if (Geo.Tools.distance(movePlayer.gridPosition, pathObject.path[0]) > 1 ||
-            !movePlayer.map.isPathWalkable(pathObject.path)) {
-           util.log('[Error: "move player"] Player ' + socket.id + ' asked for non-walkable path');
+        if (!movedPlayer.map.isCaseWalkable(newPosition)) {
+           util.log('[Error: "move player"] Player ' + socket.id + ' asked for non-walkable tile');
            return;
        }
 
-        // Queue the list of actions
-        for (var i = 0; i < pathObject.path.length; i++) {
-            movePlayer.planAction(new Action.Move({ x: pathObject.path[i].x, y: pathObject.path[i].y }));
-        }
+        // request move
+        movedPlayer.planAction(new Action.Move(newPosition));
     }
 }
