@@ -55,13 +55,6 @@ export class MainState {
         dKey.onDown.add(function() {
             GameContext.debugActivated = !GameContext.debugActivated;
         }, this);
-
-        // press space to enter fight state
-        var space = GameContext.instance.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
-        space.onDown.add(function() {
-            //don't clear the game world but cache
-            GameContext.instance.state.start('Fight', false, true);
-        }, this);
     }
 
     private initMouseInteraction() {
