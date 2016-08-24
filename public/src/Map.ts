@@ -199,8 +199,8 @@ export class Map {
         this.plateauTiles = [];
 
         // init pathfinding
-        this.easystar.setGrid(this.plateau.tiles);
-        this.easystar.setAcceptableTiles(this.plateau.walkables);
+        //this.easystar.setGrid(this.plateau.tiles);
+        //this.easystar.setAcceptableTiles(this.plateau.walkables);
 
         var tile;
         var point: Phaser.Point = new Phaser.Point(0, 0);
@@ -225,5 +225,4 @@ export class Map {
         this.plateau = mapData;
         this.initPlateau();
     }
-
 }

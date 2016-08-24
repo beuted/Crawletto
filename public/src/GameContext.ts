@@ -14,14 +14,16 @@ export class GameContext {
     static debugActivated: boolean;
 
     static create() {
-        if(!this.socketManager) this.socketManager = new SocketManager();
-        if(!this.map)  this.map = new Map();
-        if(!this.remotePlayersManager) this.remotePlayersManager = new RemotePlayersManager();
+        if (!this.socketManager) this.socketManager = new SocketManager();
+        if (!this.map) this.map = new Map();
+        if (!this.remotePlayersManager) this.remotePlayersManager = new RemotePlayersManager();
 
         // TODO: (wip) Add loader callbacks
 /*        GameContext.instance.load.onLoadComplete.add(() => {
             console.debug("[Loader] Load complete");
         }, this);*/
+
+        GameContext.instance.world.resize(2000, 1000);
     }
 
     static update() {

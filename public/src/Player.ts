@@ -21,6 +21,8 @@ export class Player {
         // differenciate other players
         if (!current)
             this.sprite.alpha = 0.7;
+        else
+            GameContext.instance.camera.follow(this.sprite);
 
         // setting up custom parameters
         this.gridPosition = new Phaser.Point(startX, startY);
@@ -39,7 +41,7 @@ export class Player {
         this.sprite.x = destPoint.x * 32;
         this.sprite.y = destPoint.y * 32;
         // TODO: b.jehanno (hack to move instant because I can't make it work without this T_T )
-        GameContext.instance.add.tween(this.sprite.body).to({ x: destPoint.x * 32, y: destPoint.y * 32 }, 1, Phaser.Easing.Linear.None, true)
+        GameContext.instance.add.tween(this.sprite.body).to({ x: destPoint.x * 32, y: destPoint.y * 32 }, 1, Phaser.Easing.Linear.None, true);
     }
 
     public destroy() {

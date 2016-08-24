@@ -27,6 +27,7 @@ export class MainState {
                 GameContext.instance.debug.body(tile, 'rgba(189, 221, 235, 0.6)', false);
             }, this);
             GameContext.instance.debug.text(!!GameContext.instance.time.fps ? GameContext.instance.time.fps + ' fps' : '--', 2, 14, "#a7aebe");
+            GameContext.instance.debug.cameraInfo(GameContext.instance.camera, 32, 32);
         }
     }
 
