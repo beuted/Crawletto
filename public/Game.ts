@@ -8,7 +8,7 @@ import {MainState} from "./src/states/MainState";
 export class Game {
     constructor() {
         // using canvas here just because it runs faster for the body debug stuff
-        GameContext.instance = <Phaser.Plugin.Isometric.Game>new Phaser.Game(1000, 800, Phaser.CANVAS, 'gameCanvas', null, true, false);
+        GameContext.instance = <Phaser.Plugin.Isometric.Game>new Phaser.Game(1000, 500, Phaser.CANVAS, 'gameCanvas', null, true, false);
         GameContext.debugActivated = false;
 
         GameContext.instance.state.add('Boot', new BootState());

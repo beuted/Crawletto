@@ -38,9 +38,7 @@ export class MapGenerator {
     private size: Geo.IPoint;
     private mapSeeds: MapSeedDic;
 
-    private mapForest: any;
-    private mapDesert: any;
-    private mapBorder: any;
+    private mapDefault: any;
 
     constructor(seed: string) {
         this.mapSeeds = new MapSeedDic();
@@ -49,37 +47,23 @@ export class MapGenerator {
 
         this.walkables = [1, 2, 3, 4, 5, 6, 7];
         this.opaques = [8, 9, 10, 11, 13];
-        this.size = { x: 16, y: 16 };
+        this.size = { x: 15, y: 15 };
 
         this.initSampleMaps();
-        this.buildMapSeeds();
     }
 
     /**
      * Generate a Map depending on the positon, return null if map out of boundaries.
      */
     public generate(coord: Geo.IPoint): Map {
-        var mapSeed = this.mapSeeds.get(coord);
-        if (!mapSeed)
-            return null;
-
-        var mapJson;
-        if (mapSeed.isBorder)
-            mapJson = this.mapBorder;
-        else if (mapSeed.biome == 0)
-            mapJson = this.mapForest;
-        else
-            mapJson = this.mapDesert;
-
-        return new Map(mapJson.tiles, this.size, this.walkables, this.opaques, coord);
+        return new Map(this.mapDefault.tiles, this.size, this.walkables, this.opaques, coord);
     }
 
     private initSampleMaps() {
-        this.mapBorder = require('../public/maps/map-biome-border');
-        this.mapForest = require('../public/maps/map-biome-forest');
-        this.mapDesert = require('../public/maps/map-biome-desert');
+        this.mapDefault = require('../public/maps/map-default');
     }
 
+    // TODO: unused
     private buildMapSeeds() {
         var voronoi = new Voronoi();
         var bbox = { xl: 0, xr: 50, yt: 0, yb: 50 }; // xl is x-left, xr is x-right, yt is y-top, and yb is y-bottom
