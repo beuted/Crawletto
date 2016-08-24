@@ -1,17 +1,15 @@
-# PhaserWebSocketGame
+# Crawletto
 
 ###*Work in progress*
 
-This Project aim to be bootstrap Phaser project for turn based isometric games where the player in moving on a grid.
+Phaser project of a turn based isometric games in rythm
 
 ## Commands
 * **D**: enter debug-mode
-* **SPACE**: enter combat-mode if another player in ont the current map
 
 ## Features
 * _Randomly generated maps_ based on a seed ([Seedrandom](https://github.com/davidbau/seedrandom)) rendered with _[isometric tiles](http://www.rotates.org/phaser/iso/)_
 * _Multiplayer_ enabled using [Socket.io](http://socket.io/) (the players can see eachothers moving on the different maps)
-* Movement enabled by clicking using an _[A\* pathfinding client side](http://www.easystarjs.com/)_
 * Feild of view of the player computed with a _recursive shadowcasting_
 
 ## Setup project
