@@ -4,8 +4,11 @@
 
 Phaser project of a turn based isometric games in rythm
 
+## [Demo of branch master on Heroku](https://crawletto.herokuapp.com/)
+
 ## Commands
 * **D**: enter debug-mode
+* **Arrow keys:** move around
 
 ## Features
 * _Randomly generated maps_ based on a seed ([Seedrandom](https://github.com/davidbau/seedrandom)) rendered with _[isometric tiles](http://www.rotates.org/phaser/iso/)_
