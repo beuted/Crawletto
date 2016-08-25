@@ -47,7 +47,7 @@ export class MapGenerator {
 
         this.walkables = [1, 2, 3, 4, 5, 6, 7];
         this.opaques = [8, 9, 10, 11, 13];
-        this.size = { x: 15, y: 15 };
+        this.size = { x: 32, y: 32 };
 
         this.initSampleMaps();
     }
