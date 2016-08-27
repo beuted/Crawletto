@@ -41,7 +41,7 @@ class Cell {
         this.structure = structure;
     }
 
-    public color(color) {
+    public color(color: number) {
         if (this.tile) this.tile.tint = color;
         if (this.structure) this.structure.tint = color;
     }
@@ -67,6 +67,7 @@ export class Map {
     private water: Phaser.Plugin.Isometric.IsoSprite[];
 
     private easystar: EasyStar.js;
+    private lightSource: LightSource;
 
     constructor() {
         this.selectedTileGridCoord = null;
@@ -100,6 +101,7 @@ export class Map {
 
         // init path finding
         this.easystar = new EasyStar.js();
+        this.lightSource = new LightSource(this);
 
         this.initPlateau();
     }
@@ -182,24 +184,18 @@ export class Map {
         });
 
         if (GameContext.player) {
-            var ls = new LightSource(GameContext.player.gridPosition, GameContext.player.visionRadius, this);
-            ls.calculate((position) => {
-                var cell = this.getCell(position);
-
-                if (cell.tile) cell.tile.tint = 0xffffff;
-                if (cell.structure) cell.structure.tint = 0xffffff;
-            });
+            this.lightSource.update(GameContext.player.gridPosition, GameContext.player.visionRadius).forEach((position) => this.getCell(position).color(0xffffff));
         }
         // tile selection animation
         // > Update the cursor position. (TODO: this shouldn't be done in Map)
         var cursorPos: Phaser.Plugin.Isometric.Point3 = GameContext.instance.iso.unproject(GameContext.instance.input.activePointer.position);
-        var selectedTile: any;
+        var selectedCell: Cell;
         this.cells.forEach((cells, i) => {
             cells.forEach((cell, i) => {
                 // Tile selection -- Note: those "1.5" are fucking mysterious to me :/
                 var inBounds = (<any>cell.tile.isoBounds).containsXY(cursorPos.x + Map.tileSize * 1.5, cursorPos.y + Map.tileSize * 1.5);
                 if (inBounds) {
-                    selectedTile = cell.tile;
+                    selectedCell = cell;
                     cell.color(0x86bfda);
 
                     this.selectedTileGridCoord = new Phaser.Point(i % this.plateau.size.x, Math.floor(i / this.plateau.size.x));
@@ -207,10 +203,10 @@ export class Map {
             })
         });
 
-        if (!selectedTile) {
+        if (!selectedCell) {
             this.selectedTileGridCoord = null;
         } else if (GameContext.instance.input.activePointer.isDown) {
-            selectedTile.tint = 0xff00ff;
+            selectedCell.color(0xff00ff);
         }
 
         // simple sort for the isometric tiles

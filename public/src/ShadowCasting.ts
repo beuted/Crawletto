@@ -5,21 +5,54 @@
 
 import {Map} from "./Map";
 
-export function LightSource(position: Phaser.Point, radius: number, map: Map) {
-    this.position = position;
-    this.radius = radius;
+export class LightSource {
+
+    public position: Phaser.Point = null;
+    public radius: number = null;
+    public map: Map;
+
+    // Cache for the result of calculate()
+    private enlightedCells: Phaser.Point[] = [];
 
     // multipliers for transforming coordinates into other octants.
-    this.mult = [
+    private static mult: number[][] = [
         [1, 0, 0, -1, -1, 0, 0, 1],
         [0, 1, -1, 0, 0, -1, 1, 0],
         [0, 1, 1, 0, 0, -1, -1, 0],
         [1, 0, 0, 1, -1, 0, 0, -1]
     ];
 
-    // calculates an octant. Called by the this.calculate when calculating lighting
-    this.calculateOctant = function(cx, cy, row, start, end, radius, xx, xy, yx, yy, id, enlight) {
-        enlight(new Phaser.Point(cx, cy));
+    constructor(map: Map) {
+        this.map = map;
+    }
+
+    /// sets flag lit to true on all tiles within radius of position specified
+    private calculate() {
+        for (var i = 0; i < 8; i++) {
+            this.calculateOctant(this.position.x, this.position.y, 1, 1.0, 0.0, this.radius,
+                LightSource.mult[0][i], LightSource.mult[1][i], LightSource.mult[2][i], LightSource.mult[3][i], 0);
+        }
+
+        this.enlightedCells.push(this.position);
+
+        return this.enlightedCells;
+    }
+
+    /// update the position of the light source
+    public update(position: Phaser.Point, radius: number) {
+        if (position != this.position || radius != this.radius) {
+            this.position = new Phaser.Point(position.x, position.y);
+            this.radius = radius;
+            this.enlightedCells = [];
+            return this.calculate();
+        } else {
+            return this.enlightedCells;
+        }
+    }
+
+    /// calculates an octant. Called by the this.calculate when calculating lighting
+    private calculateOctant(cx, cy, row, start, end, radius, xx, xy, yx, yy, id) {
+        this.enlightedCells.push(new Phaser.Point(cx, cy));
 
         var new_start = 0;
 
@@ -40,7 +73,7 @@ export function LightSource(position: Phaser.Point, radius: number, map: Map) {
                 var X = cx + dx * xx + dy * xy;
                 var Y = cy + dx * yx + dy * yy;
 
-                if (X < map.plateauSize.x && X >= 0 && Y < map.plateauSize.y && Y >= 0) {
+                if (X < this.map.plateauSize.x && X >= 0 && Y < this.map.plateauSize.y && Y >= 0) {
 
                     var l_slope = (dx - 0.5) / (dy + 0.5);
                     var r_slope = (dx + 0.5) / (dy - 0.5);
@@ -51,11 +84,11 @@ export function LightSource(position: Phaser.Point, radius: number, map: Map) {
                         break;
                     } else {
                         if (dx * dx + dy * dy < radius_squared) {
-                            enlight(new Phaser.Point(X, Y));
+                            this.enlightedCells.push(new Phaser.Point(X, Y));
                         }
 
                         if (blocked) {
-                            if (map.isCaseOpaque(new Phaser.Point(X, Y))) {
+                            if (this.map.isCaseOpaque(new Phaser.Point(X, Y))) {
                                 new_start = r_slope;
                                 continue;
                             } else {
@@ -64,9 +97,9 @@ export function LightSource(position: Phaser.Point, radius: number, map: Map) {
                             }
                         } else {
                             // TODO: if it block sight
-                            if (map.isCaseOpaque(new Phaser.Point(X, Y)) && i < radius) {
+                            if (this.map.isCaseOpaque(new Phaser.Point(X, Y)) && i < radius) {
                                 blocked = true;
-                                this.calculateOctant(cx, cy, i + 1, start, l_slope, radius, xx, xy, yx, yy, id + 1, enlight);
+                                this.calculateOctant(cx, cy, i + 1, start, l_slope, radius, xx, xy, yx, yy, id + 1);
 
                                 new_start = r_slope;
                             }
@@ -77,21 +110,5 @@ export function LightSource(position: Phaser.Point, radius: number, map: Map) {
 
             if (blocked) break;
         }
-    }
-
-    // sets flag lit to true on all tiles within radius of position specified
-    this.calculate = function(enlight: (position: Phaser.Point) => void) {
-        for (var i = 0; i < 8; i++) {
-            this.calculateOctant(this.position.x, this.position.y, 1, 1.0, 0.0, this.radius,
-                this.mult[0][i], this.mult[1][i], this.mult[2][i], this.mult[3][i], 0, enlight);
-        }
-
-        enlight(position);
-    }
-
-    // update the position of the light source
-    this.update = function(position: Phaser.Point, enlight: (position: Phaser.Point) => void) {
-        this.position = position;
-        this.calculate(enlight);
     }
 }
