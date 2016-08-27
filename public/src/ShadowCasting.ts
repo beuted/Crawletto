@@ -18,8 +18,8 @@ export function LightSource(position: Phaser.Point, radius: number, map: Map) {
     ];
 
     // calculates an octant. Called by the this.calculate when calculating lighting
-    this.calculateOctant = function(cx, cy, row, start, end, radius, xx, xy, yx, yy, id) {
-        map.getPlateauTile(new Phaser.Point(cx, cy)).tint = 0xffffff;
+    this.calculateOctant = function(cx, cy, row, start, end, radius, xx, xy, yx, yy, id, enlight) {
+        enlight(new Phaser.Point(cx, cy));
 
         var new_start = 0;
 
@@ -51,7 +51,7 @@ export function LightSource(position: Phaser.Point, radius: number, map: Map) {
                         break;
                     } else {
                         if (dx * dx + dy * dy < radius_squared) {
-                            map.getPlateauTile(new Phaser.Point(X, Y)).tint = 0xffffff;
+                            enlight(new Phaser.Point(X, Y));
                         }
 
                         if (blocked) {
@@ -66,7 +66,7 @@ export function LightSource(position: Phaser.Point, radius: number, map: Map) {
                             // TODO: if it block sight
                             if (map.isCaseOpaque(new Phaser.Point(X, Y)) && i < radius) {
                                 blocked = true;
-                                this.calculateOctant(cx, cy, i + 1, start, l_slope, radius, xx, xy, yx, yy, id + 1);
+                                this.calculateOctant(cx, cy, i + 1, start, l_slope, radius, xx, xy, yx, yy, id + 1, enlight);
 
                                 new_start = r_slope;
                             }
@@ -80,18 +80,18 @@ export function LightSource(position: Phaser.Point, radius: number, map: Map) {
     }
 
     // sets flag lit to true on all tiles within radius of position specified
-    this.calculate = function() {
+    this.calculate = function(enlight: (position: Phaser.Point) => void) {
         for (var i = 0; i < 8; i++) {
             this.calculateOctant(this.position.x, this.position.y, 1, 1.0, 0.0, this.radius,
-                this.mult[0][i], this.mult[1][i], this.mult[2][i], this.mult[3][i], 0);
+                this.mult[0][i], this.mult[1][i], this.mult[2][i], this.mult[3][i], 0, enlight);
         }
 
-        map.getPlateauTile(position).tint = 0xffffff;
+        enlight(position);
     }
 
     // update the position of the light source
-    this.update = function(position) {
+    this.update = function(position: Phaser.Point, enlight: (position: Phaser.Point) => void) {
         this.position = position;
-        this.calculate();
+        this.calculate(enlight);
     }
 }

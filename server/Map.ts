@@ -9,13 +9,15 @@ export class Map implements ICoordObject {
     private size: Geo.IPoint;
     private walkables: number[];
     private opaques: number[];
+    private needSorting: number[];
     private coord: Geo.IPoint;
 
-    constructor(tiles: number[][], size: Geo.IPoint, walkables: number[], opaques: number[], coord: Geo.IPoint) {
+    constructor(tiles: number[][], size: Geo.IPoint, walkables: number[], opaques: number[], needSorting: number[], coord: Geo.IPoint) {
         this.tiles = tiles;
         this.size = size;
         this.walkables = walkables
         this.opaques = opaques
+        this.needSorting = needSorting;
         this.coord = coord;
     }
 
@@ -50,6 +52,6 @@ export class Map implements ICoordObject {
     }
 
     public toMessage(): any {
-        return _.pick(this, ["tiles", "size", "walkables", "opaques", "coord"]);
+        return _.pick(this, ["tiles", "size", "walkables", "opaques", "needSorting", "coord"]);
     }
 }

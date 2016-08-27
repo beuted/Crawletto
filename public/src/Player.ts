@@ -12,7 +12,7 @@ export class Player {
     constructor(startX: number, startY: number, id: string, current: boolean = false) {
         // setting up the sprite
         //this.sprite = GameContext.instance.add.isoSprite(startX * 32, startY * 32, 48, 'cube', 0, Map.isoGroup); // old cube sprite
-        this.sprite = GameContext.instance.add.isoSprite(startX * 32, startY * 32, 48, 'fairy_anim', 0, Map.isoGroup);
+        this.sprite = GameContext.instance.add.isoSprite(startX * 32, startY * 32, 48, 'fairy_anim', 0, Map.sortedGroup);
         this.sprite.anchor.set(0.5, 0.5);
         this.sprite.scale.set(0.5);
         this.sprite.smoothed = false;

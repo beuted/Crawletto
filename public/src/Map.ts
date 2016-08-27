@@ -26,18 +26,43 @@ interface Plateau {
     size: { x: number, y: number };
     walkables: number[];
     opaques: number[];
+    needSorting: number[];
+}
+
+class Cell {
+    public type: number;
+    public tile: Phaser.Plugin.Isometric.IsoSprite;
+    public structure: Phaser.Plugin.Isometric.IsoSprite;
+
+
+    constructor(type: number, tile : Phaser.Plugin.Isometric.IsoSprite, structure: Phaser.Plugin.Isometric.IsoSprite) {
+        this.type = type;
+        this.tile = tile;
+        this.structure = structure;
+    }
+
+    public color(color) {
+        if (this.tile) this.tile.tint = color;
+        if (this.structure) this.structure.tint = color;
+    }
+
+    public destroy() {
+        if (this.tile) this.tile.destroy();
+        if (this.structure) this.structure.destroy();
+    }
 }
 
 export class Map {
     // TODO: should be private once character will be handle by the Map
     public static isoGroup: Phaser.Group;
+    public static sortedGroup: Phaser.Group;
     public selectedTileGridCoord: Phaser.Point;
     public coord: Phaser.Point;
 
     private static tileSize = 32;
 
     private plateau: Plateau;
-    private plateauTiles: any[]; //Phaser.Plugin.Isometric.IsoSprite[];
+    private cells: Cell[][];
     private tileArray: string[];
     private water: Phaser.Plugin.Isometric.IsoSprite[];
 
@@ -66,9 +91,12 @@ export class Map {
 
         // init isoGroup
         Map.isoGroup = GameContext.instance.add.group();
-        // we won't really be using IsoArcade physics, but I've enabled it anyway so the debug bodies can be seen
+        Map.sortedGroup = GameContext.instance.add.group();
+
         Map.isoGroup.enableBody = true;
-        Map.isoGroup.physicsBodyType = Phaser.Plugin.Isometric.ISOARCADE;
+        Map.sortedGroup.enableBody = true;
+        // we won't really be using IsoArcade physics, but I've enabled it anyway so the debug bodies can be seen
+        Map.sortedGroup.physicsBodyType = Phaser.Plugin.Isometric.ISOARCADE;
 
         // init path finding
         this.easystar = new EasyStar.js();
@@ -147,28 +175,37 @@ export class Map {
         });
 
         // set to dark every tile by default
-        this.plateauTiles.forEach(function(tile, i) {
-            tile.tint = 0x888888;
-        }, this);
+        this.cells.forEach(cells => {
+            cells.forEach(cell => {
+                cell.color(0x888888);
+            });
+        });
 
         if (GameContext.player) {
             var ls = new LightSource(GameContext.player.gridPosition, GameContext.player.visionRadius, this);
-            ls.calculate();
+            ls.calculate((position) => {
+                var cell = this.getCell(position);
+
+                if (cell.tile) cell.tile.tint = 0xffffff;
+                if (cell.structure) cell.structure.tint = 0xffffff;
+            });
         }
         // tile selection animation
         // > Update the cursor position. (TODO: this shouldn't be done in Map)
         var cursorPos: Phaser.Plugin.Isometric.Point3 = GameContext.instance.iso.unproject(GameContext.instance.input.activePointer.position);
         var selectedTile: any;
-        this.plateauTiles.forEach(function(tile, i) {
-            // Tile selection -- Note: those "1.5" are fucking mysterious to me :/
-            var inBounds = tile.isoBounds.containsXY(cursorPos.x + Map.tileSize * 1.5, cursorPos.y + Map.tileSize * 1.5);
-            if (inBounds) {
-                selectedTile = tile;
-                tile.tint = 0x86bfda;
+        this.cells.forEach((cells, i) => {
+            cells.forEach((cell, i) => {
+                // Tile selection -- Note: those "1.5" are fucking mysterious to me :/
+                var inBounds = (<any>cell.tile.isoBounds).containsXY(cursorPos.x + Map.tileSize * 1.5, cursorPos.y + Map.tileSize * 1.5);
+                if (inBounds) {
+                    selectedTile = cell.tile;
+                    cell.color(0x86bfda);
 
-                this.selectedTileGridCoord = new Phaser.Point(i % this.plateau.size.x, Math.floor(i / this.plateau.size.x));
-            }
-        }, this);
+                    this.selectedTileGridCoord = new Phaser.Point(i % this.plateau.size.x, Math.floor(i / this.plateau.size.x));
+                }
+            })
+        });
 
         if (!selectedTile) {
             this.selectedTileGridCoord = null;
@@ -176,12 +213,12 @@ export class Map {
             selectedTile.tint = 0xff00ff;
         }
 
-        // topological sort for the isometric tiles
-        GameContext.instance.iso.topologicalSort(Map.isoGroup);
+        // simple sort for the isometric tiles
+        GameContext.instance.iso.topologicalSort(Map.sortedGroup);
     }
 
-    public getPlateauTile(point: Phaser.Point) {
-        return this.plateauTiles[point.x + point.y * this.plateau.size.x];
+    public getCell(point: Phaser.Point) {
+        return this.cells[point.x][point.y];
     }
 
     public initPlateau() {
@@ -189,35 +226,58 @@ export class Map {
             return;
 
         // remove old tiles
-        if (this.plateauTiles)
-            this.plateauTiles.forEach(function(tile: Phaser.Plugin.Isometric.IsoSprite) {
-                tile.destroy();
+        if (this.cells)
+            this.cells.forEach(cells => {
+                cells.forEach(cell => {
+                    cell.destroy();
+                });
             });
 
         // init water & plateauTiles
         this.water = [];
-        this.plateauTiles = [];
 
         // init pathfinding
         //this.easystar.setGrid(this.plateau.tiles);
         //this.easystar.setAcceptableTiles(this.plateau.walkables);
 
-        var tile;
+        var tile, tile2;
         var point: Phaser.Point = new Phaser.Point(0, 0);
-        for (point.y = 0; point.y < this.plateau.size.y; point.y++) {
-            for (point.x = 0; point.x < this.plateau.size.x; point.x++) {
+        this.cells = [];
+        for (point.x = 0; point.x < this.plateau.size.x; point.x++) {
+            this.cells[point.x] = [];
+            for (point.y = 0; point.y < this.plateau.size.y; point.y++) {
+                this.cells[point.x][point.y] = new Cell(null, null, null);
                 // this bit would've been so much cleaner if I'd ordered the tileArray better, but I can't be bothered fixing it :P
-                tile = GameContext.instance.add.isoSprite(point.x * Map.tileSize, point.y * Map.tileSize, 0, 'tileset', this.tileArray[this.getPlateau(point)], Map.isoGroup);
-                tile.anchor.set(0.5, 1);
-                tile.smoothed = true;
-                tile.body.moves = false;
+                var needSorting = _.contains(this.plateau.needSorting, this.getPlateau(point));
+                if (needSorting) {
+                    tile = GameContext.instance.add.isoSprite(point.x * Map.tileSize, point.y * Map.tileSize, 0, 'tileset', this.tileArray[this.getPlateau(point)], Map.sortedGroup);
+                    tile.anchor.set(0.5, 1);
+                    tile.smoothed = true;
+                    tile.body.moves = false;
+                    this.cells[point.x][point.y].structure = tile;
 
-                this.plateauTiles.push(tile);
-                if (this.getPlateau(point) === 0) {
-                    this.water.push(tile);
+                    tile2 = GameContext.instance.add.isoSprite(point.x * Map.tileSize, point.y * Map.tileSize, 0, 'tileset', this.tileArray[2], Map.isoGroup);
+                    tile2.anchor.set(0.5, 1);
+                    tile2.smoothed = true;
+                    tile2.body.moves = false;
+                    this.cells[point.x][point.y].tile = tile2;
+                } else {
+                    tile = GameContext.instance.add.isoSprite(point.x * Map.tileSize, point.y * Map.tileSize, 0, 'tileset', this.tileArray[this.getPlateau(point)], Map.isoGroup);
+                    tile.anchor.set(0.5, 1);
+                    tile.smoothed = true;
+                    tile.body.moves = false;
+
+                    this.cells[point.x][point.y].tile = tile;
+                    if (this.getPlateau(point) === 0) {
+                        this.water.push(tile);
+                    }
                 }
             }
         }
+
+        // topological sort for the isometric tiles
+        GameContext.instance.iso.topologicalSort(Map.sortedGroup);
+        //GameContext.instance.iso.topologicalSort(Map.isoGroup);
     }
 
     public changeMap(mapData: any) {

@@ -34,6 +34,7 @@ export class MapGenerator {
     private rng: any;
     private seed: string;
     private walkables: number[];
+    private needSorting: number[]
     private opaques: number[];
     private size: Geo.IPoint;
     private mapSeeds: MapSeedDic;
@@ -46,6 +47,7 @@ export class MapGenerator {
         this.seed = seed;
 
         this.walkables = [1, 2, 3, 4, 5, 6, 7];
+        this.needSorting = [8, 9, 10, 11, 12, 13];
         this.opaques = [8, 9, 10, 11, 13];
         this.size = { x: 32, y: 32 };
 
@@ -56,7 +58,7 @@ export class MapGenerator {
      * Generate a Map depending on the positon, return null if map out of boundaries.
      */
     public generate(coord: Geo.IPoint): Map {
-        return new Map(this.mapDefault.tiles, this.size, this.walkables, this.opaques, coord);
+        return new Map(this.mapDefault.tiles, this.size, this.walkables, this.opaques, this.needSorting, coord);
     }
 
     private initSampleMaps() {
