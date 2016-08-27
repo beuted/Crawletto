@@ -33,7 +33,7 @@ export class Player {
     public move(destPoint: any) {
         this.gridPosition.x = destPoint.x;
         this.gridPosition.y = destPoint.y;
-        GameContext.instance.add.tween(this.sprite.body).to({ x: destPoint.x * 32, y: destPoint.y * 32 }, 250, Phaser.Easing.Linear.None, true)
+        GameContext.instance.add.tween(this.sprite.body).to({ x: destPoint.x * 32, y: destPoint.y * 32 }, 250, Phaser.Easing.Linear.None, true);
     }
 
     public moveInstant(destPoint: Phaser.Point) {
