@@ -1,7 +1,7 @@
 {
-  "name": "one-day-to-live",
-  "version": "1.0.0",
-  "description": "",
+  "name": "crawletto",
+  "version": "0.0.1",
+  "description": "Web based rhythmic Dungeon Crawler (fork of PhaserWebSocketGame)",
   "main": "app.js",
   "dependencies": {
     "express": "4.13.3",
