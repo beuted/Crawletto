@@ -10,7 +10,7 @@
 },
 "bush1":
 {
-	"frame": {"x":65,"y":0,"w":64,"h":50},
+	"frame": {"x":65,"y":40,"w":64,"h":50},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":90},
@@ -18,7 +18,7 @@
 },
 "bush2":
 {
-	"frame": {"x":129,"y":0,"w":64,"h":50},
+	"frame": {"x":129,"y":40,"w":64,"h":50},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":90},
