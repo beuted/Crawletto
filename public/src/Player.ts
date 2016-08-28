@@ -21,6 +21,7 @@ export class Player {
         this.sprite.animations.add('walk-up', [24,25,26,27]);
         this.sprite.animations.add('walk-right', [8,9,10,11]);
         this.sprite.animations.add('walk-left', [40,41,42,43]);
+        this.sprite.animations.add('fight-down', [4,5,6,7]);
 
         // differenciate other players
         if (!current)
@@ -53,7 +54,11 @@ export class Player {
 
         this.sprite.animations.play(animation, 16, true);
         var tween = GameContext.instance.add.tween(this.sprite.body).to({ x: destPoint.x * 32, y: destPoint.y * 32 }, 250, Phaser.Easing.Linear.None, true);
-        tween.onComplete.addOnce(item => this.sprite.animations.stop(moveVector, true));
+        tween.onComplete.addOnce(item => this.sprite.animations.stop(animation, true));
+    }
+
+    public attack(fightVector: any) {
+        this.sprite.animations.play('fight-down', 16, false);
     }
 
     public moveInstant(destPoint: Phaser.Point) {

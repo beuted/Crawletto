@@ -39,13 +39,18 @@ export class MainState {
             GameContext.socketManager.requestPlayerMove({ x: vector.x, y: vector.y });
     }
 
+    private fightPlayer() {
+            GameContext.player.attack({ x: 0, y: 0 });
+    }
+
     private initKeyboardInteraction() {
         GameContext.instance.input.keyboard.addKeyCapture([
             Phaser.Keyboard.D,
             Phaser.Keyboard.LEFT,
             Phaser.Keyboard.RIGHT,
             Phaser.Keyboard.UP,
-            Phaser.Keyboard.DOWN
+            Phaser.Keyboard.DOWN,
+            Phaser.Keyboard.SPACEBAR
         ]);
 
         var leftKey = GameContext.instance.input.keyboard.addKey(Phaser.Keyboard.LEFT);
@@ -59,6 +64,9 @@ export class MainState {
 
         var downKey = GameContext.instance.input.keyboard.addKey(Phaser.Keyboard.DOWN);
         downKey.onDown.add(() => this.movePlayer(new Phaser.Point(0, 1)));
+
+        var spacebarKey = GameContext.instance.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+        spacebarKey.onDown.add(() => this.fightPlayer());
 
         // press D to enter debugmode
         var dKey = GameContext.instance.input.keyboard.addKey(Phaser.Keyboard.D);
