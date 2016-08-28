@@ -138,19 +138,12 @@ export class Map {
         if (!cell || !cell.isWalkable(this.plateau.walkables))
             return false;
 
-        // don't go out of the map TODO REFACTO
-        if (point.x < 0 || point.x > this.plateau.size.x - 1 || point.y < 0 || point.y > this.plateau.size.y - 1)
-            return false;
-
         return true;
     }
 
     public isCellOpaque(point: Phaser.Point) {
-        if (this.getCell(point).isOpaque(this.plateau.opaques))
-            return true;
-
-        // don't go out of the map TODO REFACTO
-        if (point.x < 0 || point.x > this.plateau.size.x - 1 || point.y < 0 || point.y > this.plateau.size.y - 1)
+        var cell = this.getCell(point);
+        if (!cell || cell.isOpaque(this.plateau.opaques))
             return true;
 
         return false;
