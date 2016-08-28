@@ -20,7 +20,7 @@ export class Player {
     private actionTime: number; // time it takes to perform an action in second
 
     constructor(position: Geo.IPoint) {
-        this.mapPosition = { x: 0, y: 0 };
+        this.mapPosition = { x: 10, y: 10 };
         this.gridPosition = { x: position.x, y: position.y };
         //TODO: this should be in a global class handling every player actions
         this.actionTime = 1;

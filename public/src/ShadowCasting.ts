@@ -88,7 +88,7 @@ export class LightSource {
                         }
 
                         if (blocked) {
-                            if (this.map.isCaseOpaque(new Phaser.Point(X, Y))) {
+                            if (this.map.isCellOpaque(new Phaser.Point(X, Y))) {
                                 new_start = r_slope;
                                 continue;
                             } else {
@@ -97,7 +97,7 @@ export class LightSource {
                             }
                         } else {
                             // TODO: if it block sight
-                            if (this.map.isCaseOpaque(new Phaser.Point(X, Y)) && i < radius) {
+                            if (this.map.isCellOpaque(new Phaser.Point(X, Y)) && i < radius) {
                                 blocked = true;
                                 this.calculateOctant(cx, cy, i + 1, start, l_slope, radius, xx, xy, yx, yy, id + 1);
 

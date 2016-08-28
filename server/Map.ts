@@ -5,32 +5,39 @@ import * as Geo from "./utils/Geo";
 import {ICoordObject} from "./utils/CoordDic";
 
 export class Map implements ICoordObject {
-    private tiles: number[][];
+    private floors: number[][];
+    private structures: number[][];
     private size: Geo.IPoint;
     private walkables: number[];
     private opaques: number[];
-    private needSorting: number[];
     private coord: Geo.IPoint;
 
-    constructor(tiles: number[][], size: Geo.IPoint, walkables: number[], opaques: number[], needSorting: number[], coord: Geo.IPoint) {
-        this.tiles = tiles;
+    constructor(floors: number[][], structures: number[][], size: Geo.IPoint, walkables: number[], opaques: number[], coord: Geo.IPoint) {
+        this.floors = floors;
+        this.structures = structures;
         this.size = size;
         this.walkables = walkables
         this.opaques = opaques
-        this.needSorting = needSorting;
         this.coord = coord;
     }
 
     public isCaseWalkable(point: Geo.IPoint): boolean {
-        return _.includes(this.walkables, this.getCase({ x: point.x, y: point.y }));
+        if (point.x < 0 || point.x > this.size.x - 1 || point.y < 0 || point.y > this.size.y - 1)
+            return false;
+
+        return _.includes(this.walkables, this.getFloor(point)) && this.getStructure(point) == 0;
     }
 
     public getSize(): Geo.IPoint {
         return this.size;
     }
 
-    public getCase(point: Geo.IPoint): any {
-        return this.tiles[point.y][point.x]
+    public getFloor(point: Geo.IPoint): any {
+        return this.floors[point.y][point.x]
+    }
+
+    public getStructure(point: Geo.IPoint): any {
+        return this.structures[point.y][point.x]
     }
 
     public getCoord(): Geo.IPoint {
@@ -52,6 +59,6 @@ export class Map implements ICoordObject {
     }
 
     public toMessage(): any {
-        return _.pick(this, ["tiles", "size", "walkables", "opaques", "needSorting", "coord"]);
+        return _.pick(this, ["floors", "structures", "size", "walkables", "opaques", "coord"]);
     }
 }
