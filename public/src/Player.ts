@@ -9,6 +9,8 @@ export class Player {
     public visionRadius: number;
     public id: string;
 
+    private direction: string;
+
     constructor(startX: number, startY: number, id: string, current: boolean = false) {
         // setting up the sprite
         //this.sprite = GameContext.instance.add.isoSprite(startX * 32, startY * 32, 48, 'cube', 0, Map.isoGroup); // old cube sprite
@@ -21,7 +23,10 @@ export class Player {
         this.sprite.animations.add('walk-up', [24,25,26,27]);
         this.sprite.animations.add('walk-right', [8,9,10,11]);
         this.sprite.animations.add('walk-left', [40,41,42,43]);
-        this.sprite.animations.add('fight-down', [4,5,6,7]);
+        this.sprite.animations.add('fight-down', [60,61,62,64,56]);
+        this.sprite.animations.add('fight-up', [28,29,30,31,24]);
+        this.sprite.animations.add('fight-right', [12,13,14,15,8]);
+        this.sprite.animations.add('fight-left', [44,45,46,47,40]);
 
         // differenciate other players
         if (!current)
@@ -36,21 +41,11 @@ export class Player {
     }
 
     public move(destPoint: any) {
-        var moveVector = Phaser.Point.subtract(destPoint, this.gridPosition);
+        this.changeDirection(Phaser.Point.subtract(destPoint, this.gridPosition));
+        var animation = `walk-${this.direction}`;
 
         this.gridPosition.x = destPoint.x;
         this.gridPosition.y = destPoint.y;
-
-        var animation;
-        if (moveVector.x == -1) {
-            animation = 'walk-left';
-        } else if (moveVector.x == 1) {
-            animation = 'walk-right';
-        } else if (moveVector.y == -1){
-            animation = 'walk-up';
-        } else {
-            animation = 'walk-down';
-        }
 
         this.sprite.animations.play(animation, 16, true);
         var tween = GameContext.instance.add.tween(this.sprite.body).to({ x: destPoint.x * 32, y: destPoint.y * 32 }, 250, Phaser.Easing.Linear.None, true);
@@ -58,7 +53,7 @@ export class Player {
     }
 
     public attack(fightVector: any) {
-        this.sprite.animations.play('fight-down', 16, false);
+        this.sprite.animations.play(`fight-${this.direction}`, 16, false);
     }
 
     public moveInstant(destPoint: Phaser.Point) {
@@ -68,6 +63,22 @@ export class Player {
 
         // TODO: b.jehanno (hack to move instant because I can't make it work without this T_T )
         GameContext.instance.add.tween(this.sprite.body).to({ x: destPoint.x * 32, y: destPoint.y * 32 }, 1, Phaser.Easing.Linear.None, true);
+    }
+
+    public changeDirection(vector: any) {
+        if (vector.x < 0) {
+            this.direction = 'left';
+            this.sprite.frame = 40;
+        } else if (vector.x > 0) {
+            this.direction = 'right';
+            this.sprite.frame = 8;
+        } else if (vector.y < 0){
+            this.direction = 'up';
+            this.sprite.frame = 24;
+        } else {
+            this.direction = 'down';
+            this.sprite.frame = 56;
+        }
     }
 
     public destroy() {
