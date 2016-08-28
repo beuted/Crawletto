@@ -1,11 +1,13 @@
 /// <reference path="typings/tsd.d.ts" />
 
-import * as _ from "lodash";
-import * as Geo from "./utils/Geo";
-import {CoordDic, ICoordObject} from "./utils/CoordDic";
-import {Map} from "./Map";
-import * as seedrandom from "seedrandom";
-import * as Voronoi from "voronoi";
+import * as _ from 'lodash';
+import * as Geo from './utils/Geo';
+import {CoordDic, ICoordObject} from './utils/CoordDic';
+import {Map} from './Map';
+import * as seedrandom from 'seedrandom';
+import * as Voronoi from 'voronoi';
+
+var config = require('../public/shared/config');
 
 class MapSeed implements ICoordObject {
     public biome: number;
@@ -46,9 +48,9 @@ export class MapGenerator {
         this.rng = seedrandom(seed);
         this.seed = seed;
 
-        this.walkables = [1, 2, 3, 4, 5, 6, 7];
-        this.opaques = [8, 9, 10, 11, 13];
-        this.size = { x: 32, y: 32 };
+        this.walkables = config.map.walkables;
+        this.opaques = config.map.opaques;
+        this.size = config.map.size;
 
         this.initSampleMaps();
     }

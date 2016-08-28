@@ -10,6 +10,7 @@ export class GameContext {
     static remotePlayersManager: RemotePlayersManager;
     static map: Map;
     static socketManager: SocketManager;
+    static config: any;
 
     static debugActivated: boolean;
 

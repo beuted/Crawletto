@@ -8,7 +8,9 @@ requirejs.config({
         'Q': 'bower_components/q/q',
         'easystarjs': 'bower_components/easystarjs/easystar-0.2.3.min',
         'phaser': 'vendors/phaser/phaser.min',
-        'phaserPluginIsometric': 'vendors/phaser/phaser-plugin-isometric.min'
+        'phaserPluginIsometric': 'vendors/phaser/phaser-plugin-isometric.min',
+        'text': 'bower_components/requirejs-plugins/text',
+        'json': 'bower_components/requirejs-plugins/json'
     },
     shim: {
         'easystarjs': {
@@ -23,10 +25,10 @@ requirejs.config({
     }
 });
 
-require(['_', 'Q', 'phaser', 'easystarjs', 'phaserPluginIsometric', 'Game'], function(_, Q, Phaser, easystarjs) {
+require(['json!shared/config.json', '_', 'Q', 'phaser', 'easystarjs', 'phaserPluginIsometric', 'Game'], function(conf, _, Q, Phaser, easystarjs) {
     // Bind the global libraries that are not already bound to window
     var safeWindow: any = window;
     safeWindow.Q = Q;
 
-    var game = new Game();
+    var game = new Game(conf);
 });

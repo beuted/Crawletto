@@ -59,6 +59,6 @@ export class Map implements ICoordObject {
     }
 
     public toMessage(): any {
-        return _.pick(this, ["floors", "structures", "size", "walkables", "opaques", "coord"]);
+        return _.pick(this, ["floors", "structures", "coord"]);
     }
 }

@@ -1,7 +1,7 @@
 /// <reference path="../typings/tsd.d.ts" />
 
-import {GameContext} from "./GameContext";
-import {LightSource} from "./ShadowCasting";
+import {GameContext} from './GameContext';
+import {LightSource} from './ShadowCasting';
 
 export enum TileType {
     Water = 0,
@@ -24,9 +24,6 @@ interface Plateau {
     floors: number[][];
     structures: number[][];
     coord: { x: number, y: number };
-    size: { x: number, y: number };
-    walkables: number[];
-    opaques: number[];
 }
 
 class Cell {
@@ -34,7 +31,6 @@ class Cell {
     public structureId: number;
     public floorTile: Phaser.Plugin.Isometric.IsoSprite;
     public structureTile: Phaser.Plugin.Isometric.IsoSprite;
-
 
     constructor(floorId: number, structureId: number, floorTile : Phaser.Plugin.Isometric.IsoSprite, structureTile: Phaser.Plugin.Isometric.IsoSprite) {
         this.floorId = floorId;
@@ -69,9 +65,13 @@ export class Map {
     // TODO: should be private once character will be handle by the Map
     public static isoGroup: Phaser.Group;
     public static sortedGroup: Phaser.Group;
+
     public coord: Phaser.Point;
 
     private static tileSize = 32;
+    private static size: { x: number, y: number };
+    private static walkables: number[];
+    private static opaques: number[];
 
     private plateau: Plateau;
     private cells: Cell[][];
@@ -83,6 +83,10 @@ export class Map {
 
     constructor() {
         this.coord = new Phaser.Point(0, 0);
+
+        Map.size = GameContext.config.map.size;
+        Map.walkables = GameContext.config.map.walkables;
+        Map.opaques = GameContext.config.map.opaques;
 
         // init tileArray
         this.tileArray = [];
@@ -117,7 +121,7 @@ export class Map {
         this.initPlateau();
     }
 
-    public get plateauSize() { return new Phaser.Point(this.plateau.size.x, this.plateau.size.y) }
+    public get plateauSize() { return new Phaser.Point(Map.size.x, Map.size.y) }
 
     public getPlateauFloor(point: Phaser.Point): number {
         var line = this.plateau.floors[point.y];
@@ -135,7 +139,7 @@ export class Map {
     public isCellWalkable(point: Phaser.Point) {
         // collision handling
         var cell = this.getCell(point);
-        if (!cell || !cell.isWalkable(this.plateau.walkables))
+        if (!cell || !cell.isWalkable(Map.walkables))
             return false;
 
         return true;
@@ -143,7 +147,7 @@ export class Map {
 
     public isCellOpaque(point: Phaser.Point) {
         var cell = this.getCell(point);
-        if (!cell || cell.isOpaque(this.plateau.opaques))
+        if (!cell || cell.isOpaque(Map.opaques))
             return true;
 
         return false;
@@ -236,9 +240,9 @@ export class Map {
 
         var point: Phaser.Point = new Phaser.Point(0, 0);
         this.cells = [];
-        for (point.x = 0; point.x < this.plateau.size.x; point.x++) {
+        for (point.x = 0; point.x < Map.size.x; point.x++) {
             this.cells[point.x] = [];
-            for (point.y = 0; point.y < this.plateau.size.y; point.y++) {
+            for (point.y = 0; point.y < Map.size.y; point.y++) {
                 this.cells[point.x][point.y] = new Cell(null, null, null, null);
                 // this bit would've been so much cleaner if I'd ordered the tileArray better, but I can't be bothered fixing it :P
                 var structureId = this.getPlateauStructure(point);
