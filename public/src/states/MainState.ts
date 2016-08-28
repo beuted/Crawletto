@@ -34,7 +34,9 @@ export class MainState {
     //TODO: this should be in a class handling current player actions
     private movePlayer(vector: Phaser.Point) {
         console.log("requets move player: " + vector.x + ", " + vector.y);
-        GameContext.socketManager.requestPlayerMove({ x: vector.x, y: vector.y });
+        var newPosition = Phaser.Point.add(GameContext.player.gridPosition, vector);
+        if (GameContext.map.isCellWalkable(newPosition))
+            GameContext.socketManager.requestPlayerMove({ x: vector.x, y: vector.y });
     }
 
     private initKeyboardInteraction() {

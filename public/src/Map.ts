@@ -54,11 +54,7 @@ class Cell {
     }
 
     public isWalkable(walkables): boolean {
-        // collision handling
-        if (!_.includes(walkables, this.floorId) || this.structureId != 0) {
-            return false;
-        }
-        return true;
+        return _.includes(walkables, this.floorId) && !this.structureId;
     }
 
     public isOpaque(opaques): boolean {
@@ -138,7 +134,8 @@ export class Map {
 
     public isCellWalkable(point: Phaser.Point) {
         // collision handling
-        if (!this.getCell(point).isWalkable(this.plateau.walkables))
+        var cell = this.getCell(point);
+        if (!cell || !cell.isWalkable(this.plateau.walkables))
             return false;
 
         // don't go out of the map TODO REFACTO

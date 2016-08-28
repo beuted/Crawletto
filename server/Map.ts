@@ -25,7 +25,7 @@ export class Map implements ICoordObject {
         if (point.x < 0 || point.x > this.size.x - 1 || point.y < 0 || point.y > this.size.y - 1)
             return false;
 
-        return _.includes(this.walkables, this.getFloor(point)) && this.getStructure(point) == 0;
+        return _.includes(this.walkables, this.getFloor(point)) && !this.getStructure(point);
     }
 
     public getSize(): Geo.IPoint {
