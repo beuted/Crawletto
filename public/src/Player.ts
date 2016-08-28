@@ -17,7 +17,10 @@ export class Player {
         this.sprite.anchor.set(0.5, 0.5);
         this.sprite.scale.set(0.5);
         this.sprite.smoothed = false;
-        this.sprite.animations.add('walk', [56,57,58,59]);
+        this.sprite.animations.add('walk-down', [56,57,58,59]);
+        this.sprite.animations.add('walk-up', [24,25,26,27]);
+        this.sprite.animations.add('walk-right', [8,9,10,11]);
+        this.sprite.animations.add('walk-left', [40,41,42,43]);
 
         // differenciate other players
         if (!current)
@@ -32,11 +35,25 @@ export class Player {
     }
 
     public move(destPoint: any) {
+        var moveVector = Phaser.Point.subtract(destPoint, this.gridPosition);
+
         this.gridPosition.x = destPoint.x;
         this.gridPosition.y = destPoint.y;
-        this.sprite.animations.play('walk', 16, true);
+
+        var animation;
+        if (moveVector.x == -1) {
+            animation = 'walk-left';
+        } else if (moveVector.x == 1) {
+            animation = 'walk-right';
+        } else if (moveVector.y == -1){
+            animation = 'walk-up';
+        } else {
+            animation = 'walk-down';
+        }
+
+        this.sprite.animations.play(animation, 16, true);
         var tween = GameContext.instance.add.tween(this.sprite.body).to({ x: destPoint.x * 32, y: destPoint.y * 32 }, 250, Phaser.Easing.Linear.None, true);
-        tween.onComplete.addOnce(item => this.sprite.animations.stop('walk', true));
+        tween.onComplete.addOnce(item => this.sprite.animations.stop(moveVector, true));
     }
 
     public moveInstant(destPoint: Phaser.Point) {
