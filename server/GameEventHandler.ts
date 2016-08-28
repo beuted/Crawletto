@@ -66,7 +66,7 @@ export class GameEventHandler {
         newPlayer.id = socket.id;
 
         // Broadcast new player to connected socket clients
-        var playersOnSameMap = GameEventHandler.playersHandler.getPlayersOnMapWithoutId({ x: 0, y: 0 }, newPlayer.id);
+        var playersOnSameMap = GameEventHandler.playersHandler.getPlayersOnMapWithoutId({ x: 10, y: 10 }, newPlayer.id);
         _.forEach(playersOnSameMap, (player: Player) => {
             Server.io.sockets.connected[player.id].emit('new player', newPlayer.toMessage());
         });
