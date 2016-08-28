@@ -101,7 +101,7 @@ export class GameEventHandler {
 
         // next case should be walkable
         Geo.Tools.distance
-        if (!movedPlayer.map.isCaseWalkable(newPosition)) {
+        if (!movedPlayer.map.isCellWalkable(newPosition)) {
            util.log('[Error: "move player"] Player ' + socket.id + ' asked for non-walkable tile');
            return;
        }

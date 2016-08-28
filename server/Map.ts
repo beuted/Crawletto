@@ -21,7 +21,7 @@ export class Map implements ICoordObject {
         this.coord = coord;
     }
 
-    public isCaseWalkable(point: Geo.IPoint): boolean {
+    public isCellWalkable(point: Geo.IPoint): boolean {
         if (point.x < 0 || point.x > this.size.x - 1 || point.y < 0 || point.y > this.size.y - 1)
             return false;
 
@@ -49,7 +49,7 @@ export class Map implements ICoordObject {
         var prevPoint: Geo.IPoint = null;
 
         for (var i = 0; i < path.length; i++) {
-            if (!this.isCaseWalkable(path[i]))
+            if (!this.isCellWalkable(path[i]))
                 return false;
             if (prevPoint && Geo.Tools.distance(path[i], prevPoint) > 1)
                 return false;
