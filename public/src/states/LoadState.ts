@@ -30,6 +30,7 @@ export class LoadState
         GameContext.instance.load.atlasJSONHash('tileset', 'assets/tileset-test.png', 'assets/tileset-mod.json');
         GameContext.instance.load.image('cube', 'assets/cube.png');
         GameContext.instance.load.spritesheet('fairy_anim', 'assets/fairy.png', 96, 96, 16);
+        GameContext.instance.load.spritesheet('pingu_anim', 'assets/pingu.png', 82, 84, 64);
         //GameContext.instance.load.atlasJSONHash('tileset', 'assets/tileset-mod.png', 'assets/tileset-mod.json'); // Attempt to do better
     }
 }
