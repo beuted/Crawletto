@@ -28,7 +28,7 @@ export class SocketManager {
     private onSocketConnected() {
         console.debug("Connected to socket server as " + this.socket.io.engine.id);
 
-        GameContext.player = new Player(7, 7, this.socket.io.engine.id, 'fairy', true);
+        GameContext.player = new Player(7, 7, this.socket.io.engine.id, _.sample(['cube', 'fairy', 'pingu']), true);
         GameContext.player = GameContext.player;
 
         // Send local player data to the game server
