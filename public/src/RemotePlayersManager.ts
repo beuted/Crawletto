@@ -15,7 +15,7 @@ export class RemotePlayersManager {
     }
 
     public addFromJson(playerJson: any) {
-        var remotePlayer = new Player(playerJson.gridPosition.x, playerJson.gridPosition.y, playerJson.id);
+        var remotePlayer = new Player(playerJson.gridPosition.x, playerJson.gridPosition.y, playerJson.id, 'pingu');
         this.add(remotePlayer);
     }
 

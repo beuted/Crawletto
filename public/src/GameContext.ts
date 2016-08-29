@@ -4,13 +4,41 @@ import {Map} from "./Map";
 import {RemotePlayersManager} from "./RemotePlayersManager";
 import {SocketManager} from "./SocketManager";
 
+export interface IConfig {
+    map: {
+        walkables: number[],
+        opaques: number[],
+        size: { x: number, y: number }
+    }
+
+    characters: { [name: string]: ICharConfig }
+}
+
+export interface ICharConfig {
+    maxLife: number,
+    visionRadius: number, // in cell
+    sprite: string,
+    animations: {
+        walkDown: number[],
+        walkUp: number[],
+        walkRight: number[],
+        walkLeft: number[],
+        fightDown: number[],
+        fightUp: number[],
+        fightRight: number[],
+        fightLeft: number[]
+    },
+    animationFps: number,
+    animationTime: number // in ms
+}
+
 export class GameContext {
     static instance: Phaser.Plugin.Isometric.Game;
     static player: Player;
     static remotePlayersManager: RemotePlayersManager;
     static map: Map;
     static socketManager: SocketManager;
-    static config: any;
+    static config: IConfig;
 
     static debugActivated: boolean;
 
