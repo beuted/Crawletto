@@ -24,21 +24,6 @@ module.exports = function(grunt) {
             }
         },
 
-        tsd: {
-            public: {
-                options: {
-                    command: 'reinstall',
-                    config: './public/tsd.json'
-                }
-            },
-            server: {
-                options: {
-                    command: 'reinstall',
-                    config: './server/tsd.json'
-                }
-            }
-        },
-
         nodemon: {
             server: {
                 src: ['app.js']
@@ -91,9 +76,8 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-concurrent');
     grunt.loadNpmTasks('grunt-nodemon');
     grunt.loadNpmTasks('grunt-ts');
-    grunt.loadNpmTasks('grunt-tsd');
 
-    grunt.registerTask('default', ['bower:public', 'tsd:public', 'tsd:server', 'ts:public', 'ts:server']);
+    grunt.registerTask('default', ['bower:public', 'ts:public', 'ts:server']);
     grunt.registerTask('dev', ['concurrent:allWatchs']);
     grunt.registerTask('dev-public', ['watch:tsPublic']);
     grunt.registerTask('dev-server', ['concurrent:serverWatchs']);
