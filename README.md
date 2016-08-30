@@ -1,4 +1,4 @@
-# Crawletto
+# Crawletto ![travis status](https://travis-ci.org/beuted/Crawletto.svg?branch=master)
 
 ###*Work in progress*
 
