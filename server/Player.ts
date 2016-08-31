@@ -13,14 +13,17 @@ import {Server} from "./Server";
 export class Player {
     public mapPosition: Geo.IPoint;
     public gridPosition: Geo.IPoint;
-    public id: string;
+    public guid: string;
+    public socketId: string;
 
     private turnAction: Action.IAction = null;
     private actionScheduler: NodeJS.Timer;
     private actionTime: number; // time it takes to perform an action in second
 
-    constructor(position: Geo.IPoint) {
+    constructor(socketId: string, position: Geo.IPoint) {
+        this.socketId = socketId;
         this.mapPosition = { x: 10, y: 10 };
+        this.guid = this.generateGuid();
         this.gridPosition = { x: position.x, y: position.y };
         //TODO: this should be in a global class handling every player actions
         this.actionTime = 1;
@@ -34,8 +37,8 @@ export class Player {
         return GameEventHandler.mapsHandler.getMap(this.mapPosition)
     }
 
-    public toMessage(): any {
-        return _.pick(this, ["id", "gridPosition"]);
+    public toMessage(): { guid: string, gridPosition: Geo.IPoint } {
+        return <{ guid: string, gridPosition: Geo.IPoint }> _.pick(this, ["guid", "gridPosition"]);
     }
 
     public planAction(action: Action.IAction) {
@@ -84,5 +87,16 @@ export class Player {
             var changeMapAction = new Action.ChangeMap(newMapPosition, newGridPosition);
             this.planAction(changeMapAction);
         }
+    }
+
+    //TODO do better, move or something
+    private generateGuid() {
+      function s4() {
+        return Math.floor((1 + Math.random()) * 0x10000)
+          .toString(16)
+          .substring(1);
+      }
+      return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+        s4() + '-' + s4() + s4() + s4();
     }
 }

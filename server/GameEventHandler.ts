@@ -1,24 +1,28 @@
 /// <reference path="typings/tsd.d.ts" />
 
-import * as util from "util";
-import * as _ from "lodash";
-import * as Action from "./Action";
-import * as Geo from "./utils/Geo";
-import {Player} from "./Player";
-import {Map} from "./Map";
-import {MapsHandler} from "./MapsHandler";
-import {PlayersHandler} from "./PlayersHandler";
-import {Server} from "./Server";
+import * as util from 'util';
+import * as _ from 'lodash';
+import * as Action from './Action';
+import * as Geo from './utils/Geo';
+import {Player} from './Player';
+import {Map} from './Map';
+import {AisHandler} from './AisHandler';
+import {MapsHandler} from './MapsHandler';
+import {PlayersHandler} from './PlayersHandler';
+import {Server} from './Server';
 
 export class GameEventHandler {
     public static mapsHandler: MapsHandler;
     public static playersHandler: PlayersHandler;
+    public static aisHandler: AisHandler;
 
     constructor() {
         // Init mapsHandler
         GameEventHandler.mapsHandler = new MapsHandler();
 
         GameEventHandler.playersHandler = new PlayersHandler();
+
+        GameEventHandler.aisHandler = new AisHandler();
     }
 
     public setEventHandlers() {
@@ -45,15 +49,17 @@ export class GameEventHandler {
         var socket: SocketIO.Socket = <any>this;
 
         util.log('Player has disconnected: ' + socket.id);
-        var mapCoord: Geo.IPoint = GameEventHandler.playersHandler.getPlayer(socket.id).mapPosition;
+        var player = GameEventHandler.playersHandler.getPlayerBySocketId(socket.id);
+        var playerMapCoord = player.mapPosition;
+        var playerGuid = player.guid;
 
         // Remove player from playersHandler
-        GameEventHandler.playersHandler.removePlayer(socket.id);
+        GameEventHandler.playersHandler.removePlayer(playerGuid);
 
         // Broadcast removed player to connected socket clients on the same map
-        var playersOnSameMap = GameEventHandler.playersHandler.getPlayersOnMap(mapCoord);
+        var playersOnSameMap = GameEventHandler.playersHandler.getPlayersOnMap(playerMapCoord);
         _.forEach(playersOnSameMap, (player: Player) => {
-            Server.io.sockets.connected[player.id].emit('remove player', { id: socket.id });
+            Server.io.sockets.connected[player.socketId].emit('remove player', { guid: playerGuid });
         });
     }
 
@@ -62,13 +68,12 @@ export class GameEventHandler {
         var socket: SocketIO.Socket = <any>this;
 
         // Create a new player
-        var newPlayer: Player = new Player({ x: data.x, y: data.y });
-        newPlayer.id = socket.id;
+        var newPlayer: Player = new Player(socket.id, { x: 7, y: 7 });
 
         // Broadcast new player to connected socket clients
-        var playersOnSameMap = GameEventHandler.playersHandler.getPlayersOnMapWithoutId({ x: 10, y: 10 }, newPlayer.id);
+        var playersOnSameMap = GameEventHandler.playersHandler.getPlayersOnMapWithIdDifferentFrom({ x: 10, y: 10 }, newPlayer.guid);
         _.forEach(playersOnSameMap, (player: Player) => {
-            Server.io.sockets.connected[player.id].emit('new player', newPlayer.toMessage());
+            Server.io.sockets.connected[player.socketId].emit('new player', newPlayer.toMessage());
         });
 
         // Send existing players & map to the new player
@@ -78,7 +83,7 @@ export class GameEventHandler {
         });
 
         var map = GameEventHandler.mapsHandler.getMap({ x: 0, y: 0 });
-        socket.emit('init player', { existingPlayers: playersOnSameMapJson, map: map })
+        socket.emit('init player', { player: newPlayer.toMessage(), existingPlayers: playersOnSameMapJson, map: map })
 
         // Add new player to the players array
         GameEventHandler.playersHandler.addPlayer(newPlayer);
@@ -89,11 +94,11 @@ export class GameEventHandler {
         var socket: SocketIO.Socket = <any>this;
 
         // Find player in array
-        var movedPlayer: Player = GameEventHandler.playersHandler.getPlayer(socket.id);
+        var movedPlayer: Player = GameEventHandler.playersHandler.getPlayerBySocketId(socket.id);
 
         // Player should exist
         if (!movedPlayer) {
-            util.log('[Error: "move player"] Player not found: ' + socket.id);
+            util.log('[Error: "move player"] Player not found sId: ' + socket.id);
             return;
         }
 
@@ -102,7 +107,7 @@ export class GameEventHandler {
         // next case should be walkable
         Geo.Tools.distance
         if (!movedPlayer.map.isCellWalkable(newPosition)) {
-           util.log('[Error: "move player"] Player ' + socket.id + ' asked for non-walkable tile');
+           util.log('[Error: "move player"] Player (sId: ' + socket.id + ') asked for non-walkable tile');
            return;
        }
 

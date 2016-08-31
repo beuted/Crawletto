@@ -37,16 +37,26 @@ export class PlayersHandler {
         });
     }
 
-    public getPlayersOnMapWithoutId(coord: Geo.IPoint, id: string) {
+    public getPlayersOnMapWithIdDifferentFrom(coord: Geo.IPoint, guid: string) {
         return _.filter(this.players, function(player) {
-            return player.mapPosition.x == coord.x && player.mapPosition.y == coord.y && player.id !== id;
+            return player.mapPosition.x == coord.x && player.mapPosition.y == coord.y && player.guid !== guid;
         });
     }
 
-    // Find player by ID
-    public getPlayer(id: string): Player {
+    // Find player by GUID
+    public getPlayer(guid: string): Player {
         for (var i = 0; i < this.players.length; i++) {
-            if (this.players[i].id == id)
+            if (this.players[i].guid == guid)
+                return this.players[i];
+        };
+
+        return null;
+    }
+
+    // Find player by SocketId
+    public getPlayerBySocketId(socketId: string): Player {
+        for (var i = 0; i < this.players.length; i++) {
+            if (this.players[i].socketId == socketId)
                 return this.players[i];
         };
 

@@ -14,23 +14,23 @@ export class RemotePlayersManager {
         this.remotePlayers.push(p);
     }
 
-    public addFromJson(playerJson: any) {
-        var remotePlayer = new Player(playerJson.gridPosition.x, playerJson.gridPosition.y, playerJson.id, 'pingu');
+    public addFromJson(playerJson: { gridPosition: Phaser.Point, guid: string }) {
+        var remotePlayer = new Player(playerJson.gridPosition.x, playerJson.gridPosition.y, playerJson.guid, 'pingu');
         this.add(remotePlayer);
     }
 
-    public addAllFromJson(playersJson: any[]) {
+    public addAllFromJson(playersJson: { gridPosition: Phaser.Point, guid: string }[]) {
         _.forEach(playersJson, function(playerJson: any) {
             this.addFromJson(playerJson);
         }, this);
     }
 
-    public removeById(id: string) {
-        var removePlayer = this.playerById(id);
+    public removeByGuid(guid: string) {
+        var removePlayer = this.playerByGuid(guid);
 
         // Player not found
         if (!removePlayer) {
-            console.warn("Player not found: " + id);
+            console.warn("Player not found: " + guid);
             return;
         };
 
@@ -46,11 +46,11 @@ export class RemotePlayersManager {
         this.remotePlayers = []
     }
 
-    public moveById(id: number, destPoint: any) {
-        var playerToMove = this.playerById(id);
+    public moveByGuid(guid: string, destPoint: any) {
+        var playerToMove = this.playerByGuid(guid);
 
         if (!playerToMove) {
-            console.warn("Player not found: " + id);
+            console.warn("Player not found: " + guid);
             return;
         };
 
@@ -68,10 +68,10 @@ export class RemotePlayersManager {
         return false
     }
 
-    // Find player by ID
-    private playerById(id): Player {
+    // Find player by GUID
+    private playerByGuid(guid): Player {
         for (var i = 0; i < this.remotePlayers.length; i++) {
-            if (this.remotePlayers[i].id == id)
+            if (this.remotePlayers[i].guid == guid)
                 return this.remotePlayers[i];
         };
 

@@ -7,12 +7,14 @@ export class Player {
     public sprite: any;
     public gridPosition: Phaser.Point;
     public visionRadius: number;
-    public id: string;
+    public guid: string;
+    public life: number;
+    public maxLife: number;
 
     private direction: string;
     private charConfig: ICharConfig;
 
-    constructor(startX: number, startY: number, id: string, type: string, current: boolean = false) {
+    constructor(startX: number, startY: number, guid: string, type: string, current: boolean = false) {
         this.charConfig = GameContext.config.characters[type];
         // setting up the sprite
         //this.sprite = GameContext.instance.add.isoSprite(startX * 32, startY * 32, 48, 'cube', 0, Map.isoGroup); // old cube sprite
@@ -39,7 +41,9 @@ export class Player {
         // setting up custom parameters
         this.gridPosition = new Phaser.Point(startX, startY);
         this.visionRadius = this.charConfig.visionRadius;
-        this.id = id;
+        this.guid = guid;
+        this.maxLife = this.charConfig.maxLife;
+        this.life = this.charConfig.maxLife;
     }
 
     public move(destPoint: any) {

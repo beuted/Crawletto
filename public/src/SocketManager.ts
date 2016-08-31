@@ -28,11 +28,8 @@ export class SocketManager {
     private onSocketConnected() {
         console.debug("Connected to socket server as " + this.socket.io.engine.id);
 
-        GameContext.player = new Player(7, 7, this.socket.io.engine.id, _.sample(['cube', 'fairy', 'pingu']), true);
-        GameContext.player = GameContext.player;
-
         // Send local player data to the game server
-        this.socket.emit("new player", { x: GameContext.player.gridPosition.x, y: GameContext.player.gridPosition.y });
+        this.socket.emit("new player", {});
     }
 
     // Socket disconnected
@@ -40,7 +37,7 @@ export class SocketManager {
         console.debug("Disconnected from socket server");
     }
 
-    // New player
+    // New player (TODO: add save guid to data)
     private onNewPlayer(data: any) {
         console.debug("New player on map: " + JSON.stringify(data));
 
@@ -49,8 +46,12 @@ export class SocketManager {
     }
 
     // Init player
-    private onInitPlayer(data: { existingPlayers: any[], map: any }) {
+    private onInitPlayer(data: { player: any, existingPlayers: any[], map: any }) {
         console.debug("Init player: " + JSON.stringify(data));
+
+        // Register current player
+        GameContext.player = new Player(data.player.gridPosition.x, data.player.gridPosition.y, data.player.guid, _.sample(['cube', 'fairy', 'pingu']), true);
+        GameContext.player = GameContext.player;
 
         // Load current map
         GameContext.map.changeMap(data.map);
@@ -62,18 +63,18 @@ export class SocketManager {
     }
 
     // Move player
-    private onMovePlayer(data: any) {
-        if (GameContext.player.id === data.id) {
+    private onMovePlayer(data: { guid: string, position: Phaser.Point }) {
+        if (GameContext.player.guid === data.guid) {
             GameContext.player.move(data.position);
             return;
         }
 
-        GameContext.remotePlayersManager.moveById(data.id, data.position)
+        GameContext.remotePlayersManager.moveByGuid(data.guid, data.position)
     }
 
     // Player changed map
-    private onChangeMapPlayer(data: { id: string, gridPosition: { x: number, y: number }, mapPosition: { x: number, y: number }, players: any[], map: any[][] }) {
-        if (GameContext.player.id === data.id) {
+    private onChangeMapPlayer(data: { guid: string, gridPosition: { x: number, y: number }, mapPosition: { x: number, y: number }, players: any[], map: any[][] }) {
+        if (GameContext.player.guid === data.guid) {
             console.debug('Player changed map: ' + JSON.stringify(data));
             GameContext.map.changeMap(data.map);
             GameContext.player.moveInstant(new Phaser.Point(data.gridPosition.x, data.gridPosition.y));
@@ -86,8 +87,8 @@ export class SocketManager {
 
     // Remove player
     private onRemovePlayer(data: any) {
-        console.debug("Player removed from map: " + data.id);
+        console.debug("Player removed from map: " + data.guid);
         // Remove player from remotePlayers
-        GameContext.remotePlayersManager.removeById(data.id)
+        GameContext.remotePlayersManager.removeByGuid(data.guid)
     }
 }

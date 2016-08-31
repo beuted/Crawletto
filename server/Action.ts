@@ -19,8 +19,8 @@ export class Move implements IAction {
         player.gridPosition = this.destination;
         var playersToNotify: Player[] = GameEventHandler.playersHandler.getPlayersOnMap(player.mapPosition);
         _.forEach(playersToNotify, function(notifiedPlayer) {
-            Server.io.sockets.connected[notifiedPlayer.id].emit('move player', {
-                    id: player.id,
+            Server.io.sockets.connected[notifiedPlayer.socketId].emit('move player', {
+                    guid: player.guid,
                     position: { x: this.destination.x, y: this.destination.y }
                 });
         }, this);
@@ -40,8 +40,8 @@ export class ChangeMap implements IAction {
     public execute(player: Player) {
         var newMap = GameEventHandler.mapsHandler.getMap(this.destMap);
 
-        var playersOnPrevMap = GameEventHandler.playersHandler.getPlayersOnMapWithoutId(player.mapPosition, player.id);
-        var playersOnDestMap = GameEventHandler.playersHandler.getPlayersOnMapWithoutId(this.destMap, player.id);
+        var playersOnPrevMap = GameEventHandler.playersHandler.getPlayersOnMapWithIdDifferentFrom(player.mapPosition, player.socketId);
+        var playersOnDestMap = GameEventHandler.playersHandler.getPlayersOnMapWithIdDifferentFrom(this.destMap, player.socketId);
 
         player.gridPosition = this.destCase;
         player.mapPosition = this.destMap;
@@ -50,8 +50,8 @@ export class ChangeMap implements IAction {
         // Send the change map message to the player changing map
         var playersOnDestMapMessage = _.map(playersOnDestMap, player => player.toMessage());
 
-        Server.io.sockets.connected[player.id].emit('change map player', {
-            id: player.id,
+        Server.io.sockets.connected[player.socketId].emit('change map player', {
+            guid: player.guid,
             gridPosition: { x: player.gridPosition.x, y: player.gridPosition.y },
             mapPosition: { x: player.mapPosition.x, y: player.mapPosition.y },
             players: playersOnDestMapMessage,
@@ -60,12 +60,12 @@ export class ChangeMap implements IAction {
 
         // Notify players from previous map
         _.forEach(playersOnPrevMap, (notifiedPlayer: Player) => {
-            Server.io.sockets.connected[notifiedPlayer.id].emit('remove player', player.toMessage());
+            Server.io.sockets.connected[notifiedPlayer.socketId].emit('remove player', player.toMessage());
         }, this);
 
         // Notify players from detination map
         _.forEach(playersOnDestMap, (notifiedPlayer: Player) => {
-            Server.io.sockets.connected[notifiedPlayer.id].emit('new player', player.toMessage());
+            Server.io.sockets.connected[notifiedPlayer.socketId].emit('new player', player.toMessage());
         }, this);
     }
 }
