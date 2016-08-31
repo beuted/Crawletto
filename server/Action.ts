@@ -1,3 +1,5 @@
+/// <reference path="typings/tsd.d.ts" />
+
 import * as _ from "lodash";
 import * as Geo from "./utils/Geo";
 import {GameEventHandler} from "./GameEventHandler";
@@ -18,12 +20,12 @@ export class Move implements IAction {
     public execute(player: Player) {
         player.gridPosition = this.destination;
         var playersToNotify: Player[] = GameEventHandler.playersHandler.getPlayersOnMap(player.mapPosition);
-        _.forEach(playersToNotify, function(notifiedPlayer) {
+        _.forEach(playersToNotify, notifiedPlayer => {
             Server.io.sockets.connected[notifiedPlayer.socketId].emit('move player', {
-                    guid: player.guid,
-                    position: { x: this.destination.x, y: this.destination.y }
-                });
-        }, this);
+                guid: player.guid,
+                position: { x: this.destination.x, y: this.destination.y }
+            });
+        });
     }
 }
 
@@ -40,8 +42,8 @@ export class ChangeMap implements IAction {
     public execute(player: Player) {
         var newMap = GameEventHandler.mapsHandler.getMap(this.destMap);
 
-        var playersOnPrevMap = GameEventHandler.playersHandler.getPlayersOnMapWithIdDifferentFrom(player.mapPosition, player.socketId);
-        var playersOnDestMap = GameEventHandler.playersHandler.getPlayersOnMapWithIdDifferentFrom(this.destMap, player.socketId);
+        var playersOnPrevMap = GameEventHandler.playersHandler.getPlayersOnMapWithIdDifferentFrom(player.mapPosition, player.guid);
+        var playersOnDestMap = GameEventHandler.playersHandler.getPlayersOnMapWithIdDifferentFrom(this.destMap, player.guid);
 
         player.gridPosition = this.destCase;
         player.mapPosition = this.destMap;
