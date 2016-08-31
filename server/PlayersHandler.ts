@@ -24,7 +24,6 @@ export class PlayersHandler {
         }
 
         this.players.splice(this.players.indexOf(removePlayer), 1);
-        removePlayer.destroy();
     }
 
     public getPlayers(): Player[] {

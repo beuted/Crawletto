@@ -17,20 +17,12 @@ export class Player {
     public socketId: string;
 
     private turnAction: Action.IAction = null;
-    private actionScheduler: NodeJS.Timer;
-    private actionTime: number; // time it takes to perform an action in second
 
     constructor(socketId: string, position: Geo.IPoint) {
         this.socketId = socketId;
         this.mapPosition = { x: 10, y: 10 };
         this.guid = this.generateGuid();
         this.gridPosition = { x: position.x, y: position.y };
-        //TODO: this should be in a global class handling every player actions
-        this.actionTime = 1;
-        this.actionScheduler = setInterval(
-            (function(self) {
-                return function() { self.executeAction() }
-            })(this), this.actionTime * 1000);
     }
 
     public get map(): Map {
@@ -53,10 +45,6 @@ export class Player {
         this.turnAction = null;
 
         this.update();
-    }
-
-    public destroy() {
-        clearInterval(this.actionScheduler);
     }
 
     public update() {

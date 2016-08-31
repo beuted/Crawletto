@@ -6,6 +6,7 @@ import * as Action from './Action';
 import * as Geo from './utils/Geo';
 import {Player} from './Player';
 import {Map} from './Map';
+import {ActionHandler} from './ActionHandler';
 import {AisHandler} from './AisHandler';
 import {MapsHandler} from './MapsHandler';
 import {PlayersHandler} from './PlayersHandler';
@@ -15,6 +16,7 @@ export class GameEventHandler {
     public static mapsHandler: MapsHandler;
     public static playersHandler: PlayersHandler;
     public static aisHandler: AisHandler;
+    public static actionHandler: ActionHandler;
 
     constructor() {
         // Init mapsHandler
@@ -23,6 +25,8 @@ export class GameEventHandler {
         GameEventHandler.playersHandler = new PlayersHandler();
 
         GameEventHandler.aisHandler = new AisHandler();
+
+        GameEventHandler.actionHandler = new ActionHandler();
     }
 
     public setEventHandlers() {
