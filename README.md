@@ -1,4 +1,4 @@
-# Crawletto ![travis status](https://travis-ci.org/beuted/Crawletto.svg?branch=master)
+# Crawletto ![travis status](https://travis-ci.org/beuted/Crawletto.svg?branch=master) [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 
 ###*Work in progress*
 
