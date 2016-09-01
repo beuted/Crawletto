@@ -1,5 +1,5 @@
 {
-  "name": "one-day-to-live",
+  "name": "crawletto",
   "version": "0.0.0",
   "authors": [
     "Benoit deKajoo <dekajoo@gmail.com>"
@@ -13,10 +13,10 @@
     "tests"
   ],
   "dependencies": {
-    "requirejs": "~2.1.22",
-    "lodash": "~3.10.1",
-    "easystarjs": "~0.2.3",
+    "requirejs": "2.1.22",
+    "lodash": "3.10.1",
+    "easystarjs": "0.2.3",
     "q": "1.0.1",
-    "requirejs-plugins": "~1.0.3"
+    "requirejs-plugins": "1.0.3"
   }
 }
