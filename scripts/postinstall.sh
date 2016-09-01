@@ -1,5 +1,7 @@
 #!/bin/bash
 
+bower install
+
 cd ./server/
 ../node_modules/.bin/tsd install
 cd ..

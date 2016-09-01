@@ -1,14 +1,5 @@
 module.exports = function(grunt) {
     grunt.initConfig({
-        bower: {
-            public: {
-                options: {
-                    targetDir: './public/bower_components/',
-                    cleanBowerDir: true
-                }
-            }
-        },
-
         ts: {
             public : {
                 options: {
@@ -71,13 +62,12 @@ module.exports = function(grunt) {
         }
     });
 
-    grunt.loadNpmTasks('grunt-bower-task');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-concurrent');
     grunt.loadNpmTasks('grunt-nodemon');
     grunt.loadNpmTasks('grunt-ts');
 
-    grunt.registerTask('default', ['bower:public', 'ts:public', 'ts:server']);
+    grunt.registerTask('default', ['ts:public', 'ts:server']);
     grunt.registerTask('dev', ['concurrent:allWatchs']);
     grunt.registerTask('dev-public', ['watch:tsPublic']);
     grunt.registerTask('dev-server', ['concurrent:serverWatchs']);
