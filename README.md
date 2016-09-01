@@ -1,26 +1,28 @@
-# Crawletto ![travis status](https://travis-ci.org/beuted/Crawletto.svg?branch=master) [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
+# Crawletto ![travis status](https://travis-ci.org/beuted/Crawletto.svg?branch=master)
 
 ###*Work in progress*
 
 Phaser project of a turn based isometric games in rythm
 
-## [Demo of branch master on Heroku](https://crawletto.herokuapp.com/)
+## Play the [Demo on Heroku](https://crawletto.herokuapp.com/) or [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 
 ## Commands
 * **D**: enter debug-mode
+* **SPACEBAR**: Attack
 * **Arrow keys:** move around
 
 ## Features
 * _Randomly generated maps_ based on a seed ([Seedrandom](https://github.com/davidbau/seedrandom)) rendered with _[isometric tiles](http://www.rotates.org/phaser/iso/)_
 * _Multiplayer_ enabled using [Socket.io](http://socket.io/) (the players can see eachothers moving on the different maps)
 * Feild of view of the player computed with a _recursive shadowcasting_
+* _AI_ of mobs
 
 ## Setup project
 * [Install node](https://nodejs.org/)
-* At the root of the repo Type `npm install`
-* Type `grunt` and wait few seconds (that will retieve the bower dependencies, retrieve the .d.ts files and build the typescript of the server and the client)
+* At the root of the repo Type `npm install` (that will also retrieve the bower dependencies, and the .d.ts files)
+* Type `grunt` and wait few seconds (that will build the typescript of the server and the client)
 * Start the server with `node app.js`
-* Connect to `localhost:3000` with as many browsers as you want!
+* Connect to `localhost:3000` with as many browsers as you want and play with your friends!
 
 ## Technos used
 
