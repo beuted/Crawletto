@@ -1,0 +1,6 @@
+{
+  "name": "Crawletto",
+  "description": "Web based rhythmic Dungeon Crawler",
+  "repository": "https://github.com/beuted/Crawletto",
+  "keywords": ["RPG", "rogue-like", "node", "multi-player", "game"]
+}
