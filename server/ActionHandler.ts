@@ -16,12 +16,9 @@ export class ActionHandler {
     }
 
     private execute() {
-        _.forEach(GameEventHandler.playersHandler.getPlayers(), player => {
-            player.executeAction();
-        });
-/*        _.forEach(GameEventHandler.aisHandler.getAis(), ai => {
-            ai.executeAction();
-        });*/
+        GameEventHandler.playersHandler.executeActions();
+        GameEventHandler.aisHandler.calculateNextActions();
+        GameEventHandler.aisHandler.executeActions();
     }
 
     public destroy() {

@@ -1,7 +1,7 @@
 /// <reference path="typings/tsd.d.ts" />
 
-import * as util from "util";
 import * as _ from "lodash";
+import * as util from "util";
 import * as Geo from "./utils/Geo";
 import {Player} from "./Player";
 
@@ -60,5 +60,11 @@ export class PlayersHandler {
         };
 
         return null;
+    }
+
+    public executeActions() {
+        _.forEach(this.players, player => {
+            player.executeAction();
+        });
     }
 }

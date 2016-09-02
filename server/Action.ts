@@ -1,13 +1,14 @@
 /// <reference path="typings/tsd.d.ts" />
 
-import * as _ from "lodash";
-import * as Geo from "./utils/Geo";
-import {GameEventHandler} from "./GameEventHandler";
-import {Player} from "./Player";
-import {Server} from "./Server";
+import * as _ from 'lodash';
+import * as Geo from './utils/Geo';
+import {GameEventHandler} from './GameEventHandler';
+import {Character} from './Character';
+import {Player} from './Player';
+import {Server} from './Server';
 
 export interface IAction {
-    execute(player: Player);
+    execute(char: Character);
 }
 
 export class Move implements IAction {
@@ -17,12 +18,18 @@ export class Move implements IAction {
         this.destination = destination;
     }
 
-    public execute(player: Player) {
-        player.gridPosition = this.destination;
-        var playersToNotify: Player[] = GameEventHandler.playersHandler.getPlayersOnMap(player.mapPosition);
+    public execute(char: Character) {
+        // next case should be walkable
+        if (!char.map.isCellWalkable(this.destination))
+            return;
+
+        char.gridPosition = this.destination;
+
+
+        var playersToNotify: Player[] = GameEventHandler.playersHandler.getPlayersOnMap(char.mapPosition);
         _.forEach(playersToNotify, notifiedPlayer => {
             Server.io.sockets.connected[notifiedPlayer.socketId].emit('move player', {
-                guid: player.guid,
+                guid: char.guid,
                 position: { x: this.destination.x, y: this.destination.y }
             });
         });

@@ -5,6 +5,7 @@ import * as _ from 'lodash';
 import * as Action from './Action';
 import * as Geo from './utils/Geo';
 import {Player} from './Player';
+import {Character} from './Character';
 import {Map} from './Map';
 import {ActionHandler} from './ActionHandler';
 import {AisHandler} from './AisHandler';
@@ -80,14 +81,15 @@ export class GameEventHandler {
             Server.io.sockets.connected[player.socketId].emit('new player', newPlayer.toMessage());
         });
 
-        // Send existing players & map to the new player
-        var playersOnSameMapJson: any[] = [];
-        _.forEach(playersOnSameMap, (player: Player) => {
-            playersOnSameMapJson.push(player.toMessage());
+        // Send existing characters & map to the new player
+        var charactersOnSameMap: Character[] = (<Character[]>playersOnSameMap).concat(<Character[]>GameEventHandler.aisHandler.getAis());
+        var charactersOnSameMapJson: any[] = [];
+        _.forEach(charactersOnSameMap, (character: Character) => {
+            charactersOnSameMapJson.push(character.toMessage());
         });
 
         var map = GameEventHandler.mapsHandler.getMap({ x: 0, y: 0 });
-        socket.emit('init player', { player: newPlayer.toMessage(), existingPlayers: playersOnSameMapJson, map: map })
+        socket.emit('init player', { player: newPlayer.toMessage(), existingPlayers: charactersOnSameMapJson, map: map })
 
         // Add new player to the players array
         GameEventHandler.playersHandler.addPlayer(newPlayer);
@@ -107,13 +109,6 @@ export class GameEventHandler {
         }
 
         var newPosition: Geo.IPoint = { x: movedPlayer.gridPosition.x + msg.vector.x, y: movedPlayer.gridPosition.y + msg.vector.y };
-
-        // next case should be walkable
-        Geo.Tools.distance
-        if (!movedPlayer.map.isCellWalkable(newPosition)) {
-           util.log('[Error: "move player"] Player (sId: ' + socket.id + ') asked for non-walkable tile');
-           return;
-       }
 
         // request move
         movedPlayer.planAction(new Action.Move(newPosition));
