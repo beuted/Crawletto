@@ -55,6 +55,13 @@ export class GameEventHandler {
 
         util.log('Player has disconnected: ' + socket.id);
         var player = GameEventHandler.playersHandler.getPlayerBySocketId(socket.id);
+
+        //TODO understand and fix this bug
+        if (!player) {
+            console.log('[Critical Error] socket ' + socket.id + ' not found');
+            return;
+        }
+
         var playerMapCoord = player.mapPosition;
         var playerGuid = player.guid;
 
