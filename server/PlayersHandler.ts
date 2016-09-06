@@ -1,9 +1,9 @@
 /// <reference path="typings/tsd.d.ts" />
 
-import * as _ from "lodash";
-import * as util from "util";
-import * as Geo from "./utils/Geo";
-import {Player} from "./Player";
+import * as _ from 'lodash';
+import * as util from 'util';
+import * as Geo from './utils/Geo';
+import {Player} from './Player';
 
 export class PlayersHandler {
     private players: Player[];
@@ -66,5 +66,9 @@ export class PlayersHandler {
         _.forEach(this.players, player => {
             player.executeAction();
         });
+    }
+
+    public allPlayersPlannedAction(): boolean {
+        return _.every(this.players, player => player.havePlannedAction());
     }
 }

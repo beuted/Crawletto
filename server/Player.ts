@@ -4,7 +4,9 @@
 // Maybe we could share a common interface between back and front ?
 
 import * as Geo from './utils/Geo';
+import * as Action from './Action';
 import {Character} from './Character';
+import {GameEventHandler} from './GameEventHandler';
 
 export class Player extends Character {
     public socketId: string;
@@ -12,6 +14,10 @@ export class Player extends Character {
     constructor(socketId: string, position: Geo.IPoint) {
         super(position);
         this.socketId = socketId;
+    }
 
+    public planAction(action: Action.IAction) {
+        super.planAction(action);
+        GameEventHandler.actionHandler.tryExecuteTurn()
     }
 }

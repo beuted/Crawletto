@@ -28,6 +28,10 @@ export class Character {
         return <{ guid: string, gridPosition: Geo.IPoint }> _.pick(this, ["guid", "gridPosition"]);
     }
 
+    public havePlannedAction(): boolean {
+        return !!this.turnAction;
+    }
+
     public planAction(action: Action.IAction) {
        this.turnAction = action;
     }
