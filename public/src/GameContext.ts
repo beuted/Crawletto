@@ -1,4 +1,5 @@
-/// <reference path="../typings/tsd.d.ts" />
+/// <reference path="../typings/index.d.ts" />
+
 import {Player} from "./Player";
 import {Map} from "./Map";
 import {RemotePlayersManager} from "./RemotePlayersManager";

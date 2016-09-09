@@ -16,7 +16,6 @@
     "requirejs": "2.1.22",
     "lodash": "3.10.1",
     "easystarjs": "0.2.3",
-    "q": "1.0.1",
     "requirejs-plugins": "1.0.3"
   }
 }

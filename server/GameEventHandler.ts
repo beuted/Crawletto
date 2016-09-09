@@ -1,4 +1,4 @@
-/// <reference path="typings/tsd.d.ts" />
+/// <reference path="typings/index.d.ts" />
 
 import * as util from 'util';
 import * as _ from 'lodash';

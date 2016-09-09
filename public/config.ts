@@ -1,11 +1,9 @@
-/// <reference path='typings/tsd.d.ts' />
+declare var requirejs: any;
+declare var require: any;
 
-import {Game} from './Game';
-
-requirejs.config({
+(<any>requirejs).config({
     paths: {
-        '_': 'bower_components/lodash/lodash',
-        'Q': 'bower_components/q/q',
+        'lodash': 'bower_components/lodash/lodash',
         'easystarjs': 'bower_components/easystarjs/bin/easystar-0.2.3.min',
         'phaser': 'vendors/phaser/phaser.min',
         'phaserPluginIsometric': 'vendors/phaser/phaser-plugin-isometric.min',
@@ -14,7 +12,7 @@ requirejs.config({
     },
     shim: {
         'easystarjs': {
-            deps: ['_']
+            deps: ['lodash']
         },
         'phaser': {
             exports: 'Phaser'
@@ -25,10 +23,4 @@ requirejs.config({
     }
 });
 
-require(['json!shared/config.json', '_', 'Q', 'phaser', 'easystarjs', 'phaserPluginIsometric', 'Game'], function(conf, _, Q, Phaser, easystarjs) {
-    // Bind the global libraries that are not already bound to window
-    var safeWindow: any = window;
-    safeWindow.Q = Q;
-
-    var game = new Game(conf);
-});
+(<any>require)(['json!shared/config.json', 'phaser', 'easystarjs', 'phaserPluginIsometric', 'app']);

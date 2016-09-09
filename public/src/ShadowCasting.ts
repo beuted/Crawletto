@@ -1,7 +1,7 @@
 // uses recursive shadowcasting to calculate lighting at specified position
 // source: http://heyjavascript.com/field-of-view-in-javascript-using-recursive-shadow-casting/
 
-/// <reference path="../typings/tsd.d.ts" />
+/// <reference path="../typings/index.d.ts" />
 
 import {Map} from "./Map";
 

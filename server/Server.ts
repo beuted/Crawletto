@@ -1,9 +1,9 @@
-/// <reference path="typings/tsd.d.ts" />
+/// <reference path="typings/index.d.ts" />
 
 import * as express from "express";
 
 export class Server {
-    public static instance: Express.Application;
+    public static instance: express.Application;
     public static io: SocketIO.Server;
 
     private static app: any; //TODO: type this

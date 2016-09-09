@@ -1,4 +1,4 @@
-/// <reference path="typings/tsd.d.ts" />
+/// <reference path="typings/index.d.ts" />
 
 // Player class, this aim to be as close as possible as the client version of this class
 // Maybe we could share a common interface between back and front ?
