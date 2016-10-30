@@ -4,16 +4,15 @@ import * as _ from 'lodash';
 import * as util from 'util';
 import * as Geo from './utils/Geo';
 import {Player} from './Player';
+import {CharactersHandler} from './CharactersHandler';
 
-export class PlayersHandler {
-    private players: Player[];
-
+export class PlayersHandler extends CharactersHandler<Player> {
     constructor() {
-        this.players = [];
+        super();
     }
 
     public addPlayer(player: Player) {
-        this.players.push(player);
+        this.characters.push(player);
     }
 
     public removePlayer(playerId: string) {
@@ -23,30 +22,20 @@ export class PlayersHandler {
             return;
         }
 
-        this.players.splice(this.players.indexOf(removePlayer), 1);
-    }
-
-    public getPlayers(): Player[] {
-        return this.players;
-    }
-
-    public getPlayersOnMap(coord: Geo.IPoint): Player[] {
-        return _.filter(this.players, function(player) {
-            return player.mapPosition.x == coord.x && player.mapPosition.y == coord.y;
-        });
+        this.characters.splice(this.characters.indexOf(removePlayer), 1);
     }
 
     public getPlayersOnMapWithIdDifferentFrom(coord: Geo.IPoint, guid: string) {
-        return _.filter(this.players, function(player) {
+        return _.filter(this.characters, function(player) {
             return player.mapPosition.x == coord.x && player.mapPosition.y == coord.y && player.guid !== guid;
         });
     }
 
     // Find player by GUID
     public getPlayer(guid: string): Player {
-        for (var i = 0; i < this.players.length; i++) {
-            if (this.players[i].guid == guid)
-                return this.players[i];
+        for (var i = 0; i < this.characters.length; i++) {
+            if (this.characters[i].guid == guid)
+                return this.characters[i];
         };
 
         return null;
@@ -54,21 +43,15 @@ export class PlayersHandler {
 
     // Find player by SocketId
     public getPlayerBySocketId(socketId: string): Player {
-        for (var i = 0; i < this.players.length; i++) {
-            if (this.players[i].socketId == socketId)
-                return this.players[i];
+        for (var i = 0; i < this.characters.length; i++) {
+            if (this.characters[i].socketId == socketId)
+                return this.characters[i];
         };
 
         return null;
     }
 
-    public executeActions() {
-        _.forEach(this.players, player => {
-            player.executeAction();
-        });
-    }
-
     public allPlayersPlannedAction(): boolean {
-        return _.every(this.players, player => player.havePlannedAction());
+        return _.every(this.characters, player => player.havePlannedAction());
     }
 }

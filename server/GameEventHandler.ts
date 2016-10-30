@@ -69,7 +69,7 @@ export class GameEventHandler {
         GameEventHandler.playersHandler.removePlayer(playerGuid);
 
         // Broadcast removed player to connected socket clients on the same map
-        var playersOnSameMap = GameEventHandler.playersHandler.getPlayersOnMap(playerMapCoord);
+        var playersOnSameMap = GameEventHandler.playersHandler.getCharactersOnMap(playerMapCoord);
         _.forEach(playersOnSameMap, (player: Player) => {
             Server.io.sockets.connected[player.socketId].emit('remove player', { guid: playerGuid });
         });
@@ -89,7 +89,7 @@ export class GameEventHandler {
         });
 
         // Send existing characters & map to the new player
-        var charactersOnSameMap: Character[] = (<Character[]>playersOnSameMap).concat(<Character[]>GameEventHandler.aisHandler.getAis());
+        var charactersOnSameMap: Character[] = (<Character[]>playersOnSameMap).concat(<Character[]>GameEventHandler.aisHandler.getCharacters());
         var charactersOnSameMapJson: any[] = [];
         _.forEach(charactersOnSameMap, (character: Character) => {
             charactersOnSameMapJson.push(character.toMessage());

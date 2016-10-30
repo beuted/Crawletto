@@ -5,37 +5,18 @@ import * as Geo from './utils/Geo';
 import {Ai} from './Ai';
 import {Move} from './Action';
 import {GameEventHandler} from './GameEventHandler';
+import {CharactersHandler} from './CharactersHandler';
 
-export class AisHandler {
-
-    private ais: Ai[];
-
+export class AisHandler extends CharactersHandler<Ai> {
     constructor() {
-        this.ais = [];
-
+        super();
         var ai = new Ai({ x: 5, y: 9 });
-        this.ais.push(ai);
+        this.characters.push(ai);
     }
 
     public calculateNextActions() {
-        _.forEach(this.ais, ai => {
+        _.forEach(this.characters, ai => {
             ai.calculateNextAction();
-        });
-    }
-
-    public executeActions() {
-        _.forEach(this.ais, ai => {
-            ai.executeAction();
-        });
-    }
-
-    public getAis() {
-        return this.ais;
-    }
-
-    public getAisOnMap(coord: Geo.IPoint): Ai[] {
-        return _.filter(this.ais, function(ai) {
-            return ai.mapPosition.x == coord.x && ai.mapPosition.y == coord.y;
         });
     }
 }

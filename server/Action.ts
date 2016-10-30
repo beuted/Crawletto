@@ -26,7 +26,7 @@ export class Move implements IAction {
         char.gridPosition = this.destination;
 
 
-        var playersToNotify: Player[] = GameEventHandler.playersHandler.getPlayersOnMap(char.mapPosition);
+        var playersToNotify: Player[] = GameEventHandler.playersHandler.getCharactersOnMap(char.mapPosition);
         _.forEach(playersToNotify, notifiedPlayer => {
             Server.io.sockets.connected[notifiedPlayer.socketId].emit('move player', {
                 guid: char.guid,
@@ -51,7 +51,7 @@ export class ChangeMap implements IAction {
 
         var playersOnPrevMap = GameEventHandler.playersHandler.getPlayersOnMapWithIdDifferentFrom(player.mapPosition, player.guid);
         var playersOnDestMap = GameEventHandler.playersHandler.getPlayersOnMapWithIdDifferentFrom(this.destMap, player.guid);
-        var aisOnDestMap = GameEventHandler.aisHandler.getAisOnMap(this.destMap);
+        var aisOnDestMap = GameEventHandler.aisHandler.getCharactersOnMap(this.destMap);
 
         player.gridPosition = this.destCase;
         player.mapPosition = this.destMap;
