@@ -1,6 +1,7 @@
 /// <reference path="typings/index.d.ts" />
 
 import * as _ from 'lodash';
+import * as Geo from './utils/Geo';
 import {Ai} from './Ai';
 import {Move} from './Action';
 import {GameEventHandler} from './GameEventHandler';
@@ -30,5 +31,11 @@ export class AisHandler {
 
     public getAis() {
         return this.ais;
+    }
+
+    public getAisOnMap(coord: Geo.IPoint): Ai[] {
+        return _.filter(this.ais, function(ai) {
+            return ai.mapPosition.x == coord.x && ai.mapPosition.y == coord.y;
+        });
     }
 }
