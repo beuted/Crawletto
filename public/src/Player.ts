@@ -1,7 +1,7 @@
 /// <reference path="../typings/index.d.ts" />
 
-import {GameContext, ICharConfig} from "./GameContext";
-import {Map} from "./Map";
+import { GameContext, ICharConfig } from "./GameContext";
+import { Map } from "./Map";
 
 export class Player {
     public sprite: any;
@@ -78,7 +78,7 @@ export class Player {
         } else if (vector.x > 0) {
             this.direction = 'right';
             this.sprite.frame = this.charConfig.animations.walkRight[0];
-        } else if (vector.y < 0){
+        } else if (vector.y < 0) {
             this.direction = 'up';
             this.sprite.frame = this.charConfig.animations.walkUp[0];
         } else {

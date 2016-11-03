@@ -1,9 +1,9 @@
 /// <reference path="../typings/index.d.ts" />
 
 import * as _ from 'lodash';
-import {GameContext} from "./GameContext";
-import {Player} from "./Player";
-import {RemotePlayersManager} from "./RemotePlayersManager";
+import { GameContext } from "./GameContext";
+import { Player } from "./Player";
+import { RemotePlayersManager } from "./RemotePlayersManager";
 
 export class SocketManager {
 

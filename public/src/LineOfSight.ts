@@ -227,16 +227,16 @@ export function fieldOfView(ox, oy, r, visit, blocked) {
 
 /** Helper methods for points. */
 function Pt(x, y) { this.x = x; this.y = y; }
-Pt.prototype.toString = function() { return '(' + this.x + ',' + this.y + ')'; }
-Pt.prototype.copy = function() { return new Pt(this.x, this.y); }
+Pt.prototype.toString = function () { return '(' + this.x + ',' + this.y + ')'; }
+Pt.prototype.copy = function () { return new Pt(this.x, this.y); }
 
 /** Helper methods for lines. */
 function Ln(p, q) { this.p = p; this.q = q; }
-Ln.prototype.toString = function() { return this.p + '-' + this.q; }
-Ln.prototype.copy = function() { return new Ln(this.p.copy(), this.q.copy()); }
-Ln.prototype.cw = function(pt) { return this.dtheta(pt) > 0; }
-Ln.prototype.ccw = function(pt) { return this.dtheta(pt) < 0; }
-Ln.prototype.dtheta = function(pt) {
+Ln.prototype.toString = function () { return this.p + '-' + this.q; }
+Ln.prototype.copy = function () { return new Ln(this.p.copy(), this.q.copy()); }
+Ln.prototype.cw = function (pt) { return this.dtheta(pt) > 0; }
+Ln.prototype.ccw = function (pt) { return this.dtheta(pt) < 0; }
+Ln.prototype.dtheta = function (pt) {
     var theta = Math.atan2(this.q.y - this.p.y, this.q.x - this.p.x),
         other = Math.atan2(pt.y - this.p.y, pt.x - this.p.x),
         dt = other - theta;
@@ -251,11 +251,11 @@ function Arc(steep, shallow) {
     this.shallowbumps = [];
 }
 
-Arc.prototype.toString = function() {
+Arc.prototype.toString = function () {
     return '[' + this.steep + ' : ' + this.shallow + ']';
 }
 
-Arc.prototype.copy = function() {
+Arc.prototype.copy = function () {
     var c = new Arc(this.steep.copy(), this.shallow.copy());
     var i;
     for (i in this.steepbumps) {
@@ -267,13 +267,13 @@ Arc.prototype.copy = function() {
     return c;
 }
 
-Arc.prototype.hits = function(pt) {
+Arc.prototype.hits = function (pt) {
     return (this.steep.ccw(new Pt(pt.x + 1, pt.y)) &&
         this.shallow.cw(new Pt(pt.x, pt.y + 1)));
 }
 
 /** Bump this arc clockwise (a steep bump). */
-Arc.prototype.bumpCW = function(pt) {
+Arc.prototype.bumpCW = function (pt) {
     // Steep bump.
     var sb = new Pt(pt.x + 1, pt.y);
     this.steepbumps.push(sb);
@@ -285,7 +285,7 @@ Arc.prototype.bumpCW = function(pt) {
 }
 
 /** Bump this arc counterclockwise (a shallow bump). */
-Arc.prototype.bumpCCW = function(pt) {
+Arc.prototype.bumpCCW = function (pt) {
     var sb = new Pt(pt.x, pt.y + 1);
     this.shallowbumps.push(sb);
     this.shallow.q = sb;
@@ -295,7 +295,7 @@ Arc.prototype.bumpCCW = function(pt) {
     }
 }
 
-Arc.prototype.shade = function(pt) {
+Arc.prototype.shade = function (pt) {
     var steepBlock = this.steep.cw(new Pt(pt.x, pt.y + 1)),
         shallowBlock = this.shallow.ccw(new Pt(pt.x + 1, pt.y));
     if (steepBlock && shallowBlock) {
@@ -325,7 +325,7 @@ function Light(radius) {
     this.arcs = [wide];
 }
 
-Light.prototype.hits = function(pt): any {
+Light.prototype.hits = function (pt): any {
     for (var i in this.arcs) {
         // Cannot just return i, in case it's zero.
         if (this.arcs[i].hits(pt)) { return { i: i }; }
@@ -333,7 +333,7 @@ Light.prototype.hits = function(pt): any {
     return false;
 }
 
-Light.prototype.shade = function(arci, pt) {
+Light.prototype.shade = function (arci, pt) {
     var arc = this.arcs[arci.i],
         splice = this.arcs.splice;
     // Shade the arc with this point, replace it with new arcs (or none).

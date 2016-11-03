@@ -2,7 +2,7 @@
 
 import * as _ from "lodash";
 import * as Geo from "./utils/Geo";
-import {ICoordObject} from "./utils/CoordDic";
+import { ICoordObject } from "./utils/CoordDic";
 
 export class Map implements ICoordObject {
     private floors: number[][];

@@ -1,9 +1,8 @@
 /// <reference path="../../typings/index.d.ts" />
 
-import {GameContext} from "../GameContext";
+import { GameContext } from "../GameContext";
 
-export class BootState
-{
+export class BootState {
     public preload() {
         console.debug('Entering BootState');
     }
@@ -16,7 +15,7 @@ export class BootState
         GameContext.instance.state.start('Load');
     }
 
-    public update() {}
+    public update() { }
 
-    public render() {}
+    public render() { }
 }

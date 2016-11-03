@@ -3,8 +3,8 @@
 import * as _ from 'lodash';
 import * as util from 'util';
 import * as Geo from './utils/Geo';
-import {Player} from './Player';
-import {CharactersHandler} from './CharactersHandler';
+import { Player } from './Player';
+import { CharactersHandler } from './CharactersHandler';
 
 export class PlayersHandler extends CharactersHandler<Player> {
     constructor() {
@@ -26,7 +26,7 @@ export class PlayersHandler extends CharactersHandler<Player> {
     }
 
     public getPlayersOnMapWithIdDifferentFrom(coord: Geo.IPoint, guid: string) {
-        return _.filter(this.characters, function(player) {
+        return _.filter(this.characters, function (player) {
             return player.mapPosition.x == coord.x && player.mapPosition.y == coord.y && player.guid !== guid;
         });
     }

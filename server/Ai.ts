@@ -1,8 +1,8 @@
 /// <reference path="typings/index.d.ts" />
 
 import * as Geo from './utils/Geo';
-import {Move} from './Action';
-import {Character} from './Character';
+import { Move } from './Action';
+import { Character } from './Character';
 
 export class Ai extends Character {
 

@@ -3,7 +3,7 @@
 
 /// <reference path="../typings/index.d.ts" />
 
-import {Map} from "./Map";
+import { Map } from "./Map";
 
 export class LightSource {
 

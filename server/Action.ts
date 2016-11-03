@@ -2,10 +2,10 @@
 
 import * as _ from 'lodash';
 import * as Geo from './utils/Geo';
-import {GameEventHandler} from './GameEventHandler';
-import {Character} from './Character';
-import {Player} from './Player';
-import {Server} from './Server';
+import { GameEventHandler } from './GameEventHandler';
+import { Character } from './Character';
+import { Player } from './Player';
+import { Server } from './Server';
 
 export interface IAction {
     execute(char: Character);
@@ -58,7 +58,7 @@ export class ChangeMap implements IAction {
         player.gridPosition = this.destCase;
 
         // Send the change map message to the player changing map
-        let aisOnMapMessage =  _.map(aisOnDestMap, ai => ai.toMessage());
+        let aisOnMapMessage = _.map(aisOnDestMap, ai => ai.toMessage());
         let playersOnDestMapMessage = _.map(playersOnDestMap, player => player.toMessage());
 
         Server.io.sockets.connected[player.socketId].emit('change map player', {

@@ -2,9 +2,9 @@
 
 import * as _ from "lodash";
 import * as Geo from "./utils/Geo";
-import {CoordDic, ICoordObject} from "./utils/CoordDic";
-import {Map} from "./Map";
-import {MapGenerator} from "./MapGenerator";
+import { CoordDic, ICoordObject } from "./utils/CoordDic";
+import { Map } from "./Map";
+import { MapGenerator } from "./MapGenerator";
 
 export class MapsHandler {
     private maps: CoordDic<Map>;

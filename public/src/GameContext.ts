@@ -1,9 +1,9 @@
 /// <reference path="../typings/index.d.ts" />
 
-import {Player} from "./Player";
-import {Map} from "./Map";
-import {RemotePlayersManager} from "./RemotePlayersManager";
-import {SocketManager} from "./SocketManager";
+import { Player } from "./Player";
+import { Map } from "./Map";
+import { RemotePlayersManager } from "./RemotePlayersManager";
+import { SocketManager } from "./SocketManager";
 
 export interface IConfig {
     map: {
@@ -49,9 +49,9 @@ export class GameContext {
         if (!this.remotePlayersManager) this.remotePlayersManager = new RemotePlayersManager();
 
         // TODO: (wip) Add loader callbacks
-/*        GameContext.instance.load.onLoadComplete.add(() => {
-            console.debug("[Loader] Load complete");
-        }, this);*/
+        /*        GameContext.instance.load.onLoadComplete.add(() => {
+                    console.debug("[Loader] Load complete");
+                }, this);*/
 
         GameContext.instance.world.resize(2000, 1000);
     }

@@ -3,9 +3,9 @@
 import * as _ from 'lodash';
 import * as Geo from './utils/Geo';
 import * as Action from './Action';
-import {Map} from './Map';
-import {GameEventHandler} from './GameEventHandler';
-import {Server} from './Server';
+import { Map } from './Map';
+import { GameEventHandler } from './GameEventHandler';
+import { Server } from './Server';
 
 export class Character {
     public mapPosition: Geo.IPoint;
@@ -25,7 +25,7 @@ export class Character {
     }
 
     public toMessage(): { guid: string, gridPosition: Geo.IPoint } {
-        return <{ guid: string, gridPosition: Geo.IPoint }> _.pick(this, ["guid", "gridPosition"]);
+        return <{ guid: string, gridPosition: Geo.IPoint }>_.pick(this, ["guid", "gridPosition"]);
     }
 
     public havePlannedAction(): boolean {
@@ -33,7 +33,7 @@ export class Character {
     }
 
     public planAction(action: Action.IAction) {
-       this.turnAction = action;
+        this.turnAction = action;
     }
 
     public executeAction() {
@@ -78,12 +78,12 @@ export class Character {
 
     //TODO do better, move or something
     private generateGuid() {
-      function s4() {
-        return Math.floor((1 + Math.random()) * 0x10000)
-          .toString(16)
-          .substring(1);
-      }
-      return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
-        s4() + '-' + s4() + s4() + s4();
+        function s4() {
+            return Math.floor((1 + Math.random()) * 0x10000)
+                .toString(16)
+                .substring(1);
+        }
+        return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+            s4() + '-' + s4() + s4() + s4();
     }
 }

@@ -5,8 +5,8 @@
 
 import * as Geo from './utils/Geo';
 import * as Action from './Action';
-import {Character} from './Character';
-import {GameEventHandler} from './GameEventHandler';
+import { Character } from './Character';
+import { GameEventHandler } from './GameEventHandler';
 
 export class Player extends Character {
     public socketId: string;

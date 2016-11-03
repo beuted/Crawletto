@@ -1,8 +1,8 @@
 /// <reference path="../typings/index.d.ts" />
 
 import * as _ from 'lodash';
-import {GameContext} from './GameContext';
-import {LightSource} from './ShadowCasting';
+import { GameContext } from './GameContext';
+import { LightSource } from './ShadowCasting';
 
 export enum TileType {
     Water = 0,
@@ -33,7 +33,7 @@ class Cell {
     public floorTile: Phaser.Plugin.Isometric.IsoSprite;
     public structureTile: Phaser.Plugin.Isometric.IsoSprite;
 
-    constructor(floorId: number, structureId: number, floorTile : Phaser.Plugin.Isometric.IsoSprite, structureTile: Phaser.Plugin.Isometric.IsoSprite) {
+    constructor(floorId: number, structureId: number, floorTile: Phaser.Plugin.Isometric.IsoSprite, structureTile: Phaser.Plugin.Isometric.IsoSprite) {
         this.floorId = floorId;
         this.structureId = structureId;
         this.floorTile = floorTile;
@@ -154,26 +154,26 @@ export class Map {
         return false;
     }
 
-/*    public findPath(fromPoint: Phaser.Point, toPoint: Phaser.Point): Q.Promise<any[]> {
-        var deferred: Q.Deferred<any[]> = Q.defer<any[]>();
-        this.easystar.findPath(fromPoint.x, fromPoint.y, toPoint.x, toPoint.y, function(path: any[]) {
-            if (path === null) {
-                deferred.reject("Path returned by easystar is null");
-                return;
-            }
-
-            if (path.length <= 1) {
-                deferred.reject("Path returned by easystar has size of 0 or 1");
-                return;
-            }
-
-            path.shift(); // remove the first element which is not a move
-            deferred.resolve(path);
-        });
-        this.easystar.calculate();
-
-        return deferred.promise;
-    }*/
+    /*    public findPath(fromPoint: Phaser.Point, toPoint: Phaser.Point): Q.Promise<any[]> {
+            var deferred: Q.Deferred<any[]> = Q.defer<any[]>();
+            this.easystar.findPath(fromPoint.x, fromPoint.y, toPoint.x, toPoint.y, function(path: any[]) {
+                if (path === null) {
+                    deferred.reject("Path returned by easystar is null");
+                    return;
+                }
+    
+                if (path.length <= 1) {
+                    deferred.reject("Path returned by easystar has size of 0 or 1");
+                    return;
+                }
+    
+                path.shift(); // remove the first element which is not a move
+                deferred.resolve(path);
+            });
+            this.easystar.calculate();
+    
+            return deferred.promise;
+        }*/
 
     public update() {
         if (!this.plateau) //TODO: find a better solution
@@ -217,7 +217,7 @@ export class Map {
     }
 
     public ForEachCells(f: (cell: Cell) => void) {
-         this.cells.forEach((cells, i) => {
+        this.cells.forEach((cells, i) => {
             cells.forEach((cell, i) => {
                 f(cell);
             });

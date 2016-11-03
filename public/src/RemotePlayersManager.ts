@@ -1,8 +1,8 @@
 /// <reference path="../typings/index.d.ts" />
 
 import * as _ from 'lodash';
-import {GameContext} from "./GameContext";
-import {Player} from "./Player";
+import { GameContext } from "./GameContext";
+import { Player } from "./Player";
 
 export class RemotePlayersManager {
     private remotePlayers: Player[];
@@ -21,7 +21,7 @@ export class RemotePlayersManager {
     }
 
     public addAllFromJson(playersJson: { gridPosition: Phaser.Point, guid: string }[]) {
-        _.forEach(playersJson, function(playerJson: any) {
+        _.forEach(playersJson, function (playerJson: any) {
             this.addFromJson(playerJson);
         }, this);
     }
@@ -41,7 +41,7 @@ export class RemotePlayersManager {
     }
 
     public removeAll() {
-        _.forEach(this.remotePlayers, function(remotePlayer) {
+        _.forEach(this.remotePlayers, function (remotePlayer) {
             remotePlayer.destroy();
         });
         this.remotePlayers = []

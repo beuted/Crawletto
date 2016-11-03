@@ -4,14 +4,14 @@ import * as util from 'util';
 import * as _ from 'lodash';
 import * as Action from './Action';
 import * as Geo from './utils/Geo';
-import {Player} from './Player';
-import {Character} from './Character';
-import {Map} from './Map';
-import {ActionHandler} from './ActionHandler';
-import {AisHandler} from './AisHandler';
-import {MapsHandler} from './MapsHandler';
-import {PlayersHandler} from './PlayersHandler';
-import {Server} from './Server';
+import { Player } from './Player';
+import { Character } from './Character';
+import { Map } from './Map';
+import { ActionHandler } from './ActionHandler';
+import { AisHandler } from './AisHandler';
+import { MapsHandler } from './MapsHandler';
+import { PlayersHandler } from './PlayersHandler';
+import { Server } from './Server';
 
 export class GameEventHandler {
     public static mapsHandler: MapsHandler;
@@ -103,7 +103,7 @@ export class GameEventHandler {
     }
 
     // Player has moved
-    private static onMoveRequest(msg: {vector: Geo.IPoint }) {
+    private static onMoveRequest(msg: { vector: Geo.IPoint }) {
         var socket: SocketIO.Socket = <any>this;
 
         // Find player in array
