@@ -8,9 +8,9 @@ export class BootState {
     }
 
     public create() {
-        GameContext.instance.plugins.add(Phaser.Plugin.Isometric, GameContext.instance);
-        GameContext.instance.physics.startSystem(Phaser.Plugin.Isometric.ISOARCADE);
-        GameContext.instance.iso.anchor.setTo(0.5, 0.1);
+        //GameContext.instance.plugins.add(Phaser.Plugin.Isometric, GameContext.instance);
+        GameContext.instance.physics.startSystem(Phaser.Physics.ARCADE);
+        //GameContext.instance.iso.anchor.setTo(0.5, 0.1);
 
         GameContext.instance.state.start('Load');
     }

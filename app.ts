@@ -1,7 +1,7 @@
 /// <reference path="server/typings/index.d.ts" />
 
-import {Server} from "./server/Server"
-import {GameEventHandler} from "./server/GameEventHandler"
+import {Server} from './server/Server';
+import {GameEventHandler} from './server/GameEventHandler';
 
 var gameEventHandler: GameEventHandler
 

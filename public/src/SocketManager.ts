@@ -1,9 +1,9 @@
 /// <reference path="../typings/index.d.ts" />
 
 import * as _ from 'lodash';
-import { GameContext } from "./GameContext";
-import { Player } from "./Player";
-import { RemotePlayersManager } from "./RemotePlayersManager";
+import { GameContext } from './GameContext';
+import { Player } from './Player';
+import { RemotePlayersManager } from './RemotePlayersManager';
 
 export class SocketManager {
 
@@ -11,36 +11,36 @@ export class SocketManager {
 
     constructor() {
         this.socket = io();
-        this.socket.on("connect", this.onSocketConnected.bind(this));       // Socket connection successful
-        this.socket.on("disconnect", this.onSocketDisconnect.bind(this));   // Socket disconnection
-        this.socket.on("new player", this.onNewPlayer.bind(this));          // New player message received
-        this.socket.on("init player", this.onInitPlayer.bind(this));    // Player removed message received
-        this.socket.on("move player", this.onMovePlayer.bind(this));        // Player move message received
-        this.socket.on("change map player", this.onChangeMapPlayer.bind(this));    // Player removed message received
-        this.socket.on("remove player", this.onRemovePlayer.bind(this));    // Player removed message received
+        this.socket.on('connect', this.onSocketConnected.bind(this));       // Socket connection successful
+        this.socket.on('disconnect', this.onSocketDisconnect.bind(this));   // Socket disconnection
+        this.socket.on('new player', this.onNewPlayer.bind(this));          // New player message received
+        this.socket.on('init player', this.onInitPlayer.bind(this));    // Player removed message received
+        this.socket.on('move player', this.onMovePlayer.bind(this));        // Player move message received
+        this.socket.on('change map player', this.onChangeMapPlayer.bind(this));    // Player removed message received
+        this.socket.on('remove player', this.onRemovePlayer.bind(this));    // Player removed message received
     }
 
     public requestPlayerMove(vector: { x: number, y: number }) {
-        this.socket.emit("move player", { vector: vector });
+        this.socket.emit('move player', { vector: vector });
     }
 
 
     // Socket connected
     private onSocketConnected() {
-        console.debug("Connected to socket server as " + this.socket.io.engine.id);
+        console.debug('Connected to socket server as ' + this.socket.io.engine.id);
 
         // Send local player data to the game server
-        this.socket.emit("new player", {});
+        this.socket.emit('new player', {});
     }
 
     // Socket disconnected
     private onSocketDisconnect() {
-        console.debug("Disconnected from socket server");
+        console.debug('Disconnected from socket server');
     }
 
     // New player (TODO: add save guid to data)
     private onNewPlayer(data: any) {
-        console.debug("New player on map: " + JSON.stringify(data));
+        console.debug('New player on map: ' + JSON.stringify(data));
 
         // Add new player to the remote players array
         GameContext.remotePlayersManager.addFromJson(data);
@@ -48,10 +48,10 @@ export class SocketManager {
 
     // Init player
     private onInitPlayer(data: { player: any, existingPlayers: any[], map: any }) {
-        console.debug("Init player: " + JSON.stringify(data));
+        console.debug('Init player: ' + JSON.stringify(data));
 
         // Register current player
-        GameContext.player = new Player(data.player.gridPosition.x, data.player.gridPosition.y, data.player.guid, _.sample(['cube', 'fairy', 'pingu']), true);
+        GameContext.player = new Player(data.player.gridPosition.x, data.player.gridPosition.y, data.player.guid, 'zombie', true);
         GameContext.player = GameContext.player;
 
         // Load current map
@@ -88,7 +88,7 @@ export class SocketManager {
 
     // Remove player
     private onRemovePlayer(data: any) {
-        console.debug("Player removed from map: " + data.guid);
+        console.debug('Player removed from map: ' + data.guid);
         // Remove player from remotePlayers
         GameContext.remotePlayersManager.removeByGuid(data.guid)
     }

@@ -16,7 +16,7 @@ export class RemotePlayersManager {
     }
 
     public addFromJson(playerJson: { gridPosition: Phaser.Point, guid: string }) {
-        var remotePlayer = new Player(playerJson.gridPosition.x, playerJson.gridPosition.y, playerJson.guid, 'pingu');
+        var remotePlayer = new Player(playerJson.gridPosition.x, playerJson.gridPosition.y, playerJson.guid, 'zombie');
         this.add(remotePlayer);
     }
 

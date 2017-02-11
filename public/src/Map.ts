@@ -30,10 +30,10 @@ interface Plateau {
 class Cell {
     public floorId: number;
     public structureId: number;
-    public floorTile: Phaser.Plugin.Isometric.IsoSprite;
-    public structureTile: Phaser.Plugin.Isometric.IsoSprite;
+    public floorTile: Phaser.Sprite;
+    public structureTile: Phaser.Sprite;
 
-    constructor(floorId: number, structureId: number, floorTile: Phaser.Plugin.Isometric.IsoSprite, structureTile: Phaser.Plugin.Isometric.IsoSprite) {
+    constructor(floorId: number, structureId: number, floorTile: Phaser.Sprite, structureTile: Phaser.Sprite) {
         this.floorId = floorId;
         this.structureId = structureId;
         this.floorTile = floorTile;
@@ -77,7 +77,7 @@ export class Map {
     private plateau: Plateau;
     private cells: Cell[][];
     private tileArray: string[];
-    private water: Phaser.Plugin.Isometric.IsoSprite[];
+    private water: Phaser.Sprite[];
 
     private easystar: EasyStar.js;
     private lightSource: LightSource;
@@ -113,7 +113,7 @@ export class Map {
         Map.isoGroup.enableBody = true;
         Map.sortedGroup.enableBody = true;
         // we won't really be using IsoArcade physics, but I've enabled it anyway so the debug bodies can be seen
-        Map.sortedGroup.physicsBodyType = Phaser.Plugin.Isometric.ISOARCADE;
+        Map.sortedGroup.physicsBodyType = Phaser.Physics.ARCADE;
 
         // init path finding
         this.easystar = new EasyStar.js();
@@ -127,7 +127,7 @@ export class Map {
     public getPlateauFloor(point: Phaser.Point): number {
         var line = this.plateau.floors[point.y];
         if (line === undefined || line[point.x] === undefined) {
-            console.log("[WARNING: Map>getPlateauFloor] Tried to access (" + point.x + ", " + point.y + ") but it is undefined");
+            console.log('[WARNING: Map>getPlateauFloor] Tried to access (' + point.x + ', ' + point.y + ') but it is undefined');
             return 0;
         }
         return line[point.x];
@@ -180,10 +180,10 @@ export class Map {
             return;
 
         // make the water move nicely
-        this.water.forEach(w => {
+        /*this.water.forEach(w => {
             w.isoZ = (-2 * Math.sin((GameContext.instance.time.now + (w.isoX * 7)) * 0.004)) + (-1 * Math.sin((GameContext.instance.time.now + (w.isoY * 8)) * 0.005));
             w.alpha = Phaser.Math.clamp(1 + (w.isoZ * 0.1), 0.2, 1);
-        });
+        });*/
 
         // set to dark every tile by default
         this.ForEachCells(cell => cell.color(0x888888));
@@ -193,7 +193,7 @@ export class Map {
         }
         // tile selection animation
         // > Update the cursor position. (TODO: this shouldn't be done in Map)
-        var cursorPos: Phaser.Plugin.Isometric.Point3 = GameContext.instance.iso.unproject(GameContext.instance.input.activePointer.position);
+        /*var cursorPos: Phaser.Plugin.Isometric.Point3 = GameContext.instance.iso.unproject(GameContext.instance.input.activePointer.position);
         var selectedCell: Cell;
         this.ForEachCells(cell => {
             // Tile selection -- Note: those "1.5" are fucking mysterious to me :/
@@ -209,7 +209,7 @@ export class Map {
         }
 
         // simple sort for the isometric tiles
-        GameContext.instance.iso.topologicalSort(Map.sortedGroup);
+        GameContext.instance.iso.topologicalSort(Map.sortedGroup);*/
     }
 
     public getCell(point: Phaser.Point) {
@@ -250,7 +250,7 @@ export class Map {
                 var floorId = this.getPlateauFloor(point);
 
                 if (structureId != 0) {
-                    var structureTile = GameContext.instance.add.isoSprite(point.x * Map.tileSize, point.y * Map.tileSize, 0, 'tileset', this.tileArray[structureId], Map.sortedGroup);
+                    var structureTile = GameContext.instance.add.sprite(point.x * Map.tileSize, point.y * Map.tileSize, 'tileset', this.tileArray[structureId], Map.sortedGroup);
                     structureTile.anchor.set(0.5, 1);
                     structureTile.smoothed = true;
                     structureTile.body.moves = false;
@@ -258,7 +258,7 @@ export class Map {
                     this.cells[point.x][point.y].structureTile = structureTile;
                 }
 
-                var floorTile = GameContext.instance.add.isoSprite(point.x * Map.tileSize, point.y * Map.tileSize, 0, 'tileset', this.tileArray[floorId], Map.isoGroup);
+                var floorTile = GameContext.instance.add.sprite(point.x * Map.tileSize, point.y * Map.tileSize, 'tileset', this.tileArray[floorId], Map.isoGroup);
                 floorTile.anchor.set(0.5, 1);
                 floorTile.smoothed = true;
                 floorTile.body.moves = false;
@@ -272,7 +272,7 @@ export class Map {
         }
 
         // topological sort for the isometric tiles
-        GameContext.instance.iso.topologicalSort(Map.sortedGroup);
+        //GameContext.instance.iso.topologicalSort(Map.sortedGroup);
     }
 
     public changeMap(mapData: any) {

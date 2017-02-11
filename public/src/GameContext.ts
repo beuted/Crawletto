@@ -34,7 +34,7 @@ export interface ICharConfig {
 }
 
 export class GameContext {
-    static instance: Phaser.Plugin.Isometric.Game;
+    static instance: Phaser.Game;
     static player: Player;
     static remotePlayersManager: RemotePlayersManager;
     static map: Map;

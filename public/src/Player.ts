@@ -17,11 +17,9 @@ export class Player {
     constructor(startX: number, startY: number, guid: string, type: string, current: boolean = false) {
         this.charConfig = GameContext.config.characters[type];
         // setting up the sprite
-        //this.sprite = GameContext.instance.add.isoSprite(startX * 32, startY * 32, 48, 'cube', 0, Map.isoGroup); // old cube sprite
-        //this.sprite = GameContext.instance.add.isoSprite(startX * 32, startY * 32, 48, 'fairy_anim', 0, Map.sortedGroup);
-        this.sprite = GameContext.instance.add.isoSprite(startX * 32, startY * 32, 36, this.charConfig.sprite, 0, Map.sortedGroup);
-        this.sprite.anchor.set(0.5, 0.5);
-        this.sprite.scale.set(0.5);
+        this.sprite = GameContext.instance.add.sprite(startX * 32, startY * 32, this.charConfig.sprite, 0, Map.sortedGroup);
+        this.sprite.anchor.set(0.5, 1);
+        this.sprite.scale.set(2);
         this.sprite.smoothed = false;
         this.sprite.animations.add('walk-down', this.charConfig.animations.walkDown);
         this.sprite.animations.add('walk-up', this.charConfig.animations.walkUp);
@@ -54,7 +52,7 @@ export class Player {
         this.gridPosition.y = destPoint.y;
 
         this.sprite.animations.play(animation, this.charConfig.animationFps, true);
-        var tween = GameContext.instance.add.tween(this.sprite.body).to({ x: destPoint.x * 32, y: destPoint.y * 32 }, this.charConfig.animationTime, Phaser.Easing.Linear.None, true);
+        var tween = GameContext.instance.add.tween(this.sprite).to({ x: destPoint.x * 32, y: destPoint.y * 32 }, this.charConfig.animationTime, Phaser.Easing.Linear.None, true);
         tween.onComplete.addOnce(item => this.sprite.animations.stop(animation, true));
     }
 
@@ -68,7 +66,7 @@ export class Player {
         this.sprite.y = destPoint.y * 32;
 
         // TODO: b.jehanno (hack to move instant because I can't make it work without this T_T )
-        GameContext.instance.add.tween(this.sprite.body).to({ x: destPoint.x * 32, y: destPoint.y * 32 }, 1, Phaser.Easing.Linear.None, true);
+        //GameContext.instance.add.tween(this.sprite).to({ x: destPoint.x * 32, y: destPoint.y * 32 }, 1, Phaser.Easing.Linear.None, true);
     }
 
     public changeDirection(vector: any) {
