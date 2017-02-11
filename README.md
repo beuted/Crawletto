@@ -1,8 +1,8 @@
 # Crawletto ![travis status](https://travis-ci.org/beuted/Crawletto.svg?branch=master) [![Deploy](https://beuted.github.io/Crawletto/deploy-to-heroku.svg)](https://heroku.com/deploy)
 
-###*Work in progress*
+### *Work in progress*
 
-Phaser project of a turn based isometric games in rythm
+Phaser project of a turn based multiplayer games inspred by nethack
 
 ## Play the [Demo on Heroku](https://crawletto.herokuapp.com/) or [![Deploy](https://beuted.github.io/Crawletto/deploy-to-heroku.svg)](https://heroku.com/deploy)
 
@@ -12,7 +12,7 @@ Phaser project of a turn based isometric games in rythm
 * **Arrow keys:** move around
 
 ## Features
-* _Randomly generated maps_ based on a seed ([Seedrandom](https://github.com/davidbau/seedrandom)) rendered with _[isometric tiles](http://www.rotates.org/phaser/iso/)_
+* _Randomly generated maps_ based on a seed ([Seedrandom](https://github.com/davidbau/seedrandom))
 * _Multiplayer_ enabled using [Socket.io](http://socket.io/) (the players can see eachothers moving on the different maps)
 * Feild of view of the player computed with a _recursive shadowcasting_
 * _AI_ of mobs
@@ -28,7 +28,7 @@ Phaser project of a turn based isometric games in rythm
 
 **In Client**
 * [Phaser](http://www.phaser.io/)
-* [Phaser Isometric Plugin](http://www.rotates.org/phaser/iso/)
+* ~~[Phaser Isometric Plugin](http://www.rotates.org/phaser/iso/)~~ -> I moved to vanilla Phaser
 * [easystar.js](http://www.easystarjs.com/)
 
 **In Client & Server**
