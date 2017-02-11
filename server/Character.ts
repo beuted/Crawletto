@@ -47,33 +47,6 @@ export class Character {
     }
 
     public update() {
-        // Change player map if player as reach map borders in it's last action
-        var mapSize: Geo.IPoint = this.map.getSize();
-        var newMapPosition: Geo.IPoint = { x: this.mapPosition.x, y: this.mapPosition.y }
-        var newGridPosition: Geo.IPoint = { x: this.gridPosition.x, y: this.gridPosition.y }
-
-        if (this.gridPosition.x <= 0) {
-            newMapPosition.x--;
-            newGridPosition.x = mapSize.x - 2;
-        } else if (this.gridPosition.x >= mapSize.x - 1) {
-            newMapPosition.x++;
-            newGridPosition.x = 1;
-        }
-
-        if (this.gridPosition.y <= 0) {
-            newMapPosition.y--;
-            newGridPosition.y = mapSize.y - 2;
-        } else if (this.gridPosition.y >= mapSize.y - 1) {
-            newMapPosition.y++;
-            newGridPosition.y = 1;
-        }
-
-        var map = GameEventHandler.mapsHandler.getMap(newMapPosition);
-
-        if ((this.mapPosition.x != newMapPosition.x || this.mapPosition.y != newMapPosition.y) && !!map) {
-            var changeMapAction = new Action.ChangeMap(newMapPosition, newGridPosition);
-            this.planAction(changeMapAction);
-        }
     }
 
     //TODO do better, move or something
