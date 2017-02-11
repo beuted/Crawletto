@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "lodash": "registry:npm/lodash#4.0.0+20160723033700",
+    "requirejs": "registry:npm/requirejs#2.2.0+20160319062357"
+  }
+}

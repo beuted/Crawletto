@@ -1,0 +1,60 @@
+{
+    "map" : {
+        "walkables": [1, 2, 3, 4, 5, 6, 7],
+        "opaques": [8, 9, 10, 11, 13],
+        "size": { "x": 32, "y": 32 }
+    },
+    "characters": {
+        "pingu": {
+            "maxLife": 100,
+            "visionRadius": 7,
+            "sprite": "pingu_anim",
+            "animations": {
+                "walkDown": [56,57,58,59],
+                "walkUp": [24,25,26,27],
+                "walkRight": [8,9,10,11],
+                "walkLeft": [40,41,42,43],
+                "fightDown": [60,61,62,64,56],
+                "fightUp": [28,29,30,31,24],
+                "fightRight": [12,13,14,15,8],
+                "fightLeft": [44,45,46,47,40]
+            },
+            "animationFps": 16,
+            "animationTime": 250
+        },
+        "fairy": {
+            "maxLife": 100,
+            "visionRadius": 7,
+            "sprite": "fairy_anim",
+            "animations": {
+                "walkDown": [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15],
+                "walkUp": [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15],
+                "walkRight": [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15],
+                "walkLeft": [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15],
+                "fightDown": [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15],
+                "fightUp": [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15],
+                "fightRight": [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15],
+                "fightLeft": [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
+            },
+            "animationFps": 32,
+            "animationTime": 500
+        },
+        "cube": {
+            "maxLife": 30,
+            "visionRadius": 4,
+            "sprite": "cube_anim",
+            "animations": {
+                "walkDown": [0,1,2,3,4],
+                "walkUp": [0,1,2,3,4],
+                "walkRight": [0,1,2,3,4],
+                "walkLeft": [0,1,2,3,4],
+                "fightDown": [5,6,7,8,9],
+                "fightUp": [5,6,7,8,9],
+                "fightRight": [5,6,7,8,9],
+                "fightLeft": [5,6,7,8,9]
+            },
+            "animationFps": 10,
+            "animationTime": 500
+        }
+    }
+}
