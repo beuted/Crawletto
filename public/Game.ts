@@ -1,8 +1,8 @@
 /// <reference path="typings/index.d.ts" />
-import {GameContext} from "./src/GameContext";
-import {BootState} from "./src/states/BootState";
-import {LoadState} from "./src/states/LoadState";
-import {MainState} from "./src/states/MainState";
+import {GameContext} from './src/GameContext';
+import {BootState} from './src/states/BootState';
+import {LoadState} from './src/states/LoadState';
+import {MainState} from './src/states/MainState';
 
 export class Game {
     constructor(conf) {
