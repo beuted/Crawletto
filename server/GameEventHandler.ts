@@ -47,6 +47,9 @@ export class GameEventHandler {
 
         // Listen for move player message
         socket.on('move player', GameEventHandler.onMoveRequest);
+
+        // Listen for attack player message
+        socket.on('attack player', GameEventHandler.onAttackRequest);
     }
 
     // Socket client has disconnected
@@ -119,5 +122,26 @@ export class GameEventHandler {
 
         // request move
         movedPlayer.planAction(new Action.Move(newPosition));
+    }
+
+    private static onAttackRequest(msg: { guid: string }) {
+        var socket: SocketIO.Socket = <any>this;
+
+        // Find player in array
+        var attackingPlayer: Player = GameEventHandler.playersHandler.getPlayerBySocketId(socket.id);
+
+        // Player should exist
+        if (!attackingPlayer) {
+            util.log('[Error: "attack player"] Player not found sId: ' + socket.id);
+            return;
+        }
+
+        if (!msg.guid) {
+            util.log('[Error: "attack player"] invalid guid: ' + msg.guid);
+            return;
+        }
+
+        // request move
+        attackingPlayer.planAction(new Action.Attack(msg.guid));
     }
 }

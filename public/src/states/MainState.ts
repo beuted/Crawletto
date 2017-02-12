@@ -41,7 +41,12 @@ export class MainState {
     }
 
     private fightPlayer() {
-        GameContext.player.attack({ x: 0, y: 0 });
+        GameContext.player.attack();
+        var point = GameContext.player.getFacingPoint();
+        var aimedPlayer = GameContext.remotePlayersManager.getPlayerAt(point);
+        if (!aimedPlayer) { return; }
+            
+        GameContext.socketManager.requestPlayerAttack(aimedPlayer.guid);
     }
 
     private initKeyboardInteraction() {

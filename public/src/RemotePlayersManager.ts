@@ -15,8 +15,12 @@ export class RemotePlayersManager {
         this.remotePlayers.push(p);
     }
 
-    public addFromJson(playerJson: { gridPosition: Phaser.Point, guid: string }) {
-        var remotePlayer = new Player(playerJson.gridPosition.x, playerJson.gridPosition.y, playerJson.guid, 'zombie');
+    public addFromJson(playerJson: { gridPosition: Phaser.Point, guid: string, hp: number }) {
+        var remotePlayer = new Player(playerJson.gridPosition.x,
+                                      playerJson.gridPosition.y,
+                                      playerJson.guid,
+                                      playerJson.hp,
+                                      'zombie');
         this.add(remotePlayer);
     }
 
@@ -59,14 +63,14 @@ export class RemotePlayersManager {
         playerToMove.move(destPoint)
     }
 
-    public arePresentAt(point: Phaser.Point) {
+    public getPlayerAt(gridCoord: Phaser.Point) {
         for (var i = 0; i < this.remotePlayers.length; i++) {
-            if (Phaser.Point.equals(this.remotePlayers[i].gridPosition, point)) {
-                return true;
+            if (Phaser.Point.equals(this.remotePlayers[i].gridPosition, gridCoord)) {
+                return this.remotePlayers[i];
             }
         }
 
-        return false
+        return null
     }
 
     // Find player by GUID

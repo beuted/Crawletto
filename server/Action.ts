@@ -64,6 +64,35 @@ export class Move implements IAction {
     }
 }
 
+export class Attack implements IAction {
+    public attackedPlayerGuid: string;
+
+    constructor(playerGuid: string) {
+        this.attackedPlayerGuid = playerGuid;
+    }
+
+    public execute(char: Character) {
+        var attackedPlayer = GameEventHandler.playersHandler.getCharacter(this.attackedPlayerGuid)
+                             || GameEventHandler.aisHandler.getCharacter(this.attackedPlayerGuid);
+
+        // Compute damage
+        var damage = 10;
+
+        // Impact player aimed 
+        attackedPlayer.hp -= damage;
+
+        // Notify players on the same map
+        var playersToNotify: Player[] = GameEventHandler.playersHandler.getCharactersOnMap(char.mapPosition);
+        _.forEach(playersToNotify, notifiedPlayer => {
+            Server.io.sockets.connected[notifiedPlayer.socketId].emit('attack player', {
+                guid: this.attackedPlayerGuid,
+                hp: attackedPlayer.hp
+            });
+        });
+        
+    }
+}
+
 
 export class ChangeMap implements IAction {
     public destMap: Geo.IPoint;

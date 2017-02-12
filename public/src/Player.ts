@@ -8,13 +8,13 @@ export class Player {
     public gridPosition: Phaser.Point;
     public visionRadius: number;
     public guid: string;
-    public life: number;
-    public maxLife: number;
+    public hp: number;
+    public maxHp: number;
 
-    private direction: string;
+    private direction: string = 'right';
     private charConfig: ICharConfig;
 
-    constructor(startX: number, startY: number, guid: string, type: string, current: boolean = false) {
+    constructor(startX: number, startY: number, guid: string, hp: number, type: string, current: boolean = false) {
         this.charConfig = GameContext.config.characters[type];
         // setting up the sprite
         this.sprite = GameContext.instance.add.sprite(startX * 32, startY * 32, this.charConfig.sprite, 0, Map.playerGroup);
@@ -40,8 +40,8 @@ export class Player {
         this.gridPosition = new Phaser.Point(startX, startY);
         this.visionRadius = this.charConfig.visionRadius;
         this.guid = guid;
-        this.maxLife = this.charConfig.maxLife;
-        this.life = this.charConfig.maxLife;
+        this.hp = hp;        
+        this.maxHp = this.charConfig.maxLife;
     }
 
     public move(destPoint: any) {
@@ -56,7 +56,7 @@ export class Player {
         tween.onComplete.addOnce(item => this.sprite.animations.stop(animation, true));
     }
 
-    public attack(fightVector: any) {
+    public attack() {
         this.sprite.animations.play(`fight-${this.direction}`, this.charConfig.animationFps, false);
     }
 
@@ -82,6 +82,44 @@ export class Player {
         } else {
             this.direction = 'down';
             this.sprite.frame = this.charConfig.animations.walkDown[0];
+        }
+    }
+
+    public getFacingPoint(): Phaser.Point {
+        switch(this.direction) {
+            case 'left': {
+                return this.gridPosition.clone().add(-1, 0);
+            }
+            case 'right': {
+                return this.gridPosition.clone().add(1, 0);
+            }
+            case 'up': {
+                return this.gridPosition.clone().add(0, -1);
+            }
+            case 'down': {
+                return this.gridPosition.clone().add(0, 1);
+            }
+            default:
+                throw new Error('Player.getFacingPoint(): Unknown direction');
+        }
+    }
+
+    public getDirectionVector(): Phaser.Point {
+        switch(this.direction) {
+            case 'left': {
+                return new Phaser.Point(-1, 0);
+            }
+            case 'right': {
+                return new Phaser.Point(1, 0);
+            }
+            case 'up': {
+                return new Phaser.Point(0, -1);
+            }
+            case 'down': {
+                return new Phaser.Point(0, 1);
+            }
+            default:
+                throw new Error('Player.getDirectionVector(): Unknown direction');
         }
     }
 

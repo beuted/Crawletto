@@ -11,6 +11,7 @@ export class Character {
     public mapPosition: Geo.IPoint;
     public gridPosition: Geo.IPoint;
     public guid: string;
+    public hp: number;
 
     private turnAction: Action.IAction = null;
 
@@ -18,14 +19,15 @@ export class Character {
         this.mapPosition = { x: 10, y: 10 };
         this.guid = this.generateGuid();
         this.gridPosition = { x: position.x, y: position.y };
+        this.hp = 100;
     }
 
     public get map(): Map {
         return GameEventHandler.mapsHandler.getMap(this.mapPosition)
     }
 
-    public toMessage(): { guid: string, gridPosition: Geo.IPoint } {
-        return <{ guid: string, gridPosition: Geo.IPoint }>_.pick(this, ["guid", "gridPosition"]);
+    public toMessage(): { guid: string, gridPosition: Geo.IPoint, hp: number } {
+        return <{ guid: string, gridPosition: Geo.IPoint, hp: number }>_.pick(this, ["guid", "gridPosition", "hp"]);
     }
 
     public havePlannedAction(): boolean {

@@ -16,13 +16,13 @@ export class PlayersHandler extends CharactersHandler<Player> {
     }
 
     public removePlayer(playerId: string) {
-        var removePlayer = this.getPlayer(playerId);
+        var removePlayer = this.getCharacter(playerId);
         if (!removePlayer) {
             console.error('[removePlayer] Player not found: ' + playerId);
             return;
         }
 
-        this.characters.splice(this.characters.indexOf(removePlayer), 1);
+        this.characters.splice(this.characters.indexOf(<Player>removePlayer), 1);
     }
 
     public getPlayersOnMapWithIdDifferentFrom(coord: Geo.IPoint, guid: string) {
