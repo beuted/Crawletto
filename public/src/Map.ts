@@ -64,8 +64,9 @@ class Cell {
 
 export class Map {
     // TODO: should be private once character will be handle by the Map
-    public static isoGroup: Phaser.Group;
-    public static sortedGroup: Phaser.Group;
+    public static floorGroup: Phaser.Group;
+    public static structureGroup: Phaser.Group;
+    public static playerGroup: Phaser.Group;
 
     public coord: Phaser.Point;
 
@@ -107,13 +108,15 @@ export class Map {
         this.tileArray[TileType.Wallangle] = 'wallangle';
 
         // init isoGroup
-        Map.isoGroup = GameContext.instance.add.group();
-        Map.sortedGroup = GameContext.instance.add.group();
+        Map.floorGroup = GameContext.instance.add.group();
+        Map.structureGroup = GameContext.instance.add.group();
+        Map.playerGroup = GameContext.instance.add.group();
 
-        Map.isoGroup.enableBody = true;
-        Map.sortedGroup.enableBody = true;
+        Map.floorGroup.enableBody = true;
+        Map.structureGroup.enableBody = true;
+        Map.playerGroup.enableBody = true;
         // we won't really be using IsoArcade physics, but I've enabled it anyway so the debug bodies can be seen
-        Map.sortedGroup.physicsBodyType = Phaser.Physics.ARCADE;
+        Map.structureGroup.physicsBodyType = Phaser.Physics.ARCADE;
 
         // init path finding
         this.easystar = new EasyStar.js();
@@ -250,17 +253,19 @@ export class Map {
                 var floorId = this.getPlateauFloor(point);
 
                 if (structureId != 0) {
-                    var structureTile = GameContext.instance.add.sprite(point.x * Map.tileSize, point.y * Map.tileSize, 'tileset', this.tileArray[structureId], Map.sortedGroup);
-                    structureTile.anchor.set(0.5, 1);
-                    structureTile.smoothed = true;
+                    var structureTile = GameContext.instance.add.sprite(point.x * Map.tileSize, point.y * Map.tileSize, 'tileset', this.tileArray[structureId], Map.structureGroup);
+                    structureTile.anchor.set(0, 0);
+                    structureTile.scale.set(2);
+                    structureTile.smoothed = false;
                     structureTile.body.moves = false;
                     this.cells[point.x][point.y].structureId = structureId;
                     this.cells[point.x][point.y].structureTile = structureTile;
                 }
 
-                var floorTile = GameContext.instance.add.sprite(point.x * Map.tileSize, point.y * Map.tileSize, 'tileset', this.tileArray[floorId], Map.isoGroup);
-                floorTile.anchor.set(0.5, 1);
-                floorTile.smoothed = true;
+                var floorTile = GameContext.instance.add.sprite(point.x * Map.tileSize, point.y * Map.tileSize, 'tileset', this.tileArray[floorId], Map.floorGroup);
+                floorTile.anchor.set(0, 0);
+                floorTile.scale.set(2);
+                floorTile.smoothed = false;
                 floorTile.body.moves = false;
                 this.cells[point.x][point.y].floorId = floorId;
                 this.cells[point.x][point.y].floorTile = floorTile;

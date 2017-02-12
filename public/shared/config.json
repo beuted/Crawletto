@@ -10,14 +10,48 @@
             "visionRadius": 7,
             "sprite": "zombie",
             "animations": {
-                "walkDown": [0,1,2,3],
-                "walkUp": [0,1,2,3],
+                "walkDown": [8,9,10,11],
+                "walkUp": [12,13,14,15],
                 "walkRight": [0,1,2,3],
-                "walkLeft": [0,1,2,3],
-                "fightDown": [0,1,2,3],
-                "fightUp": [0,1,2,3],
+                "walkLeft": [4,5,6,7],
+                "fightDown": [8,9,10,11],
+                "fightUp": [12,13,14,15],
                 "fightRight": [0,1,2,3],
-                "fightLeft": [0,1,2,3]
+                "fightLeft": [4,5,6,7]
+            },
+            "animationFps": 16,
+            "animationTime": 250
+        },
+        "monk": {
+            "maxLife": 100,
+            "visionRadius": 7,
+            "sprite": "monk",
+            "animations": {
+                "walkDown": [8,9,10,11],
+                "walkUp": [12,13,14,15],
+                "walkRight": [0,1,2,3],
+                "walkLeft": [4,5,6,7],
+                "fightDown": [8,9,10,11],
+                "fightUp": [12,13,14,15],
+                "fightRight": [0,1,2,3],
+                "fightLeft": [4,5,6,7]
+            },
+            "animationFps": 16,
+            "animationTime": 250
+        },
+        "knight": {
+            "maxLife": 100,
+            "visionRadius": 7,
+            "sprite": "knight",
+            "animations": {
+                "walkDown": [8,9,10,11],
+                "walkUp": [12,13,14,15],
+                "walkRight": [0,1,2,3],
+                "walkLeft": [4,5,6,7],
+                "fightDown": [8,9,10,11],
+                "fightUp": [12,13,14,15],
+                "fightRight": [0,1,2,3],
+                "fightLeft": [4,5,6,7]
             },
             "animationFps": 16,
             "animationTime": 250

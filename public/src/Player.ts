@@ -17,8 +17,8 @@ export class Player {
     constructor(startX: number, startY: number, guid: string, type: string, current: boolean = false) {
         this.charConfig = GameContext.config.characters[type];
         // setting up the sprite
-        this.sprite = GameContext.instance.add.sprite(startX * 32, startY * 32, this.charConfig.sprite, 0, Map.sortedGroup);
-        this.sprite.anchor.set(0.5, 1);
+        this.sprite = GameContext.instance.add.sprite(startX * 32, startY * 32, this.charConfig.sprite, 0, Map.playerGroup);
+        this.sprite.anchor.set(0.25, 0.5);
         this.sprite.scale.set(2);
         this.sprite.smoothed = false;
         this.sprite.animations.add('walk-down', this.charConfig.animations.walkDown);

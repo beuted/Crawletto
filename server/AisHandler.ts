@@ -10,8 +10,9 @@ import { CharactersHandler } from './CharactersHandler';
 export class AisHandler extends CharactersHandler<Ai> {
     constructor() {
         super();
-        var ai = new Ai({ x: 5, y: 9 });
-        this.characters.push(ai);
+        this.characters.push(new Ai({ x: 5, y: 9 }));
+        this.characters.push(new Ai({ x: 10, y: 15 }));
+        this.characters.push(new Ai({ x: 15, y: 15 }));
     }
 
     public calculateNextActions() {

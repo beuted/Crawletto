@@ -27,8 +27,10 @@ export class LoadState
 
     private preloadAssets() {
         GameContext.instance.load.json('map.0.0', 'maps/map.0.0.json');
-        GameContext.instance.load.atlasJSONHash('tileset', 'assets/tileset.png', 'assets/tileset.json');
-        GameContext.instance.load.spritesheet('zombie', 'assets/zombie.png', 32, 32, 4);
+        GameContext.instance.load.atlasJSONHash('tileset', 'assets/tileset-16x16.png', 'assets/tileset-16x16.json');
+        GameContext.instance.load.spritesheet('zombie', 'assets/zombie.png', 32, 32, 16);
+        GameContext.instance.load.spritesheet('monk', 'assets/monk.png', 32, 32, 16);
+        GameContext.instance.load.spritesheet('knight', 'assets/knight.png', 32, 32, 16);
         //GameContext.instance.load.atlasJSONHash('tileset', 'assets/tileset-mod.png', 'assets/tileset-mod.json'); // Attempt to do better
     }
 }

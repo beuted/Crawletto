@@ -50,12 +50,12 @@ export class SocketManager {
     private onInitPlayer(data: { player: any, existingPlayers: any[], map: any }) {
         console.debug('Init player: ' + JSON.stringify(data));
 
-        // Register current player
-        GameContext.player = new Player(data.player.gridPosition.x, data.player.gridPosition.y, data.player.guid, 'zombie', true);
-        GameContext.player = GameContext.player;
-
         // Load current map
         GameContext.map.changeMap(data.map);
+
+        // Register current player
+        GameContext.player = new Player(data.player.gridPosition.x, data.player.gridPosition.y, data.player.guid, 'knight', true);
+        GameContext.player = GameContext.player;
 
         // Load players on current map
         _.forEach(data.existingPlayers, (player) => {

@@ -44,18 +44,18 @@ button#update {
     opacity: 0.3;
 }
 
-    button#update:hover {
-        background-color: #fff;
-        color: #000;
-    }
+button#update:hover {
+    background-color: #fff;
+    color: #000;
+}
 
-    button#update.active {
-        -moz-animation: pulse 0.7s ease-in-out infinite alternate;
-        -o-animation: pulse 0.7s ease-in-out infinite alternate;
-        -webkit-animation: pulse 0.7s ease-in-out infinite alternate;
-        animation: pulse 0.7s ease-in-out infinite alternate;
-        opacity: 1;
-    }
+button#update.active {
+    -moz-animation: pulse 0.7s ease-in-out infinite alternate;
+    -o-animation: pulse 0.7s ease-in-out infinite alternate;
+    -webkit-animation: pulse 0.7s ease-in-out infinite alternate;
+    animation: pulse 0.7s ease-in-out infinite alternate;
+    opacity: 1;
+}
 
 @-moz-keyframes pulse {
     from: {
@@ -109,7 +109,7 @@ button#update, li {
 }
 
 #gameCanvas {
-    width: 800px;
+    width: 992px;
     margin: 0 auto;
     border: 1px dotted #a7aebe;
 }

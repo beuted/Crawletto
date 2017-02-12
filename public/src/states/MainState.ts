@@ -23,7 +23,7 @@ export class MainState {
 
     public render() {
         if (GameContext.debugActivated) {
-            Map.sortedGroup.forEach(function (tile) {
+            Map.structureGroup.forEach(function (tile) {
                 GameContext.instance.debug.body(tile, 'rgba(189, 221, 235, 0.6)', false);
             }, this);
             GameContext.instance.debug.text(!!GameContext.instance.time.fps ? GameContext.instance.time.fps + ' fps' : '--', 2, 14, "#a7aebe");
