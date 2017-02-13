@@ -3,8 +3,10 @@
 import * as _ from 'lodash';
 import * as Geo from './utils/Geo';
 import { Character } from './Character';
+import { Player } from './Player';
 import { Move } from './Action';
 import { GameEventHandler } from './GameEventHandler';
+import { Server } from './Server';
 
 export class CharactersHandler<T extends Character> {
 
@@ -18,6 +20,7 @@ export class CharactersHandler<T extends Character> {
         _.forEach(this.characters, character => {
             character.executeAction();
         });
+        this.update();
     }
 
     public getCharacters() {
@@ -34,6 +37,10 @@ export class CharactersHandler<T extends Character> {
         return null;
     }
 
+    public removeCharacter(guid: string) {
+        _.remove(this.characters, (char) => { char.guid == guid; });
+    }
+
     public getCharactersOnMapAtPosition(coordMap: Geo.IPoint, coord: Geo.IPoint): T[] {
         return _.filter(this.characters, function (character) {
             return character.mapPosition.x == coordMap.x && character.mapPosition.y == coordMap.y
@@ -44,6 +51,20 @@ export class CharactersHandler<T extends Character> {
     public getCharactersOnMap(mapCoord: Geo.IPoint): T[] {
         return _.filter(this.characters, function (character) {
             return character.mapPosition.x == mapCoord.x && character.mapPosition.y == mapCoord.y;
+        });
+    }
+
+    private update() {
+        _.forEach(this.characters, character => {
+            // Remove players with hp below 0
+            if (character.hp <= 0) {
+                this.removeCharacter(character.guid);
+                var playersToNotify: Player[] = GameEventHandler.playersHandler.getCharactersOnMap(character.mapPosition);
+                _.forEach(playersToNotify, notifiedPlayer => {
+                    Server.io.sockets.connected[notifiedPlayer.socketId].emit('remove character', { guid: character.guid });
+                });
+            }
+
         });
     }
 }

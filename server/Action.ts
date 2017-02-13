@@ -65,28 +65,33 @@ export class Move implements IAction {
 }
 
 export class Attack implements IAction {
-    public attackedPlayerGuid: string;
+    public attackedCharacterGuid: string;
 
     constructor(playerGuid: string) {
-        this.attackedPlayerGuid = playerGuid;
+        this.attackedCharacterGuid = playerGuid;
     }
 
     public execute(char: Character) {
-        var attackedPlayer = GameEventHandler.playersHandler.getCharacter(this.attackedPlayerGuid)
-                             || GameEventHandler.aisHandler.getCharacter(this.attackedPlayerGuid);
+        var attackedCharacter = GameEventHandler.playersHandler.getCharacter(this.attackedCharacterGuid)
+                             || GameEventHandler.aisHandler.getCharacter(this.attackedCharacterGuid);
 
         // Compute damage
         var damage = 10;
 
         // Impact player aimed 
-        attackedPlayer.hp -= damage;
+        attackedCharacter.hp -= damage;
+
+        // Remove player if life is below 0
+        if (attackedCharacter.hp <= 0) {
+
+        }
 
         // Notify players on the same map
         var playersToNotify: Player[] = GameEventHandler.playersHandler.getCharactersOnMap(char.mapPosition);
         _.forEach(playersToNotify, notifiedPlayer => {
             Server.io.sockets.connected[notifiedPlayer.socketId].emit('attack character', {
-                guid: this.attackedPlayerGuid,
-                hp: attackedPlayer.hp
+                guid: this.attackedCharacterGuid,
+                hp: attackedCharacter.hp
             });
         });
         
@@ -123,7 +128,7 @@ export class ChangeMap implements IAction {
                 guid: char.guid,
                 gridPosition: { x: char.gridPosition.x, y: char.gridPosition.y },
                 mapPosition: { x: char.mapPosition.x, y: char.mapPosition.y },
-                players: playersOnDestMapMessage.concat(aisOnMapMessage),
+                characters: playersOnDestMapMessage.concat(aisOnMapMessage),
                 map: newMap.toMessage()
             });
 

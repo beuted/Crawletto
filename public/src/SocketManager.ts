@@ -14,9 +14,9 @@ export class SocketManager {
         this.socket.on('connect', this.onSocketConnected.bind(this));                    // Socket connection successful
         this.socket.on('disconnect', this.onSocketDisconnect.bind(this));                // Socket disconnection
         this.socket.on('new character', this.onNewCharacter.bind(this));                 // New character message received
-        this.socket.on('init player', this.onInitCharacter.bind(this));               // Character removed message received
+        this.socket.on('init player', this.onInitPlayer.bind(this));               // Character removed message received
         this.socket.on('move player', this.onMovePlayer.bind(this));               // Character move message received
-        this.socket.on('change map character', this.onChangeMapCharacter.bind(this));    // Character removed message received
+        this.socket.on('change map player', this.onChangeMapCharacter.bind(this));    // Character removed message received
         this.socket.on('remove character', this.onRemoveCharacter.bind(this));           // Character removed message received
         this.socket.on('attack character', this.onAttackCharacter.bind(this));           // Character removed message received
     }
@@ -50,9 +50,9 @@ export class SocketManager {
         GameContext.remoteCharactersManager.addFromJson(data);
     }
 
-    // Init character
-    private onInitCharacter(data: { player: any, existingCharacters: any[], map: any }) {
-        console.debug('Init character: ' + JSON.stringify(data));
+    // Init player
+    private onInitPlayer(data: { player: any, existingCharacters: any[], map: any }) {
+        console.debug('Init player: ' + JSON.stringify(data));
 
         // Load current map
         GameContext.map.changeMap(data.map);
@@ -100,7 +100,7 @@ export class SocketManager {
     private onAttackCharacter(data: { guid: string, hp: number}) {
         console.debug('Character attacked : ' + data.guid);
 
-        //GameContext.remoteCharactersManager.get(data.guid); //TODO
+        GameContext.remoteCharactersManager.getByGuid(data.guid).hp -= data.hp;
     }
 
 }
