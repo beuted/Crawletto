@@ -35,7 +35,7 @@ export class RemoteCharactersManager {
 
         // Character not found
         if (!removeCharacter) {
-            console.warn("Character not found: " + guid);
+            console.warn('Character not found: ' + guid);
             return;
         };
 
@@ -55,7 +55,7 @@ export class RemoteCharactersManager {
         var characterToMove = this.getByGuid(guid);
 
         if (!characterToMove) {
-            console.warn("Character not found: " + guid);
+            console.warn('Character not found: ' + guid);
             return;
         };
 

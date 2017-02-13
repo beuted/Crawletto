@@ -41,11 +41,11 @@ export class MainState {
     }
 
     private fightCharacter() {
-        GameContext.player.attack();
         var point = GameContext.player.getFacingPoint();
         var aimedPlayer = GameContext.remoteCharactersManager.getCharacterAt(point);
         if (!aimedPlayer) { return; }
-            
+
+        GameContext.player.attack();
         GameContext.socketManager.requestCharacterAttack(aimedPlayer.guid);
     }
 
@@ -77,8 +77,6 @@ export class MainState {
         // press D to enter debugmode
         var dKey = GameContext.instance.input.keyboard.addKey(Phaser.Keyboard.D);
         dKey.onDown.add(() => GameContext.debugActivated = !GameContext.debugActivated);
-
-
     }
 
     private initMouseInteraction() {
