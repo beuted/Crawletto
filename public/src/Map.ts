@@ -66,7 +66,7 @@ export class Map {
     // TODO: should be private once character will be handle by the Map
     public static floorGroup: Phaser.Group;
     public static structureGroup: Phaser.Group;
-    public static playerGroup: Phaser.Group;
+    public static characterGroup: Phaser.Group;
 
     public coord: Phaser.Point;
 
@@ -110,11 +110,11 @@ export class Map {
         // init isoGroup
         Map.floorGroup = GameContext.instance.add.group();
         Map.structureGroup = GameContext.instance.add.group();
-        Map.playerGroup = GameContext.instance.add.group();
+        Map.characterGroup = GameContext.instance.add.group();
 
         Map.floorGroup.enableBody = true;
         Map.structureGroup.enableBody = true;
-        Map.playerGroup.enableBody = true;
+        Map.characterGroup.enableBody = true;
         // we won't really be using IsoArcade physics, but I've enabled it anyway so the debug bodies can be seen
         Map.structureGroup.physicsBodyType = Phaser.Physics.ARCADE;
 

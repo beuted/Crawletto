@@ -84,7 +84,7 @@ export class Attack implements IAction {
         // Notify players on the same map
         var playersToNotify: Player[] = GameEventHandler.playersHandler.getCharactersOnMap(char.mapPosition);
         _.forEach(playersToNotify, notifiedPlayer => {
-            Server.io.sockets.connected[notifiedPlayer.socketId].emit('attack player', {
+            Server.io.sockets.connected[notifiedPlayer.socketId].emit('attack character', {
                 guid: this.attackedPlayerGuid,
                 hp: attackedPlayer.hp
             });
@@ -134,7 +134,7 @@ export class ChangeMap implements IAction {
 
         // Notify players from detination map
         _.forEach(playersOnDestMap, (notifiedPlayer: Player) => {
-            Server.io.sockets.connected[notifiedPlayer.socketId].emit('new player', char.toMessage());
+            Server.io.sockets.connected[notifiedPlayer.socketId].emit('new character', char.toMessage());
         }, this);
     }
 }

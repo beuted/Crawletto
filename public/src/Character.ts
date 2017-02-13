@@ -3,7 +3,7 @@
 import { GameContext, ICharConfig } from "./GameContext";
 import { Map } from "./Map";
 
-export class Player {
+export class Character {
     public sprite: any;
     public gridPosition: Phaser.Point;
     public visionRadius: number;
@@ -17,7 +17,7 @@ export class Player {
     constructor(startX: number, startY: number, guid: string, hp: number, type: string, current: boolean = false) {
         this.charConfig = GameContext.config.characters[type];
         // setting up the sprite
-        this.sprite = GameContext.instance.add.sprite(startX * 32, startY * 32, this.charConfig.sprite, 0, Map.playerGroup);
+        this.sprite = GameContext.instance.add.sprite(startX * 32, startY * 32, this.charConfig.sprite, 0, Map.characterGroup);
         this.sprite.anchor.set(0.25, 0.5);
         this.sprite.scale.set(2);
         this.sprite.smoothed = false;
@@ -30,7 +30,7 @@ export class Player {
         this.sprite.animations.add('fight-right', this.charConfig.animations.fightRight);
         this.sprite.animations.add('fight-left', this.charConfig.animations.fightLeft);
 
-        // differenciate other players
+        // differenciate other characters
         if (!current)
             this.sprite.alpha = 0.7;
         else
@@ -100,7 +100,7 @@ export class Player {
                 return this.gridPosition.clone().add(0, 1);
             }
             default:
-                throw new Error('Player.getFacingPoint(): Unknown direction');
+                throw new Error('Character.getFacingPoint(): Unknown direction');
         }
     }
 
@@ -119,7 +119,7 @@ export class Player {
                 return new Phaser.Point(0, 1);
             }
             default:
-                throw new Error('Player.getDirectionVector(): Unknown direction');
+                throw new Error('Character.getDirectionVector(): Unknown direction');
         }
     }
 

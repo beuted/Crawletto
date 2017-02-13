@@ -2,8 +2,8 @@
 
 import * as _ from 'lodash';
 import { GameContext } from './GameContext';
-import { Player } from './Player';
-import { RemotePlayersManager } from './RemotePlayersManager';
+import { Character } from './Character';
+import { RemoteCharactersManager } from './RemoteCharactersManager';
 
 export class SocketManager {
 
@@ -11,22 +11,22 @@ export class SocketManager {
 
     constructor() {
         this.socket = io();
-        this.socket.on('connect', this.onSocketConnected.bind(this));       // Socket connection successful
-        this.socket.on('disconnect', this.onSocketDisconnect.bind(this));   // Socket disconnection
-        this.socket.on('new player', this.onNewPlayer.bind(this));          // New player message received
-        this.socket.on('init player', this.onInitPlayer.bind(this));    // Player removed message received
-        this.socket.on('move player', this.onMovePlayer.bind(this));        // Player move message received
-        this.socket.on('change map player', this.onChangeMapPlayer.bind(this));    // Player removed message received
-        this.socket.on('remove player', this.onRemovePlayer.bind(this));    // Player removed message received
-        this.socket.on('attack player', this.onAttackPlayer.bind(this));    // Player removed message received
+        this.socket.on('connect', this.onSocketConnected.bind(this));                    // Socket connection successful
+        this.socket.on('disconnect', this.onSocketDisconnect.bind(this));                // Socket disconnection
+        this.socket.on('new character', this.onNewCharacter.bind(this));                 // New character message received
+        this.socket.on('init player', this.onInitCharacter.bind(this));               // Character removed message received
+        this.socket.on('move player', this.onMovePlayer.bind(this));               // Character move message received
+        this.socket.on('change map character', this.onChangeMapCharacter.bind(this));    // Character removed message received
+        this.socket.on('remove character', this.onRemoveCharacter.bind(this));           // Character removed message received
+        this.socket.on('attack character', this.onAttackCharacter.bind(this));           // Character removed message received
     }
 
-    public requestPlayerMove(vector: { x: number, y: number }) {
+    public requestCharacterMove(vector: { x: number, y: number }) {
         this.socket.emit('move player', { vector: vector });
     }
 
-    public requestPlayerAttack(guid: string) {
-        this.socket.emit('attack player', { guid: guid });
+    public requestCharacterAttack(guid: string) {
+        this.socket.emit('attack character', { guid: guid });
     }
 
     // Socket connected
@@ -42,65 +42,65 @@ export class SocketManager {
         console.debug('Disconnected from socket server');
     }
 
-    // New player (TODO: add save guid to data)
-    private onNewPlayer(data: any) {
-        console.debug('New player on map: ' + JSON.stringify(data));
+    // New character (TODO: add save guid to data)
+    private onNewCharacter(data: any) {
+        console.debug('New character on map: ' + JSON.stringify(data));
 
-        // Add new player to the remote players array
-        GameContext.remotePlayersManager.addFromJson(data);
+        // Add new character to the remote characters array
+        GameContext.remoteCharactersManager.addFromJson(data);
     }
 
-    // Init player
-    private onInitPlayer(data: { player: any, existingPlayers: any[], map: any }) {
-        console.debug('Init player: ' + JSON.stringify(data));
+    // Init character
+    private onInitCharacter(data: { player: any, existingCharacters: any[], map: any }) {
+        console.debug('Init character: ' + JSON.stringify(data));
 
         // Load current map
         GameContext.map.changeMap(data.map);
 
-        // Register current player
-        GameContext.player = new Player(data.player.gridPosition.x, data.player.gridPosition.y, data.player.guid, data.player.hp, 'knight', true);
+        // Register current character
+        GameContext.player = new Character(data.player.gridPosition.x, data.player.gridPosition.y, data.player.guid, data.player.hp, 'knight', true);
 
-        // Load players on current map
-        _.forEach(data.existingPlayers, (player) => {
-            GameContext.remotePlayersManager.addFromJson(player);
+        // Load characters on current map
+        _.forEach(data.existingCharacters, (character: any) => {
+            GameContext.remoteCharactersManager.addFromJson(character);
         });
     }
 
-    // Move player
+    // Move character
     private onMovePlayer(data: { guid: string, position: Phaser.Point }) {
         if (GameContext.player.guid === data.guid) {
             GameContext.player.move(data.position);
             return;
         }
 
-        GameContext.remotePlayersManager.moveByGuid(data.guid, data.position)
+        GameContext.remoteCharactersManager.moveByGuid(data.guid, data.position)
     }
 
-    // Player changed map
-    private onChangeMapPlayer(data: { guid: string, gridPosition: { x: number, y: number }, mapPosition: { x: number, y: number }, players: any[], map: any[][] }) {
+    // Character changed map
+    private onChangeMapCharacter(data: { guid: string, gridPosition: { x: number, y: number }, mapPosition: { x: number, y: number }, characters: any[], map: any[][] }) {
         if (GameContext.player.guid === data.guid) {
-            console.debug('Player changed map: ' + JSON.stringify(data));
+            console.debug('Character changed map: ' + JSON.stringify(data));
             GameContext.map.changeMap(data.map);
             GameContext.player.moveInstant(new Phaser.Point(data.gridPosition.x, data.gridPosition.y));
-            GameContext.remotePlayersManager.removeAll();
-            GameContext.remotePlayersManager.addAllFromJson(data.players);
+            GameContext.remoteCharactersManager.removeAll();
+            GameContext.remoteCharactersManager.addAllFromJson(data.characters);
         } else {
-            console.error('Player received a "changed map" for another id: ' + JSON.stringify(data));
+            console.error('Character received a "changed map" for another id: ' + JSON.stringify(data));
         }
     }
 
-    // Remove player
-    private onRemovePlayer(data: any) {
-        console.debug('Player removed from map: ' + data.guid);
-        // Remove player from remotePlayers
-        GameContext.remotePlayersManager.removeByGuid(data.guid);
+    // Remove character
+    private onRemoveCharacter(data: any) {
+        console.debug('Character removed from map: ' + data.guid);
+        // Remove character from remoteCharacter
+        GameContext.remoteCharactersManager.removeByGuid(data.guid);
     }
 
-    // Attack player
-    private onAttackPlayer(data: { guid: string, hp: number}) {
-        console.debug('Player attacked : ' + data.guid);
-        // Remove player from remotePlayers
-        GameContext.remotePlayersManager.removeByGuid(data.guid); //TODO
+    // Attack character
+    private onAttackCharacter(data: { guid: string, hp: number}) {
+        console.debug('Character attacked : ' + data.guid);
+
+        //GameContext.remoteCharactersManager.get(data.guid); //TODO
     }
 
 }

@@ -20,13 +20,10 @@ export class GameEventHandler {
     public static actionHandler: ActionHandler;
 
     constructor() {
-        // Init mapsHandler
+        // Init Handlers
         GameEventHandler.mapsHandler = new MapsHandler();
-
         GameEventHandler.playersHandler = new PlayersHandler();
-
         GameEventHandler.aisHandler = new AisHandler();
-
         GameEventHandler.actionHandler = new ActionHandler();
     }
 
@@ -42,14 +39,14 @@ export class GameEventHandler {
         // Listen for client disconnected
         socket.on('disconnect', GameEventHandler.onClientDisconnect);
 
-        // Listen for new player message
+        // Listen for new character message
         socket.on('new player', GameEventHandler.onNewPlayer);
 
-        // Listen for move player message
+        // Listen for move character message
         socket.on('move player', GameEventHandler.onMoveRequest);
 
-        // Listen for attack player message
-        socket.on('attack player', GameEventHandler.onAttackRequest);
+        // Listen for attack character message
+        socket.on('attack character', GameEventHandler.onAttackRequest);
     }
 
     // Socket client has disconnected
@@ -88,7 +85,7 @@ export class GameEventHandler {
         // Broadcast new player to connected socket clients
         var playersOnSameMap = GameEventHandler.playersHandler.getPlayersOnMapWithIdDifferentFrom({ x: 10, y: 10 }, newPlayer.guid);
         _.forEach(playersOnSameMap, (player: Player) => {
-            Server.io.sockets.connected[player.socketId].emit('new player', newPlayer.toMessage());
+            Server.io.sockets.connected[player.socketId].emit('new character', newPlayer.toMessage());
         });
 
         // Send existing characters & map to the new player
@@ -99,7 +96,7 @@ export class GameEventHandler {
         });
 
         var map = GameEventHandler.mapsHandler.getMap({ x: 0, y: 0 });
-        socket.emit('init player', { player: newPlayer.toMessage(), existingPlayers: charactersOnSameMapJson, map: map })
+        socket.emit('init player', { player: newPlayer.toMessage(), existingCharacters: charactersOnSameMapJson, map: map })
 
         // Add new player to the players array
         GameEventHandler.playersHandler.addPlayer(newPlayer);

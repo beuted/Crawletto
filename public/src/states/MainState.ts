@@ -1,8 +1,8 @@
 /// <reference path="../../typings/index.d.ts" />
 
-import { GameContext } from "../GameContext";
-import { Map } from "../Map";
-import { Player } from "../Player";
+import { GameContext } from '../GameContext';
+import { Map } from '../Map';
+import { Character } from '../Character';
 
 export class MainState {
     public preload() {
@@ -37,16 +37,16 @@ export class MainState {
         GameContext.player.changeDirection(vector);
         var newPosition = Phaser.Point.add(GameContext.player.gridPosition, vector);
         if (GameContext.map.isCellWalkable(newPosition))
-            GameContext.socketManager.requestPlayerMove({ x: vector.x, y: vector.y });
+            GameContext.socketManager.requestCharacterMove({ x: vector.x, y: vector.y });
     }
 
-    private fightPlayer() {
+    private fightCharacter() {
         GameContext.player.attack();
         var point = GameContext.player.getFacingPoint();
-        var aimedPlayer = GameContext.remotePlayersManager.getPlayerAt(point);
+        var aimedPlayer = GameContext.remoteCharactersManager.getCharacterAt(point);
         if (!aimedPlayer) { return; }
             
-        GameContext.socketManager.requestPlayerAttack(aimedPlayer.guid);
+        GameContext.socketManager.requestCharacterAttack(aimedPlayer.guid);
     }
 
     private initKeyboardInteraction() {
@@ -72,7 +72,7 @@ export class MainState {
         downKey.onDown.add(() => this.movePlayer(new Phaser.Point(0, 1)));
 
         var spacebarKey = GameContext.instance.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
-        spacebarKey.onDown.add(() => this.fightPlayer());
+        spacebarKey.onDown.add(() => this.fightCharacter());
 
         // press D to enter debugmode
         var dKey = GameContext.instance.input.keyboard.addKey(Phaser.Keyboard.D);

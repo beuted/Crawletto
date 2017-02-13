@@ -1,8 +1,8 @@
 /// <reference path="../typings/index.d.ts" />
 
-import { Player } from "./Player";
+import { Character } from "./Character";
 import { Map } from "./Map";
-import { RemotePlayersManager } from "./RemotePlayersManager";
+import { RemoteCharactersManager } from "./RemoteCharactersManager";
 import { SocketManager } from "./SocketManager";
 
 export interface IConfig {
@@ -35,8 +35,8 @@ export interface ICharConfig {
 
 export class GameContext {
     static instance: Phaser.Game;
-    static player: Player;
-    static remotePlayersManager: RemotePlayersManager;
+    static player: Character;
+    static remoteCharactersManager: RemoteCharactersManager;
     static map: Map;
     static socketManager: SocketManager;
     static config: IConfig;
@@ -46,7 +46,7 @@ export class GameContext {
     static create() {
         if (!this.socketManager) this.socketManager = new SocketManager();
         if (!this.map) this.map = new Map();
-        if (!this.remotePlayersManager) this.remotePlayersManager = new RemotePlayersManager();
+        if (!this.remoteCharactersManager) this.remoteCharactersManager = new RemoteCharactersManager();
 
         // TODO: (wip) Add loader callbacks
         /*        GameContext.instance.load.onLoadComplete.add(() => {
