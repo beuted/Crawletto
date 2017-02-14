@@ -65,13 +65,13 @@ export class GameEventHandler {
         var playerMapCoord = player.mapPosition;
         var playerGuid = player.guid;
 
-        // Remove player from playersHandler
+        // Remove character from playersHandler
         GameEventHandler.playersHandler.removePlayer(playerGuid);
 
         // Broadcast removed player to connected socket clients on the same map
         var playersOnSameMap = GameEventHandler.playersHandler.getCharactersOnMap(playerMapCoord);
         _.forEach(playersOnSameMap, (player: Player) => {
-            Server.io.sockets.connected[player.socketId].emit('remove player', { guid: playerGuid });
+            Server.io.sockets.connected[player.socketId].emit('remove character', { guid: playerGuid });
         });
     }
 

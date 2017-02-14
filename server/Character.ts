@@ -19,7 +19,7 @@ export class Character {
         this.mapPosition = { x: 10, y: 10 };
         this.guid = this.generateGuid();
         this.gridPosition = { x: position.x, y: position.y };
-        this.hp = 100;
+        this.hp = 11;
     }
 
     public get map(): Map {

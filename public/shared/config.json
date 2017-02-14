@@ -6,7 +6,7 @@
     },
     "characters": {
         "zombie": {
-            "maxLife": 100,
+            "maxLife": 10,
             "visionRadius": 7,
             "sprite": "zombie",
             "animations": {

@@ -39,9 +39,8 @@ export class RemoteCharactersManager {
             return;
         };
 
-        this.remoteCharacters.splice(this.remoteCharacters.indexOf(removeCharacter), 1);
-
         removeCharacter.destroy();
+        this.remoteCharacters.splice(this.remoteCharacters.indexOf(removeCharacter), 1);
     }
 
     public removeAll() {

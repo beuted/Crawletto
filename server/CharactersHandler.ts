@@ -37,8 +37,8 @@ export class CharactersHandler<T extends Character> {
         return null;
     }
 
-    public removeCharacter(guid: string) {
-        _.remove(this.characters, (char) => { char.guid == guid; });
+    public removeCharacters(guids: string[]) {
+        _.remove(this.characters, (char) => { return _.includes(guids, char.guid); });
     }
 
     public getCharactersOnMapAtPosition(coordMap: Geo.IPoint, coord: Geo.IPoint): T[] {
@@ -55,10 +55,15 @@ export class CharactersHandler<T extends Character> {
     }
 
     private update() {
+        // list of characters to remove
+        var charactersToRemove = [];
+
         _.forEach(this.characters, character => {
-            // Remove players with hp below 0
+            // Remove characters with hp below 0
             if (character.hp <= 0) {
-                this.removeCharacter(character.guid);
+                console.log('removing: ' + character.guid);
+                charactersToRemove.push(character);
+
                 var playersToNotify: Player[] = GameEventHandler.playersHandler.getCharactersOnMap(character.mapPosition);
                 _.forEach(playersToNotify, notifiedPlayer => {
                     Server.io.sockets.connected[notifiedPlayer.socketId].emit('remove character', { guid: character.guid });
@@ -66,5 +71,7 @@ export class CharactersHandler<T extends Character> {
             }
 
         });
+
+        this.removeCharacters(_.map(charactersToRemove, c => c.guid));
     }
 }

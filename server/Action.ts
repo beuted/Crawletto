@@ -81,11 +81,6 @@ export class Attack implements IAction {
         // Impact player aimed 
         attackedCharacter.hp -= damage;
 
-        // Remove player if life is below 0
-        if (attackedCharacter.hp <= 0) {
-
-        }
-
         // Notify players on the same map
         var playersToNotify: Player[] = GameEventHandler.playersHandler.getCharactersOnMap(char.mapPosition);
         _.forEach(playersToNotify, notifiedPlayer => {
@@ -134,7 +129,7 @@ export class ChangeMap implements IAction {
 
         // Notify players from previous map
         _.forEach(playersOnPrevMap, (notifiedPlayer: Player) => {
-            Server.io.sockets.connected[notifiedPlayer.socketId].emit('remove player', char.toMessage());
+            Server.io.sockets.connected[notifiedPlayer.socketId].emit('remove character', char.toMessage());
         }, this);
 
         // Notify players from detination map
