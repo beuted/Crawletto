@@ -10,14 +10,16 @@ export class Character {
     public guid: string;
     public hp: number;
     public maxHp: number;
+    public type: string;
 
     private direction: string = 'right';
     private charConfig: ICharConfig;
 
-    constructor(startX: number, startY: number, guid: string, hp: number, type: string, current: boolean = false) {
+    constructor(gridPosition: {x: number, y: number}, guid: string, hp: number, type: string, current: boolean = false) {
+        this.type = type;
         this.charConfig = GameContext.config.characters[type];
         // setting up the sprite
-        this.sprite = GameContext.instance.add.sprite(startX * 32, startY * 32, this.charConfig.sprite, 0, Map.characterGroup);
+        this.sprite = GameContext.instance.add.sprite(gridPosition.x * 32, gridPosition.y * 32, this.charConfig.sprite, 0, Map.characterGroup);
         this.sprite.anchor.set(0.25, 0.5);
         this.sprite.scale.set(2);
         this.sprite.smoothed = false;
@@ -37,11 +39,11 @@ export class Character {
             GameContext.instance.camera.follow(this.sprite);
 
         // setting up custom parameters
-        this.gridPosition = new Phaser.Point(startX, startY);
+        this.gridPosition = new Phaser.Point(gridPosition.x, gridPosition.y);
         this.visionRadius = this.charConfig.visionRadius;
         this.guid = guid;
         this.hp = hp;        
-        this.maxHp = this.charConfig.maxLife;
+        this.maxHp = this.charConfig.maxHp;
     }
 
     public move(destPoint: any) {

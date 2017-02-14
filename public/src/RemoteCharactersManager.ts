@@ -15,12 +15,11 @@ export class RemoteCharactersManager {
         this.remoteCharacters.push(p);
     }
 
-    public addFromJson(characterJson: { gridPosition: Phaser.Point, guid: string, hp: number }) {
-        var remoteCharacter = new Character(characterJson.gridPosition.x,
-                                      characterJson.gridPosition.y,
+    public addFromJson(characterJson: { gridPosition: { x: number, y: number }, guid: string, hp: number, type: string }) {
+        var remoteCharacter = new Character(characterJson.gridPosition,
                                       characterJson.guid,
                                       characterJson.hp,
-                                      'zombie');
+                                      characterJson.type);
         this.add(remoteCharacter);
     }
 

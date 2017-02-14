@@ -80,7 +80,7 @@ export class GameEventHandler {
         var socket: SocketIO.Socket = <any>this;
 
         // Create a new player
-        var newPlayer: Player = new Player(socket.id, { x: 7, y: 7 });
+        var newPlayer: Player = new Player(socket.id, { x: 7, y: 7 }, 'knight');
 
         // Broadcast new player to connected socket clients
         var playersOnSameMap = GameEventHandler.playersHandler.getPlayersOnMapWithIdDifferentFrom({ x: 10, y: 10 }, newPlayer.guid);

@@ -7,19 +7,25 @@ import { Map } from './Map';
 import { GameEventHandler } from './GameEventHandler';
 import { Server } from './Server';
 
+var config = require('../public/shared/config');
+
 export class Character {
     public mapPosition: Geo.IPoint;
     public gridPosition: Geo.IPoint;
     public guid: string;
     public hp: number;
+    public maxHp: number;
+    public type: string;
 
     private turnAction: Action.IAction = null;
 
-    constructor(position: Geo.IPoint) {
+    constructor(position: Geo.IPoint, type: string) {
         this.mapPosition = { x: 10, y: 10 };
         this.guid = this.generateGuid();
         this.gridPosition = { x: position.x, y: position.y };
-        this.hp = 11;
+        this.type = type;
+        this.hp = config.characters[type].maxHp;
+        this.maxHp = config.characters[type].maxHp;
     }
 
     public get map(): Map {
@@ -27,7 +33,7 @@ export class Character {
     }
 
     public toMessage(): { guid: string, gridPosition: Geo.IPoint, hp: number } {
-        return <{ guid: string, gridPosition: Geo.IPoint, hp: number }>_.pick(this, ["guid", "gridPosition", "hp"]);
+        return <{ guid: string, gridPosition: Geo.IPoint, hp: number }>_.pick(this, ["guid", "gridPosition", "hp", "type"]);
     }
 
     public havePlannedAction(): boolean {

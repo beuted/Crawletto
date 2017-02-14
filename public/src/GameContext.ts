@@ -16,7 +16,7 @@ export interface IConfig {
 }
 
 export interface ICharConfig {
-    maxLife: number,
+    maxHp: number,
     visionRadius: number, // in cell
     sprite: string,
     animations: {

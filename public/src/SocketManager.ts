@@ -58,7 +58,7 @@ export class SocketManager {
         GameContext.map.changeMap(data.map);
 
         // Register current character
-        GameContext.player = new Character(data.player.gridPosition.x, data.player.gridPosition.y, data.player.guid, data.player.hp, 'knight', true);
+        GameContext.player = new Character(data.player.gridPosition, data.player.guid, data.player.hp, data.player.type, true);
 
         // Load characters on current map
         _.forEach(data.existingCharacters, (character: any) => {

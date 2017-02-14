@@ -6,7 +6,7 @@
     },
     "characters": {
         "zombie": {
-            "maxLife": 10,
+            "maxHp": 10,
             "visionRadius": 7,
             "sprite": "zombie",
             "animations": {
@@ -23,7 +23,7 @@
             "animationTime": 250
         },
         "monk": {
-            "maxLife": 100,
+            "maxHp": 100,
             "visionRadius": 7,
             "sprite": "monk",
             "animations": {
@@ -40,7 +40,7 @@
             "animationTime": 250
         },
         "knight": {
-            "maxLife": 100,
+            "maxHp": 100,
             "visionRadius": 7,
             "sprite": "knight",
             "animations": {

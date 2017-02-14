@@ -6,8 +6,8 @@ import { Character } from './Character';
 
 export class Ai extends Character {
 
-    constructor(position: Geo.IPoint) {
-        super(position);
+    constructor(position: Geo.IPoint, type: string) {
+        super(position, type);
     }
 
     public calculateNextAction() {
