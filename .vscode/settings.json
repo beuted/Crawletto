@@ -6,6 +6,7 @@
         "server/**/*.js": true,
         "server/**/*.js.map": true,
         "public/**/*.js": true,
-        "public/**/*.js.map": true
+        "public/**/*.js.map": true,
+        "public_iso/": true
     }
 }
