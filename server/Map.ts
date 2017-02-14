@@ -1,8 +1,9 @@
 /// <reference path="typings/index.d.ts" />
 
-import * as _ from "lodash";
-import * as Geo from "./utils/Geo";
-import { ICoordObject } from "./utils/CoordDic";
+import * as _ from 'lodash';
+import * as EasyStar from 'easystarjs';
+import * as Geo from './utils/Geo';
+import { ICoordObject } from './utils/CoordDic';
 
 export class Map implements ICoordObject {
     private floors: number[][];
@@ -12,6 +13,8 @@ export class Map implements ICoordObject {
     private opaques: number[];
     private coord: Geo.IPoint;
 
+    private easystar: EasyStar.js;
+
     constructor(floors: number[][], structures: number[][], size: Geo.IPoint, walkables: number[], opaques: number[], coord: Geo.IPoint) {
         this.floors = floors;
         this.structures = structures;
@@ -19,6 +22,16 @@ export class Map implements ICoordObject {
         this.walkables = walkables
         this.opaques = opaques
         this.coord = coord;
+
+        // init easystar.js
+        this.easystar = new EasyStar.js();
+        this.easystar.enableSync();
+        this.easystar.disableDiagonals();
+        var easystarFloorGrid = _.map(this.floors, arrayFloors => _.map(arrayFloors, x => { return _.includes(this.walkables, x) ? 1 : 0; }));
+        var easystarStructureGrid = _.map(this.structures, arrayStructures => _.map(arrayStructures, x => { return  x == 0 ? 1 : 0; }));
+        var easystarGrid = _.zipWith(easystarFloorGrid, easystarStructureGrid, (array1, array2) => _.zipWith(array1, array2, (x1, x2) => x1 == 1 && x2 == 1 ? 1 : 0));
+        this.easystar.setGrid(<number[][]>easystarGrid);
+        this.easystar.setAcceptableTiles([1]);
     }
 
     public isCellWalkable(point: Geo.IPoint): boolean {
@@ -59,6 +72,16 @@ export class Map implements ICoordObject {
     }
 
     public toMessage(): any {
-        return _.pick(this, ["floors", "structures", "coord"]);
+        return _.pick(this, ['floors', 'structures', 'coord']);
     }
+
+    public findPath(start: Geo.IPoint, end: Geo.IPoint) {
+        var resultPath = null;
+        this.easystar.findPath(start.x, start.y, end.x, end.y, function( path ) {
+            resultPath = path;
+        });
+        this.easystar.calculate();
+        return resultPath;
+    }
+
 }

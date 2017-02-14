@@ -80,7 +80,6 @@ export class Map {
     private tileArray: string[];
     private water: Phaser.Sprite[];
 
-    private easystar: EasyStar.js;
     private lightSource: LightSource;
 
     constructor() {
@@ -119,7 +118,6 @@ export class Map {
         Map.structureGroup.physicsBodyType = Phaser.Physics.ARCADE;
 
         // init path finding
-        this.easystar = new EasyStar.js();
         this.lightSource = new LightSource(this);
 
         this.initPlateau();
@@ -157,36 +155,9 @@ export class Map {
         return false;
     }
 
-    /*    public findPath(fromPoint: Phaser.Point, toPoint: Phaser.Point): Q.Promise<any[]> {
-            var deferred: Q.Deferred<any[]> = Q.defer<any[]>();
-            this.easystar.findPath(fromPoint.x, fromPoint.y, toPoint.x, toPoint.y, function(path: any[]) {
-                if (path === null) {
-                    deferred.reject("Path returned by easystar is null");
-                    return;
-                }
-    
-                if (path.length <= 1) {
-                    deferred.reject("Path returned by easystar has size of 0 or 1");
-                    return;
-                }
-    
-                path.shift(); // remove the first element which is not a move
-                deferred.resolve(path);
-            });
-            this.easystar.calculate();
-    
-            return deferred.promise;
-        }*/
-
     public update() {
         if (!this.plateau) //TODO: find a better solution
             return;
-
-        // make the water move nicely
-        /*this.water.forEach(w => {
-            w.isoZ = (-2 * Math.sin((GameContext.instance.time.now + (w.isoX * 7)) * 0.004)) + (-1 * Math.sin((GameContext.instance.time.now + (w.isoY * 8)) * 0.005));
-            w.alpha = Phaser.Math.clamp(1 + (w.isoZ * 0.1), 0.2, 1);
-        });*/
 
         // set to dark every tile by default
         this.ForEachCells(cell => cell.color(0x888888));
@@ -194,25 +165,6 @@ export class Map {
         if (GameContext.player) {
             this.lightSource.update(GameContext.player.gridPosition, GameContext.player.visionRadius).forEach((position) => this.getCell(position).color(0xffffff));
         }
-        // tile selection animation
-        // > Update the cursor position. (TODO: this shouldn't be done in Map)
-        /*var cursorPos: Phaser.Plugin.Isometric.Point3 = GameContext.instance.iso.unproject(GameContext.instance.input.activePointer.position);
-        var selectedCell: Cell;
-        this.ForEachCells(cell => {
-            // Tile selection -- Note: those "1.5" are fucking mysterious to me :/
-            var inBounds = (<any>cell.floorTile.isoBounds).containsXY(cursorPos.x + Map.tileSize * 1.5, cursorPos.y + Map.tileSize * 1.5);
-            if (inBounds) {
-                selectedCell = cell;
-                cell.color(0x86bfda);
-            }
-        });
-
-        if (selectedCell && GameContext.instance.input.activePointer.isDown) {
-            selectedCell.color(0xff00ff);
-        }
-
-        // simple sort for the isometric tiles
-        GameContext.instance.iso.topologicalSort(Map.sortedGroup);*/
     }
 
     public getCell(point: Phaser.Point) {
@@ -237,10 +189,6 @@ export class Map {
 
         // init water & plateauTiles
         this.water = [];
-
-        // init pathfinding
-        //this.easystar.setGrid(this.plateau.tiles);
-        //this.easystar.setAcceptableTiles(this.plateau.walkables);
 
         var point: Phaser.Point = new Phaser.Point(0, 0);
         this.cells = [];
@@ -275,9 +223,6 @@ export class Map {
                 }
             }
         }
-
-        // topological sort for the isometric tiles
-        //GameContext.instance.iso.topologicalSort(Map.sortedGroup);
     }
 
     public changeMap(mapData: any) {
