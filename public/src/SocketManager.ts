@@ -59,6 +59,7 @@ export class SocketManager {
 
         // Register current character
         GameContext.player = new Character(data.player.gridPosition, data.player.guid, data.player.hp, data.player.type, true);
+        GameContext.remoteCharactersManager.add(GameContext.player);
 
         // Load characters on current map
         _.forEach(data.existingCharacters, (character: any) => {
@@ -68,11 +69,6 @@ export class SocketManager {
 
     // Move character
     private onMovePlayer(data: { guid: string, position: Phaser.Point }) {
-        if (GameContext.player.guid === data.guid) {
-            GameContext.player.move(data.position);
-            return;
-        }
-
         GameContext.remoteCharactersManager.moveByGuid(data.guid, data.position)
     }
 
@@ -82,7 +78,7 @@ export class SocketManager {
             console.debug('Character changed map: ' + JSON.stringify(data));
             GameContext.map.changeMap(data.map);
             GameContext.player.moveInstant(new Phaser.Point(data.gridPosition.x, data.gridPosition.y));
-            GameContext.remoteCharactersManager.removeAll();
+            GameContext.remoteCharactersManager.removeAllButPlayer();
             GameContext.remoteCharactersManager.addAllFromJson(data.characters);
         } else {
             console.error('Character received a "changed map" for another id: ' + JSON.stringify(data));
@@ -105,18 +101,13 @@ export class SocketManager {
     // Attack character
     private onAttackCharacter(data: { attackedGuid: string, attackingGuid: string, hp: number}) {
         console.debug('Character attacked : ' + data.attackingGuid);
+        var attackedlayer = GameContext.remoteCharactersManager.getByGuid(data.attackedGuid);
+        var attackingPlayer = GameContext.remoteCharactersManager.getByGuid(data.attackingGuid);
 
-        // TODO: have GameContext.player inside remoteCharacterManager for cleaner code
-        if (data.attackedGuid == GameContext.player.guid) {
-            GameContext.player.attack();
-            GameContext.remoteCharactersManager.getByGuid(data.attackingGuid).hp -= data.hp;
-        } else if (data.attackingGuid == GameContext.player.guid) {
-            GameContext.remoteCharactersManager.getByGuid(data.attackedGuid).attack();
-            GameContext.player.hp -= 10;
-        } else {
-            GameContext.remoteCharactersManager.getByGuid(data.attackedGuid).attack();
-            GameContext.remoteCharactersManager.getByGuid(data.attackingGuid).hp -= data.hp;
-        }
+        var vector = Phaser.Point.subtract(attackedlayer.gridPosition, attackingPlayer.gridPosition)
+        attackingPlayer.changeDirection(vector);
+        attackingPlayer.attack();
+        attackedlayer.hp -= data.hp;
     }
 
 }

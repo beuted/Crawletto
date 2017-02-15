@@ -42,11 +42,12 @@ export class RemoteCharactersManager {
         this.remoteCharacters.splice(this.remoteCharacters.indexOf(removeCharacter), 1);
     }
 
-    public removeAll() {
+    public removeAllButPlayer() {
         _.forEach(this.remoteCharacters, function (remoteCharacter) {
-            remoteCharacter.destroy();
+            if (remoteCharacter.guid != GameContext.player.guid)
+                remoteCharacter.destroy();
         });
-        this.remoteCharacters = []
+        this.remoteCharacters = [GameContext.player];
     }
 
     public moveByGuid(guid: string, destPoint: any) {

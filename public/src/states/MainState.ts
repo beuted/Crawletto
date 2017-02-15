@@ -38,15 +38,12 @@ export class MainState {
 
         // If there is a character on the point, attack him
         if (GameContext.remoteCharactersManager.getCharacterAt(newPosition)) {
-            GameContext.player.changeDirection(vector);
             this.fightCharacter(newPosition);
             return;
         }
 
         console.log('request move player: ' + vector.x + ', ' + vector.y);
-        GameContext.player.changeDirection(vector);
         if (GameContext.map.isCellWalkable(newPosition)) {
-            GameContext.player.changeDirection(vector);
             GameContext.socketManager.requestCharacterMove({ x: vector.x, y: vector.y });
         }
     }
