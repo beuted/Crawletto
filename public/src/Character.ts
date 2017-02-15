@@ -4,7 +4,7 @@ import { GameContext, ICharConfig } from "./GameContext";
 import { Map } from "./Map";
 
 export class Character {
-    public sprite: any;
+    public sprite: Phaser.Sprite;
     public gridPosition: Phaser.Point;
     public visionRadius: number;
     public guid: string;
