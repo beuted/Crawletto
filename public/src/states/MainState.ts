@@ -45,7 +45,6 @@ export class MainState {
         var aimedPlayer = GameContext.remoteCharactersManager.getCharacterAt(point);
         if (!aimedPlayer) { return; }
 
-        GameContext.player.attack();
         GameContext.socketManager.requestCharacterAttack(aimedPlayer.guid);
     }
 

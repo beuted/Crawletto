@@ -90,17 +90,33 @@ export class SocketManager {
     }
 
     // Remove character
-    private onRemoveCharacter(data: any) {
+    private onRemoveCharacter(data: { guid: string }) {
         console.debug('Character removed from map: ' + data.guid);
-        // Remove character from remoteCharacter
-        GameContext.remoteCharactersManager.removeByGuid(data.guid);
+        // Check if the removed character is you
+        if (data.guid == GameContext.player.guid) {
+            // TODO: handle current player death!
+            alert('You died!! (Stop playing or it will bug ATM :D)');
+        } else {
+            // Remove character from remoteCharacter
+            GameContext.remoteCharactersManager.removeByGuid(data.guid);
+        }
     }
 
     // Attack character
-    private onAttackCharacter(data: { guid: string, hp: number}) {
-        console.debug('Character attacked : ' + data.guid);
+    private onAttackCharacter(data: { attackedGuid: string, attackingGuid: string, hp: number}) {
+        console.debug('Character attacked : ' + data.attackingGuid);
 
-        GameContext.remoteCharactersManager.getByGuid(data.guid).hp -= data.hp;
+        // TODO: have GameContext.player inside remoteCharacterManager for cleaner code
+        if (data.attackedGuid == GameContext.player.guid) {
+            GameContext.player.attack();
+            GameContext.remoteCharactersManager.getByGuid(data.attackingGuid).hp -= data.hp;
+        } else if (data.attackingGuid == GameContext.player.guid) {
+            GameContext.remoteCharactersManager.getByGuid(data.attackedGuid).attack();
+            GameContext.player.hp -= 10;
+        } else {
+            GameContext.remoteCharactersManager.getByGuid(data.attackedGuid).attack();
+            GameContext.remoteCharactersManager.getByGuid(data.attackingGuid).hp -= data.hp;
+        }
     }
 
 }

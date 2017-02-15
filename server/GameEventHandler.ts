@@ -139,6 +139,6 @@ export class GameEventHandler {
         }
 
         // request move
-        attackingPlayer.planAction(new Action.Attack(msg.guid));
+        attackingPlayer.planAction(new Action.Attack(msg.guid, attackingPlayer.guid));
     }
 }

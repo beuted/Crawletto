@@ -2,7 +2,7 @@
 
 import * as _ from 'lodash';
 import * as Geo from './utils/Geo';
-import { Move } from './Action';
+import { Move, Attack } from './Action';
 import { Character } from './Character';
 import { GameEventHandler } from './GameEventHandler';
 
@@ -13,8 +13,6 @@ export class Ai extends Character {
     }
 
     public calculateNextAction() {
-        var XorY: boolean = !!Math.round(Math.random());
-        var moveDirection = Math.floor(Math.random() * 3) - 1;
         var characterOnMap = GameEventHandler.playersHandler.getCharactersOnMap(this.mapPosition);
 
         var minDist = Number.MAX_VALUE;
@@ -27,13 +25,26 @@ export class Ai extends Character {
             }
         });
 
-        console.log(this.gridPosition, closestChar.gridPosition);
+        // If a player is just next to you, attack him
+        if (closestChar && Geo.Tools.distance(closestChar.gridPosition, this.gridPosition) == 1) {
+            this.planAction(new Attack(closestChar.guid, this.guid));
+            return;
+        }
 
-        var path = GameEventHandler.mapsHandler.getMap(this.mapPosition).findPath(this.gridPosition, closestChar.gridPosition);
+        var path = null;
+        if (closestChar) {
+            path = GameEventHandler.mapsHandler.getMap(this.mapPosition).findPath(this.gridPosition, closestChar.gridPosition);
+        }
         
-        if (!path)
+        // If we can't find a way to a player just randomly walk
+        if (!path || !path[1]) {
+            var XorY: boolean = !!Math.round(Math.random());
+            var moveDirection = Math.floor(Math.random() * 3) - 1;
             this.planAction(new Move({ x: this.gridPosition.x + (XorY ? moveDirection : 0), y: this.gridPosition.y + (!XorY ? moveDirection : 0) }));
-        else
-            this.planAction(new Move({ x: path[1].x, y: path[1].y }));
+            return;
+        }
+
+        // Else way to the nearest player
+        this.planAction(new Move({ x: path[1].x, y: path[1].y }));
     }
 }

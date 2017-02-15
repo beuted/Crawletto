@@ -66,9 +66,11 @@ export class Move implements IAction {
 
 export class Attack implements IAction {
     public attackedCharacterGuid: string;
+    public attackingCharacterGuid: string;
 
-    constructor(playerGuid: string) {
-        this.attackedCharacterGuid = playerGuid;
+    constructor(attackedGuid: string, attackingGuid: string) {
+        this.attackedCharacterGuid = attackedGuid;
+        this.attackingCharacterGuid = attackingGuid;
     }
 
     public execute(char: Character) {
@@ -85,7 +87,8 @@ export class Attack implements IAction {
         var playersToNotify: Player[] = GameEventHandler.playersHandler.getCharactersOnMap(char.mapPosition);
         _.forEach(playersToNotify, notifiedPlayer => {
             Server.io.sockets.connected[notifiedPlayer.socketId].emit('attack character', {
-                guid: this.attackedCharacterGuid,
+                attackedGuid: this.attackedCharacterGuid,
+                attackingGuid: this.attackingCharacterGuid,
                 hp: attackedCharacter.hp
             });
         });
