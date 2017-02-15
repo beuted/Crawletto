@@ -32,16 +32,29 @@ export class MainState {
     }
 
     //TODO: this should be in a class handling current player actions
+    //TODO: should take a point not a vector (like fightCharacter)
     private movePlayer(vector: Phaser.Point) {
+        var newPosition = Phaser.Point.add(GameContext.player.gridPosition, vector);
+
+        // If there is a character on the point, attack him
+        if (GameContext.remoteCharactersManager.getCharacterAt(newPosition)) {
+            GameContext.player.changeDirection(vector);
+            this.fightCharacter(newPosition);
+            return;
+        }
+
         console.log('request move player: ' + vector.x + ', ' + vector.y);
         GameContext.player.changeDirection(vector);
-        var newPosition = Phaser.Point.add(GameContext.player.gridPosition, vector);
-        if (GameContext.map.isCellWalkable(newPosition))
+        if (GameContext.map.isCellWalkable(newPosition)) {
+            GameContext.player.changeDirection(vector);
             GameContext.socketManager.requestCharacterMove({ x: vector.x, y: vector.y });
+        }
     }
 
-    private fightCharacter() {
-        var point = GameContext.player.getFacingPoint();
+    private fightCharacter(point?: Phaser.Point) {
+        if (!point)
+            point = GameContext.player.getFacingPoint();
+
         var aimedPlayer = GameContext.remoteCharactersManager.getCharacterAt(point);
         if (!aimedPlayer) { return; }
 
