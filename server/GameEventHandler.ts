@@ -66,10 +66,10 @@ export class GameEventHandler {
         var playerGuid = player.guid;
 
         // Remove character from playersHandler
-        GameEventHandler.playersHandler.removePlayer(playerGuid);
+        GameEventHandler.playersHandler.remove(playerGuid);
 
         // Broadcast removed player to connected socket clients on the same map
-        var playersOnSameMap = GameEventHandler.playersHandler.getCharactersOnMap(playerMapCoord);
+        var playersOnSameMap = GameEventHandler.playersHandler.getAllOnMap(playerMapCoord);
         _.forEach(playersOnSameMap, (player: Player) => {
             Server.io.sockets.connected[player.socketId].emit('remove character', { guid: playerGuid });
         });
@@ -89,7 +89,7 @@ export class GameEventHandler {
         });
 
         // Send existing characters & map to the new player
-        var charactersOnSameMap: Character[] = (<Character[]>playersOnSameMap).concat(<Character[]>GameEventHandler.aisHandler.getCharacters());
+        var charactersOnSameMap: Character[] = (<Character[]>playersOnSameMap).concat(<Character[]>GameEventHandler.aisHandler.getAll());
         var charactersOnSameMapJson: any[] = [];
         _.forEach(charactersOnSameMap, (character: Character) => {
             charactersOnSameMapJson.push(character.toMessage());
@@ -99,7 +99,7 @@ export class GameEventHandler {
         socket.emit('init player', { player: newPlayer.toMessage(), existingCharacters: charactersOnSameMapJson, map: map })
 
         // Add new player to the players array
-        GameEventHandler.playersHandler.addPlayer(newPlayer);
+        GameEventHandler.playersHandler.add(newPlayer);
     }
 
     // Player has moved

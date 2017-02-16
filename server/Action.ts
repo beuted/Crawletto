@@ -54,7 +54,7 @@ export class Move implements IAction {
 
         char.gridPosition = this.destination;
 
-        var playersToNotify: Player[] = GameEventHandler.playersHandler.getCharactersOnMap(char.mapPosition);
+        var playersToNotify: Player[] = GameEventHandler.playersHandler.getAllOnMap(char.mapPosition);
         _.forEach(playersToNotify, notifiedPlayer => {
             Server.io.sockets.connected[notifiedPlayer.socketId].emit('move player', {
                 guid: char.guid,
@@ -74,8 +74,8 @@ export class Attack implements IAction {
     }
 
     public execute(char: Character) {
-        var attackedCharacter = GameEventHandler.playersHandler.getCharacter(this.attackedCharacterGuid)
-                             || GameEventHandler.aisHandler.getCharacter(this.attackedCharacterGuid);
+        var attackedCharacter: Character = <Character>GameEventHandler.playersHandler.get(this.attackedCharacterGuid)
+                                        || <Character>GameEventHandler.aisHandler.get(this.attackedCharacterGuid);
 
         // Compute damage
         var damage = 10;
@@ -84,7 +84,7 @@ export class Attack implements IAction {
         attackedCharacter.hp -= damage;
 
         // Notify players on the same map
-        var playersToNotify: Player[] = GameEventHandler.playersHandler.getCharactersOnMap(char.mapPosition);
+        var playersToNotify: Player[] = GameEventHandler.playersHandler.getAllOnMap(char.mapPosition);
         _.forEach(playersToNotify, notifiedPlayer => {
             Server.io.sockets.connected[notifiedPlayer.socketId].emit('attack character', {
                 attackedGuid: this.attackedCharacterGuid,
@@ -111,7 +111,7 @@ export class ChangeMap implements IAction {
 
         var playersOnPrevMap = GameEventHandler.playersHandler.getPlayersOnMapWithIdDifferentFrom(char.mapPosition, char.guid);
         var playersOnDestMap = GameEventHandler.playersHandler.getPlayersOnMapWithIdDifferentFrom(this.destMapPosition, char.guid);
-        var aisOnDestMap = GameEventHandler.aisHandler.getCharactersOnMap(this.destMapPosition);
+        var aisOnDestMap = GameEventHandler.aisHandler.getAllOnMap(this.destMapPosition);
 
         char.gridPosition = this.destCharacterPosition;
         char.mapPosition = this.destMapPosition;

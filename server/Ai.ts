@@ -13,7 +13,7 @@ export class Ai extends Character {
     }
 
     public calculateNextAction() {
-        var characterOnMap = GameEventHandler.playersHandler.getCharactersOnMap(this.mapPosition);
+        var characterOnMap = GameEventHandler.playersHandler.getAllOnMap(this.mapPosition);
 
         var minDist = Number.MAX_VALUE;
         var closestChar = null;

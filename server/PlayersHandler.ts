@@ -11,47 +11,23 @@ export class PlayersHandler extends CharactersHandler<Player> {
         super();
     }
 
-    public addPlayer(player: Player) {
-        this.characters.push(player);
-    }
-
-    public removePlayer(playerId: string) {
-        var removePlayer = this.getCharacter(playerId);
-        if (!removePlayer) {
-            console.error('[removePlayer] Player not found: ' + playerId);
-            return;
-        }
-
-        this.characters.splice(this.characters.indexOf(<Player>removePlayer), 1);
-    }
-
     public getPlayersOnMapWithIdDifferentFrom(coord: Geo.IPoint, guid: string) {
-        return _.filter(this.characters, function (player) {
+        return _.filter(this.elements, function (player) {
             return player.mapPosition.x == coord.x && player.mapPosition.y == coord.y && player.guid !== guid;
         });
     }
 
-    // Find player by GUID
-    public getPlayer(guid: string): Player {
-        for (var i = 0; i < this.characters.length; i++) {
-            if (this.characters[i].guid == guid)
-                return this.characters[i];
-        };
-
-        return null;
-    }
-
     // Find player by SocketId
     public getPlayerBySocketId(socketId: string): Player {
-        for (var i = 0; i < this.characters.length; i++) {
-            if (this.characters[i].socketId == socketId)
-                return this.characters[i];
+        for (var i = 0; i < this.elements.length; i++) {
+            if (this.elements[i].socketId == socketId)
+                return this.elements[i];
         };
 
         return null;
     }
 
     public allPlayersPlannedAction(): boolean {
-        return _.every(this.characters, player => player.havePlannedAction());
+        return _.every(this.elements, player => player.havePlannedAction());
     }
 }
