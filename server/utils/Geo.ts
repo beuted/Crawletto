@@ -12,7 +12,7 @@ export interface IPoint {
 
 export class Tools {
 	static distance(a: IPoint, b: IPoint): number {
-		return Math.abs((a.x - b.x) + (a.y - b.y));
+		return Math.abs((a.x - b.x)) + Math.abs((a.y - b.y));
 	}
 
     // simple Bresenham implementation
