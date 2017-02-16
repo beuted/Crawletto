@@ -20,7 +20,7 @@ export class Character {
         this.type = type;
         this.charConfig = GameContext.config.characters[type];
         // setting up the sprite
-        this.sprite = GameContext.instance.add.sprite(gridPosition.x * 32, gridPosition.y * 32, this.charConfig.sprite, 0, Map.characterGroup);
+        this.sprite = GameContext.instance.add.sprite(gridPosition.x * 32, gridPosition.y * 32, this.charConfig.sprite, 0, Map.sortedGroup);
         this.sprite.anchor.set(0.25, 0.5);
         this.sprite.scale.set(2);
         this.sprite.smoothed = false;

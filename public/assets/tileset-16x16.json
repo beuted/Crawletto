@@ -2,11 +2,11 @@
 
 "window":
 {
-	"frame": {"x":80,"y":0,"w":16,"h":16},
+	"frame": {"x":16,"y":112,"w":16,"h":32},
 	"rotated": false,
 	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":16},
-	"sourceSize": {"w":16,"h":16}
+	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":32},
+	"sourceSize": {"w":16,"h":32}
 },
 "bush1":
 {
@@ -42,11 +42,11 @@
 },
 "wall":
 {
-	"frame": {"x":64,"y":0,"w":16,"h":16},
+	"frame": {"x":0,"y":112,"w":16,"h":32},
 	"rotated": false,
 	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":16},
-	"sourceSize": {"w":16,"h":16}
+	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":32},
+	"sourceSize": {"w":16,"h":32}
 },
 "sandstone":
 {

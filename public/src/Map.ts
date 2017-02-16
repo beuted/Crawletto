@@ -65,8 +65,7 @@ class Cell {
 export class Map {
     // TODO: should be private once character will be handle by the Map
     public static floorGroup: Phaser.Group;
-    public static structureGroup: Phaser.Group;
-    public static characterGroup: Phaser.Group;
+    public static sortedGroup: Phaser.Group;
 
     public position: Phaser.Point;
 
@@ -78,7 +77,6 @@ export class Map {
     private plateau: Plateau;
     private cells: Cell[][];
     private tileArray: string[];
-    private water: Phaser.Sprite[];
 
     private lightSource: LightSource;
 
@@ -108,14 +106,12 @@ export class Map {
 
         // init isoGroup
         Map.floorGroup = GameContext.instance.add.group();
-        Map.structureGroup = GameContext.instance.add.group();
-        Map.characterGroup = GameContext.instance.add.group();
+        Map.sortedGroup = GameContext.instance.add.group();
 
         Map.floorGroup.enableBody = true;
-        Map.structureGroup.enableBody = true;
-        Map.characterGroup.enableBody = true;
+        Map.sortedGroup.enableBody = true;
+
         // we won't really be using IsoArcade physics, but I've enabled it anyway so the debug bodies can be seen
-        Map.structureGroup.physicsBodyType = Phaser.Physics.ARCADE;
 
         // init path finding
         this.lightSource = new LightSource(this);
@@ -165,6 +161,8 @@ export class Map {
         if (GameContext.player) {
             this.lightSource.update(GameContext.player.gridPosition, GameContext.player.visionRadius).forEach((position) => this.getCell(position).color(0xffffff));
         }
+
+        Map.sortedGroup.sort('y', Phaser.Group.SORT_ASCENDING);
     }
 
     public getCell(point: Phaser.Point) {
@@ -188,8 +186,6 @@ export class Map {
             this.ForEachCells(cell => cell.destroy());
 
         // init water & plateauTiles
-        this.water = [];
-
         var point: Phaser.Point = new Phaser.Point(0, 0);
         this.cells = [];
         for (point.x = 0; point.x < Map.size.x; point.x++) {
@@ -200,16 +196,6 @@ export class Map {
                 var structureId = this.getPlateauStructure(point);
                 var floorId = this.getPlateauFloor(point);
 
-                if (structureId != 0) {
-                    var structureTile = GameContext.instance.add.sprite(point.x * Map.tileSize, point.y * Map.tileSize, 'tileset', this.tileArray[structureId], Map.structureGroup);
-                    structureTile.anchor.set(0, 0);
-                    structureTile.scale.set(2);
-                    structureTile.smoothed = false;
-                    structureTile.body.moves = false;
-                    this.cells[point.x][point.y].structureId = structureId;
-                    this.cells[point.x][point.y].structureTile = structureTile;
-                }
-
                 var floorTile = GameContext.instance.add.sprite(point.x * Map.tileSize, point.y * Map.tileSize, 'tileset', this.tileArray[floorId], Map.floorGroup);
                 floorTile.anchor.set(0, 0);
                 floorTile.scale.set(2);
@@ -218,8 +204,14 @@ export class Map {
                 this.cells[point.x][point.y].floorId = floorId;
                 this.cells[point.x][point.y].floorTile = floorTile;
 
-                if (floorId === 0) {
-                    this.water.push(floorTile);
+                if (structureId != 0) {
+                    var structureTile = GameContext.instance.add.sprite(point.x * Map.tileSize, point.y * Map.tileSize, 'tileset', this.tileArray[structureId], Map.sortedGroup);
+                    structureTile.anchor.set(0, 0.5);
+                    structureTile.scale.set(2);
+                    structureTile.smoothed = false;
+                    structureTile.body.moves = false;
+                    this.cells[point.x][point.y].structureId = structureId;
+                    this.cells[point.x][point.y].structureTile = structureTile;
                 }
             }
         }
