@@ -31,6 +31,5 @@ export class LoadState
         GameContext.instance.load.spritesheet('zombie', 'assets/zombie.png', 32, 32, 32);
         GameContext.instance.load.spritesheet('monk', 'assets/monk.png', 32, 32, 16);
         GameContext.instance.load.spritesheet('knight', 'assets/knight.png', 32, 32, 16);
-        //GameContext.instance.load.atlasJSONHash('tileset', 'assets/tileset-mod.png', 'assets/tileset-mod.json'); // Attempt to do better
     }
 }
