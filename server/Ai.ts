@@ -8,8 +8,8 @@ import { GameEventHandler } from './GameEventHandler';
 
 export class Ai extends Character {
 
-    constructor(position: Geo.IPoint, type: string) {
-        super(position, type);
+    constructor(gridPosition: Geo.IPoint, mapPosition: Geo.IPoint, type: string) {
+        super(gridPosition, mapPosition, type);
     }
 
     public calculateNextAction() {

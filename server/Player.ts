@@ -11,8 +11,8 @@ import { GameEventHandler } from './GameEventHandler';
 export class Player extends Character {
     public socketId: string;
 
-    constructor(socketId: string, position: Geo.IPoint, type: string) {
-        super(position, type);
+    constructor(socketId: string, gridPosition: Geo.IPoint, mapPosition: Geo.IPoint, type: string) {
+        super(gridPosition, mapPosition, type);
         this.socketId = socketId;
     }
 

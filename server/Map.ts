@@ -11,17 +11,17 @@ export class Map implements ICoordObject {
     private size: Geo.IPoint;
     private walkables: number[];
     private opaques: number[];
-    private coord: Geo.IPoint;
+    private position: Geo.IPoint;
 
     private easystar: EasyStar.js;
 
-    constructor(floors: number[][], structures: number[][], size: Geo.IPoint, walkables: number[], opaques: number[], coord: Geo.IPoint) {
+    constructor(floors: number[][], structures: number[][], size: Geo.IPoint, walkables: number[], opaques: number[], position: Geo.IPoint) {
         this.floors = floors;
         this.structures = structures;
         this.size = size;
         this.walkables = walkables
         this.opaques = opaques
-        this.coord = coord;
+        this.position = position;
 
         // init easystar.js
         this.easystar = new EasyStar.js();
@@ -54,7 +54,7 @@ export class Map implements ICoordObject {
     }
 
     public getCoord(): Geo.IPoint {
-        return this.coord;
+        return this.position;
     }
 
     public isPathWalkable(path: Geo.IPoint[]) {
@@ -72,7 +72,7 @@ export class Map implements ICoordObject {
     }
 
     public toMessage(): any {
-        return _.pick(this, ['floors', 'structures', 'coord']);
+        return _.pick(this, ['floors', 'structures', 'position']);
     }
 
     public findPath(start: Geo.IPoint, end: Geo.IPoint) {

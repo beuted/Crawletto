@@ -19,15 +19,15 @@ export class MapsHandler {
     }
 
     // Get the map at @coord, if not found, load it
-    public getMap(coord: Geo.IPoint): Map {
-        var map = this.maps.get(coord);
+    public getMap(position: Geo.IPoint): Map {
+        var map = this.maps.get(position);
         if (!map)
-            map = this.loadMap(coord);
+            map = this.loadMap(position);
         return map;
     }
 
-    private loadMap(coord: Geo.IPoint): Map {
-        var map: Map = this.mapGenerator.generate(coord);
+    private loadMap(position: Geo.IPoint): Map {
+        var map: Map = this.mapGenerator.generate(position);
         if (!map)
             return null;
 

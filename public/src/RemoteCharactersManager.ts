@@ -15,8 +15,9 @@ export class RemoteCharactersManager {
         this.remoteCharacters.push(p);
     }
 
-    public addFromJson(characterJson: { gridPosition: { x: number, y: number }, guid: string, hp: number, type: string }) {
+    public addFromJson(characterJson: { gridPosition: { x: number, y: number }, mapPosition: { x: number, y: number }, guid: string, hp: number, type: string }) {
         var remoteCharacter = new Character(characterJson.gridPosition,
+                                      characterJson.mapPosition,
                                       characterJson.guid,
                                       characterJson.hp,
                                       characterJson.type);

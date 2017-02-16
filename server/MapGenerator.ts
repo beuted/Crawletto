@@ -58,8 +58,8 @@ export class MapGenerator {
     /**
      * Generate a Map depending on the positon, return null if map out of boundaries.
      */
-    public generate(coord: Geo.IPoint): Map {
-        return new Map(this.mapDefault.tiles, this.mapDefault.structures, this.size, this.walkables, this.opaques, coord);
+    public generate(position: Geo.IPoint): Map {
+        return new Map(this.mapDefault.tiles, this.mapDefault.structures, this.size, this.walkables, this.opaques, position);
     }
 
     private initSampleMaps() {

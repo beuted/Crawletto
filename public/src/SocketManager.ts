@@ -58,7 +58,7 @@ export class SocketManager {
         GameContext.map.changeMap(data.map);
 
         // Register current character
-        GameContext.player = new Character(data.player.gridPosition, data.player.guid, data.player.hp, data.player.type, true);
+        GameContext.player = new Character(data.player.gridPosition, data.player.mapPosition, data.player.guid, data.player.hp, data.player.type, true);
         GameContext.remoteCharactersManager.add(GameContext.player);
 
         // Load characters on current map
@@ -73,11 +73,20 @@ export class SocketManager {
     }
 
     // Character changed map
-    private onChangeMapCharacter(data: { guid: string, gridPosition: { x: number, y: number }, mapPosition: { x: number, y: number }, characters: any[], map: any[][] }) {
+    private onChangeMapCharacter(data: { guid: string, gridPosition: { x: number, y: number }, characters: any[], map: any }) {
         if (GameContext.player.guid === data.guid) {
             console.debug('Character changed map: ' + JSON.stringify(data));
+            // change player direction
+            var newMapPosition = new Phaser.Point(data.map.position.x, data.map.position.y);
+            var vector = Phaser.Point.subtract(newMapPosition, GameContext.player.mapPosition);
+            GameContext.player.changeDirection(vector);
+
+            // Change map and move to dest position on it
             GameContext.map.changeMap(data.map);
             GameContext.player.moveInstant(new Phaser.Point(data.gridPosition.x, data.gridPosition.y));
+            GameContext.player.mapPosition = newMapPosition;
+
+            // refresh players on map
             GameContext.remoteCharactersManager.removeAllButPlayer();
             GameContext.remoteCharactersManager.addAllFromJson(data.characters);
         } else {

@@ -98,24 +98,24 @@ export class Attack implements IAction {
 
 
 export class ChangeMap implements IAction {
-    public destMap: Geo.IPoint;
-    public destCase: Geo.IPoint;
+    public destMapPosition: Geo.IPoint;
+    public destCharacterPosition: Geo.IPoint;
 
-    constructor(destMap: Geo.IPoint, destCase: Geo.IPoint) {
-        this.destMap = destMap;
-        this.destCase = destCase;
+    constructor(destMapPosition: Geo.IPoint, destCharacterPosition: Geo.IPoint) {
+        this.destMapPosition = destMapPosition;
+        this.destCharacterPosition = destCharacterPosition;
     }
 
     public execute(char: Character) {
-        var newMap = GameEventHandler.mapsHandler.getMap(this.destMap);
+        var newMap = GameEventHandler.mapsHandler.getMap(this.destMapPosition);
 
         var playersOnPrevMap = GameEventHandler.playersHandler.getPlayersOnMapWithIdDifferentFrom(char.mapPosition, char.guid);
-        var playersOnDestMap = GameEventHandler.playersHandler.getPlayersOnMapWithIdDifferentFrom(this.destMap, char.guid);
-        var aisOnDestMap = GameEventHandler.aisHandler.getCharactersOnMap(this.destMap);
+        var playersOnDestMap = GameEventHandler.playersHandler.getPlayersOnMapWithIdDifferentFrom(this.destMapPosition, char.guid);
+        var aisOnDestMap = GameEventHandler.aisHandler.getCharactersOnMap(this.destMapPosition);
 
-        char.gridPosition = this.destCase;
-        char.mapPosition = this.destMap;
-        char.gridPosition = this.destCase;
+        char.gridPosition = this.destCharacterPosition;
+        char.mapPosition = this.destMapPosition;
+        char.gridPosition = this.destCharacterPosition;
 
         // Send the change map message to the player changing map
         let aisOnMapMessage = _.map(aisOnDestMap, ai => ai.toMessage());
@@ -125,7 +125,6 @@ export class ChangeMap implements IAction {
             Server.io.sockets.connected[char.socketId].emit('change map player', {
                 guid: char.guid,
                 gridPosition: { x: char.gridPosition.x, y: char.gridPosition.y },
-                mapPosition: { x: char.mapPosition.x, y: char.mapPosition.y },
                 characters: playersOnDestMapMessage.concat(aisOnMapMessage),
                 map: newMap.toMessage()
             });

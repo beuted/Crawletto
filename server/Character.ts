@@ -19,10 +19,10 @@ export class Character {
 
     private turnAction: Action.IAction = null;
 
-    constructor(position: Geo.IPoint, type: string) {
-        this.mapPosition = { x: 10, y: 10 };
+    constructor(gridPosition: Geo.IPoint, mapPosition: Geo.IPoint, type: string) {
         this.guid = this.generateGuid();
-        this.gridPosition = { x: position.x, y: position.y };
+        this.gridPosition = { x: gridPosition.x, y: gridPosition.y };
+        this.mapPosition = { x: mapPosition.x, y: mapPosition.y };
         this.type = type;
         this.hp = config.characters[type].maxHp;
         this.maxHp = config.characters[type].maxHp;
@@ -33,7 +33,7 @@ export class Character {
     }
 
     public toMessage(): { guid: string, gridPosition: Geo.IPoint, hp: number } {
-        return <{ guid: string, gridPosition: Geo.IPoint, hp: number }>_.pick(this, ["guid", "gridPosition", "hp", "type"]);
+        return <{ guid: string, gridPosition: Geo.IPoint, hp: number }>_.pick(this, ["guid", "gridPosition", "mapPosition", "hp", "type"]);
     }
 
     public havePlannedAction(): boolean {

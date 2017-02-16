@@ -68,7 +68,7 @@ export class Map {
     public static structureGroup: Phaser.Group;
     public static characterGroup: Phaser.Group;
 
-    public coord: Phaser.Point;
+    public position: Phaser.Point;
 
     private static tileSize = 32;
     private static size: { x: number, y: number };
@@ -83,7 +83,7 @@ export class Map {
     private lightSource: LightSource;
 
     constructor() {
-        this.coord = new Phaser.Point(0, 0);
+        this.position = new Phaser.Point(0, 0);
 
         Map.size = GameContext.config.map.size;
         Map.walkables = GameContext.config.map.walkables;
@@ -226,7 +226,7 @@ export class Map {
     }
 
     public changeMap(mapData: any) {
-        this.coord = mapData.coord;
+        this.position = mapData.position;
         this.plateau = mapData;
         this.initPlateau();
     }

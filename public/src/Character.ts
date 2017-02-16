@@ -6,6 +6,7 @@ import { Map } from "./Map";
 export class Character {
     public sprite: Phaser.Sprite;
     public gridPosition: Phaser.Point;
+    public mapPosition: Phaser.Point;
     public visionRadius: number;
     public guid: string;
     public hp: number;
@@ -15,7 +16,7 @@ export class Character {
     private direction: string = 'right';
     private charConfig: ICharConfig;
 
-    constructor(gridPosition: {x: number, y: number}, guid: string, hp: number, type: string, current: boolean = false) {
+    constructor(gridPosition: {x: number, y: number}, mapPosition: {x: number, y: number}, guid: string, hp: number, type: string, current: boolean = false) {
         this.type = type;
         this.charConfig = GameContext.config.characters[type];
         // setting up the sprite
@@ -40,6 +41,7 @@ export class Character {
 
         // setting up custom parameters
         this.gridPosition = new Phaser.Point(gridPosition.x, gridPosition.y);
+        this.mapPosition = new Phaser.Point(mapPosition.x, mapPosition.y);
         this.visionRadius = this.charConfig.visionRadius;
         this.guid = guid;
         this.hp = hp;        
