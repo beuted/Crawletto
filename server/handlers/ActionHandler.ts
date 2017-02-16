@@ -1,7 +1,7 @@
-/// <reference path="typings/index.d.ts" />
+/// <reference path="../typings/index.d.ts" />
 
 import * as _ from 'lodash';
-import { GameEventHandler } from './GameEventHandler';
+import { GameEventHandler } from '../GameEventHandler';
 
 export class ActionHandler {
     private turnTime: number;  // time it takes to perform an action in ms

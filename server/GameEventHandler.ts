@@ -7,10 +7,10 @@ import * as Geo from './utils/Geo';
 import { Player } from './Player';
 import { Character } from './Character';
 import { Map } from './Map';
-import { ActionHandler } from './ActionHandler';
-import { AisHandler } from './AisHandler';
-import { MapsHandler } from './MapsHandler';
-import { PlayersHandler } from './PlayersHandler';
+import { ActionHandler } from './handlers/ActionHandler';
+import { AisHandler } from './handlers/AisHandler';
+import { MapsHandler } from './handlers/MapsHandler';
+import { PlayersHandler } from './handlers/PlayersHandler';
 import { Server } from './Server';
 
 export class GameEventHandler {

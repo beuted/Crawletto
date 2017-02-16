@@ -1,13 +1,12 @@
-/// <reference path="typings/index.d.ts" />
+/// <reference path="../typings/index.d.ts" />
 
 import * as _ from 'lodash';
-import * as Geo from './utils/Geo';
-import { Character } from './Character';
-import { Player } from './Player';
-import { Move } from './Action';
-import { GameEventHandler } from './GameEventHandler';
+import { Character } from '../Character';
+import { Player } from '../Player';
+import { Move } from '../Action';
+import { GameEventHandler } from '../GameEventHandler';
 import { ElementsHandler } from './ElementsHandler';
-import { Server } from './Server';
+import { Server } from '../Server';
 
 export class CharactersHandler<T extends Character> extends ElementsHandler<T> {
     constructor() {

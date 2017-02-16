@@ -1,8 +1,8 @@
-/// <reference path="typings/index.d.ts" />
+/// <reference path="../typings/index.d.ts" />
 
 import * as _ from 'lodash';
-import * as Geo from './utils/Geo';
-import { Element } from './Element';
+import * as Geo from '../utils/Geo';
+import { Element } from '../Element';
 
 export class ElementsHandler<T extends Element> {
 

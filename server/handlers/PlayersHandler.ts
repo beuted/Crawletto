@@ -1,9 +1,8 @@
-/// <reference path="typings/index.d.ts" />
+/// <reference path="../typings/index.d.ts" />
 
 import * as _ from 'lodash';
-import * as util from 'util';
-import * as Geo from './utils/Geo';
-import { Player } from './Player';
+import * as Geo from '../utils/Geo';
+import { Player } from '../Player';
 import { CharactersHandler } from './CharactersHandler';
 
 export class PlayersHandler extends CharactersHandler<Player> {
