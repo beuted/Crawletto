@@ -80,6 +80,11 @@ export class Attack implements IAction {
         // Compute damage
         var damage = 10;
 
+        if (!attackedCharacter) {
+            console.error('Can\'t find attacked character: ' + this.attackedCharacterGuid);
+            return;
+        }
+
         // Impact player aimed 
         attackedCharacter.hp -= damage;
 

@@ -1,24 +1,25 @@
 /// <reference path="../typings/index.d.ts" />
 
-import { GameContext, ICharConfig } from "./GameContext";
-import { Map } from "./Map";
+import { GameContext, ICharConfig } from './GameContext';
+import { Map } from './Map';
+import { Element } from './Element';
 
-export class Character {
-    public sprite: Phaser.Sprite;
-    public gridPosition: Phaser.Point;
-    public mapPosition: Phaser.Point;
+export class Character extends Element {
     public visionRadius: number;
-    public guid: string;
     public hp: number;
     public maxHp: number;
-    public type: string;
 
     private direction: string = 'right';
     private charConfig: ICharConfig;
 
     constructor(gridPosition: {x: number, y: number}, mapPosition: {x: number, y: number}, guid: string, hp: number, type: string, current: boolean = false) {
-        this.type = type;
+        super(gridPosition, mapPosition, guid, type);
         this.charConfig = GameContext.config.characters[type];
+
+        this.visionRadius = this.charConfig.visionRadius;
+        this.hp = hp;
+        this.maxHp = this.charConfig.maxHp;
+
         // setting up the sprite
         this.sprite = GameContext.instance.add.sprite(gridPosition.x * 32, gridPosition.y * 32, this.charConfig.sprite, 0, Map.sortedGroup);
         this.sprite.anchor.set(0.25, 0.5);
@@ -40,10 +41,7 @@ export class Character {
             GameContext.instance.camera.follow(this.sprite);
 
         // setting up custom parameters
-        this.gridPosition = new Phaser.Point(gridPosition.x, gridPosition.y);
-        this.mapPosition = new Phaser.Point(mapPosition.x, mapPosition.y);
         this.visionRadius = this.charConfig.visionRadius;
-        this.guid = guid;
         this.hp = hp;        
         this.maxHp = this.charConfig.maxHp;
     }
@@ -125,9 +123,5 @@ export class Character {
             default:
                 throw new Error('Character.getDirectionVector(): Unknown direction');
         }
-    }
-
-    public destroy() {
-        this.sprite.destroy();
     }
 }
