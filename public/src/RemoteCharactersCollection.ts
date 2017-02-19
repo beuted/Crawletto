@@ -3,16 +3,11 @@
 import * as _ from 'lodash';
 import { GameContext } from './GameContext';
 import { Character } from './Character';
+import { RemoteElementsCollection } from './RemoteElementsCollection';
 
-export class RemoteCharactersManager {
-    private remoteCharacters: Character[];
-
+export class RemoteCharactersCollection extends RemoteElementsCollection<Character> {
     constructor() {
-        this.remoteCharacters = [];
-    }
-
-    public add(p: Character) {
-        this.remoteCharacters.push(p);
+        super();
     }
 
     public addFromJson(characterJson: { gridPosition: { x: number, y: number }, mapPosition: { x: number, y: number }, guid: string, hp: number, type: string }) {
@@ -30,28 +25,16 @@ export class RemoteCharactersManager {
         }, this);
     }
 
-    public removeByGuid(guid: string) {
-        var removeCharacter = this.getByGuid(guid);
-
-        if (!removeCharacter) {
-            console.warn('Character not found: ' + guid);
-            return;
-        }
-
-        removeCharacter.destroy();
-        this.remoteCharacters.splice(this.remoteCharacters.indexOf(removeCharacter), 1);
-    }
-
     public removeAllButPlayer() {
-        _.forEach(this.remoteCharacters, function (remoteCharacter) {
+        _.forEach(this.remoteElements, function (remoteCharacter) {
             if (remoteCharacter.guid != GameContext.player.guid)
                 remoteCharacter.destroy();
         });
-        this.remoteCharacters = [GameContext.player];
+        this.add(GameContext.player);
     }
 
     public moveByGuid(guid: string, destPoint: any) {
-        var characterToMove = this.getByGuid(guid);
+        var characterToMove = this.get(guid);
 
         if (!characterToMove) {
             console.warn('Character not found: ' + guid);
@@ -61,24 +44,4 @@ export class RemoteCharactersManager {
         // Update character position
         characterToMove.move(destPoint)
     }
-
-    public getCharacterAt(gridCoord: Phaser.Point) {
-        for (var i = 0; i < this.remoteCharacters.length; i++) {
-            if (Phaser.Point.equals(this.remoteCharacters[i].gridPosition, gridCoord)) {
-                return this.remoteCharacters[i];
-            }
-        }
-
-        return null
-    }
-
-    // Find character by GUID
-    public getByGuid(guid): Character {
-        for (var i = 0; i < this.remoteCharacters.length; i++) {
-            if (this.remoteCharacters[i].guid == guid)
-                return this.remoteCharacters[i];
-        };
-
-        return null;
-    };
 }

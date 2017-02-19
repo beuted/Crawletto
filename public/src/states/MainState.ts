@@ -37,7 +37,7 @@ export class MainState {
         var newPosition = Phaser.Point.add(GameContext.player.gridPosition, vector);
 
         // If there is a character on the point, attack him
-        if (GameContext.remoteCharactersManager.getCharacterAt(newPosition)) {
+        if (GameContext.remoteCharactersCollection.getAt(newPosition).length > 0) {
             this.fightCharacter(newPosition);
             return;
         }
@@ -52,10 +52,10 @@ export class MainState {
         if (!point)
             point = GameContext.player.getFacingPoint();
 
-        var aimedPlayer = GameContext.remoteCharactersManager.getCharacterAt(point);
-        if (!aimedPlayer) { return; }
+        var aimedPlayer = GameContext.remoteCharactersCollection.getAt(point);
+        if (!aimedPlayer[0]) { return; }
 
-        GameContext.socketManager.requestCharacterAttack(aimedPlayer.guid);
+        GameContext.socketManager.requestCharacterAttack(aimedPlayer[0].guid);
     }
 
     private initKeyboardInteraction() {

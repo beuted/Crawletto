@@ -3,7 +3,7 @@
 import * as _ from 'lodash';
 import { GameContext } from './GameContext';
 import { Character } from './Character';
-import { RemoteCharactersManager } from './RemoteCharactersManager';
+import { RemoteCharactersCollection } from './RemoteCharactersCollection';
 
 export class SocketManager {
 
@@ -14,9 +14,9 @@ export class SocketManager {
         this.socket.on('connect', this.onSocketConnected.bind(this));                    // Socket connection successful
         this.socket.on('disconnect', this.onSocketDisconnect.bind(this));                // Socket disconnection
         this.socket.on('new character', this.onNewCharacter.bind(this));                 // New character message received
-        this.socket.on('init player', this.onInitPlayer.bind(this));               // Character removed message received
-        this.socket.on('move player', this.onMovePlayer.bind(this));               // Character move message received
-        this.socket.on('change map player', this.onChangeMapCharacter.bind(this));    // Character removed message received
+        this.socket.on('init player', this.onInitPlayer.bind(this));                     // Character removed message received
+        this.socket.on('move player', this.onMovePlayer.bind(this));                     // Character move message received
+        this.socket.on('change map player', this.onChangeMapCharacter.bind(this));       // Character removed message received
         this.socket.on('remove character', this.onRemoveCharacter.bind(this));           // Character removed message received
         this.socket.on('attack character', this.onAttackCharacter.bind(this));           // Character removed message received
     }
@@ -47,7 +47,7 @@ export class SocketManager {
         console.debug('New character on map: ' + JSON.stringify(data));
 
         // Add new character to the remote characters array
-        GameContext.remoteCharactersManager.addFromJson(data);
+        GameContext.remoteCharactersCollection.addFromJson(data);
     }
 
     // Init player
@@ -59,18 +59,18 @@ export class SocketManager {
 
         // Register current character
         GameContext.player = new Character(data.player.gridPosition, data.player.mapPosition, data.player.guid, data.player.hp, data.player.type, true);
-        GameContext.remoteCharactersManager.add(GameContext.player);
+        GameContext.remoteCharactersCollection.add(GameContext.player);
 
         // Load characters on current map
-        GameContext.remoteCharactersManager.addAllFromJson(data.characters);
+        GameContext.remoteCharactersCollection.addAllFromJson(data.characters);
 
         // Load items on current map
-        GameContext.remoteItemsManager.addAllFromJson(data.items);
+        GameContext.remoteItemsCollection.addAllFromJson(data.items);
     }
 
     // Move character
     private onMovePlayer(data: { guid: string, position: Phaser.Point }) {
-        GameContext.remoteCharactersManager.moveByGuid(data.guid, data.position)
+        GameContext.remoteCharactersCollection.moveByGuid(data.guid, data.position)
     }
 
     // Character changed map
@@ -88,12 +88,12 @@ export class SocketManager {
             GameContext.player.mapPosition = newMapPosition;
 
             // refresh players on map
-            GameContext.remoteCharactersManager.removeAllButPlayer();
-            GameContext.remoteCharactersManager.addAllFromJson(data.characters);
+            GameContext.remoteCharactersCollection.removeAllButPlayer();
+            GameContext.remoteCharactersCollection.addAllFromJson(data.characters);
 
             // refresh items on map
-            GameContext.remoteItemsManager.removeAll();
-            GameContext.remoteItemsManager.addAllFromJson(data.items);
+            GameContext.remoteItemsCollection.removeAll();
+            GameContext.remoteItemsCollection.addAllFromJson(data.items);
         } else {
             console.error('Character received a "changed map" for another id: ' + JSON.stringify(data));
         }
@@ -108,15 +108,15 @@ export class SocketManager {
             alert('You died!! (Stop playing or it will bug ATM :D)');
         } else {
             // Remove character from remoteCharacter
-            GameContext.remoteCharactersManager.removeByGuid(data.guid);
+            GameContext.remoteCharactersCollection.remove(data.guid);
         }
     }
 
     // Attack character
     private onAttackCharacter(data: { attackedGuid: string, attackingGuid: string, hp: number}) {
         console.debug('Character attacked : ' + data.attackingGuid);
-        var attackedlayer = GameContext.remoteCharactersManager.getByGuid(data.attackedGuid);
-        var attackingPlayer = GameContext.remoteCharactersManager.getByGuid(data.attackingGuid);
+        var attackedlayer = GameContext.remoteCharactersCollection.get(data.attackedGuid);
+        var attackingPlayer = GameContext.remoteCharactersCollection.get(data.attackingGuid);
 
         var vector = Phaser.Point.subtract(attackedlayer.gridPosition, attackingPlayer.gridPosition)
         attackingPlayer.changeDirection(vector);
