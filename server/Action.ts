@@ -107,11 +107,12 @@ export class ChangeMap implements IAction {
     }
 
     public execute(char: Character) {
-        var newMap = GameEventHandler.mapsHandler.getMap(this.destMapPosition);
+        let newMap = GameEventHandler.mapsHandler.getMap(this.destMapPosition);
 
-        var playersOnPrevMap = GameEventHandler.playersHandler.getPlayersOnMapWithIdDifferentFrom(char.mapPosition, char.guid);
-        var playersOnDestMap = GameEventHandler.playersHandler.getPlayersOnMapWithIdDifferentFrom(this.destMapPosition, char.guid);
-        var aisOnDestMap = GameEventHandler.aisHandler.getAllOnMap(this.destMapPosition);
+        let playersOnPrevMap = GameEventHandler.playersHandler.getPlayersOnMapWithIdDifferentFrom(char.mapPosition, char.guid);
+        let playersOnDestMap = GameEventHandler.playersHandler.getPlayersOnMapWithIdDifferentFrom(this.destMapPosition, char.guid);
+        let aisOnDestMap = GameEventHandler.aisHandler.getAllOnMap(this.destMapPosition);
+        let itemsOnDestMap = GameEventHandler.itemsHandler.getAllOnMap(this.destMapPosition);
 
         char.gridPosition = this.destCharacterPosition;
         char.mapPosition = this.destMapPosition;
@@ -120,12 +121,14 @@ export class ChangeMap implements IAction {
         // Send the change map message to the player changing map
         let aisOnMapMessage = _.map(aisOnDestMap, ai => ai.toMessage());
         let playersOnDestMapMessage = _.map(playersOnDestMap, player => player.toMessage());
+        let itemsOnDestMapMessage = _.map(itemsOnDestMap, item => item.toMessage());
 
         if (char instanceof Player)
             Server.io.sockets.connected[char.socketId].emit('change map player', {
                 guid: char.guid,
                 gridPosition: { x: char.gridPosition.x, y: char.gridPosition.y },
                 characters: playersOnDestMapMessage.concat(aisOnMapMessage),
+                items: itemsOnDestMapMessage,
                 map: newMap.toMessage()
             });
 

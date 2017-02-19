@@ -6,17 +6,20 @@ import * as Action from './Action';
 import * as Geo from './utils/Geo';
 import { Player } from './Player';
 import { Character } from './Character';
+import { Item } from './Item';
 import { Map } from './Map';
 import { ActionHandler } from './handlers/ActionHandler';
 import { AisHandler } from './handlers/AisHandler';
 import { MapsHandler } from './handlers/MapsHandler';
 import { PlayersHandler } from './handlers/PlayersHandler';
+import { ItemsHandler } from './handlers/ItemsHandler';
 import { Server } from './Server';
 
 export class GameEventHandler {
     public static mapsHandler: MapsHandler;
     public static playersHandler: PlayersHandler;
     public static aisHandler: AisHandler;
+    public static itemsHandler: ItemsHandler;
     public static actionHandler: ActionHandler;
 
     constructor() {
@@ -24,6 +27,7 @@ export class GameEventHandler {
         GameEventHandler.mapsHandler = new MapsHandler();
         GameEventHandler.playersHandler = new PlayersHandler();
         GameEventHandler.aisHandler = new AisHandler();
+        GameEventHandler.itemsHandler = new ItemsHandler();
         GameEventHandler.actionHandler = new ActionHandler();
     }
 
@@ -77,26 +81,31 @@ export class GameEventHandler {
 
     // New player has joined
     private static onNewPlayer(data: any) {
-        var socket: SocketIO.Socket = <any>this;
+        let socket: SocketIO.Socket = <any>this;
 
         // Create a new player
-        var newPlayer: Player = new Player(socket.id, { x: 7, y: 7 }, { x: 10, y: 10 }, 'knight');
+        let newPlayer: Player = new Player(socket.id, { x: 7, y: 7 }, { x: 10, y: 10 }, 'knight');
 
         // Broadcast new player to connected socket clients
-        var playersOnSameMap = GameEventHandler.playersHandler.getPlayersOnMapWithIdDifferentFrom({ x: 10, y: 10 }, newPlayer.guid);
+        let playersOnSameMap = GameEventHandler.playersHandler.getPlayersOnMapWithIdDifferentFrom({ x: 10, y: 10 }, newPlayer.guid);
         _.forEach(playersOnSameMap, (player: Player) => {
             Server.io.sockets.connected[player.socketId].emit('new character', newPlayer.toMessage());
         });
 
-        // Send existing characters & map to the new player
-        var charactersOnSameMap: Character[] = (<Character[]>playersOnSameMap).concat(<Character[]>GameEventHandler.aisHandler.getAll());
-        var charactersOnSameMapJson: any[] = [];
+        // Compute ais on map
+        let charactersOnSameMap: Character[] = (<Character[]>playersOnSameMap).concat(<Character[]>GameEventHandler.aisHandler.getAll());
+        let charactersOnSameMapJson: any[] = [];
         _.forEach(charactersOnSameMap, (character: Character) => {
             charactersOnSameMapJson.push(character.toMessage());
         });
 
-        var map = GameEventHandler.mapsHandler.getMap({ x: 0, y: 0 });
-        socket.emit('init player', { player: newPlayer.toMessage(), existingCharacters: charactersOnSameMapJson, map: map })
+        // Compute items on map
+        let itemsOnSameMap = GameEventHandler.itemsHandler.getAll();
+        let itemsOnSameMapJson = _.map(itemsOnSameMap, item => item.toMessage());
+
+        // Send existing characters & existing items & map to the new player
+        let map = GameEventHandler.mapsHandler.getMap({ x: 0, y: 0 });
+        socket.emit('init player', { player: newPlayer.toMessage(), characters: charactersOnSameMapJson, items: itemsOnSameMapJson, map: map })
 
         // Add new player to the players array
         GameEventHandler.playersHandler.add(newPlayer);

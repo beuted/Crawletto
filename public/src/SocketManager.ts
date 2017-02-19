@@ -51,7 +51,7 @@ export class SocketManager {
     }
 
     // Init player
-    private onInitPlayer(data: { player: any, existingCharacters: any[], map: any }) {
+    private onInitPlayer(data: { player: any, characters: any[], items: any[], map: any }) {
         console.debug('Init player: ' + JSON.stringify(data));
 
         // Load current map
@@ -62,9 +62,10 @@ export class SocketManager {
         GameContext.remoteCharactersManager.add(GameContext.player);
 
         // Load characters on current map
-        _.forEach(data.existingCharacters, (character: any) => {
-            GameContext.remoteCharactersManager.addFromJson(character);
-        });
+        GameContext.remoteCharactersManager.addAllFromJson(data.characters);
+
+        // Load items on current map
+        GameContext.remoteItemsManager.addAllFromJson(data.items);
     }
 
     // Move character
@@ -73,7 +74,7 @@ export class SocketManager {
     }
 
     // Character changed map
-    private onChangeMapCharacter(data: { guid: string, gridPosition: { x: number, y: number }, characters: any[], map: any }) {
+    private onChangeMapCharacter(data: { guid: string, gridPosition: { x: number, y: number }, characters: any[], items: any[], map: any }) {
         if (GameContext.player.guid === data.guid) {
             console.debug('Character changed map: ' + JSON.stringify(data));
             // change player direction
@@ -89,6 +90,10 @@ export class SocketManager {
             // refresh players on map
             GameContext.remoteCharactersManager.removeAllButPlayer();
             GameContext.remoteCharactersManager.addAllFromJson(data.characters);
+
+            // refresh items on map
+            GameContext.remoteItemsManager.removeAll();
+            GameContext.remoteItemsManager.addAllFromJson(data.items);
         } else {
             console.error('Character received a "changed map" for another id: ' + JSON.stringify(data));
         }

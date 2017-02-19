@@ -1,9 +1,9 @@
 /// <reference path="../typings/index.d.ts" />
 
-import * as Geo from "../utils/Geo";
-import { CoordDic } from "../utils/CoordDic";
-import { Map } from "../Map";
-import { MapGenerator } from "../MapGenerator";
+import * as Geo from '../utils/Geo';
+import { CoordDic } from '../utils/CoordDic';
+import { Map } from '../Map';
+import { MapGenerator } from '../MapGenerator';
 
 export class MapsHandler {
     private maps: CoordDic<Map>;
@@ -11,7 +11,7 @@ export class MapsHandler {
 
     constructor() {
         this.maps = new CoordDic<Map>();
-        this.mapGenerator = new MapGenerator("this is a random seed");
+        this.mapGenerator = new MapGenerator('this is a random seed');
 
         var map: Map = this.mapGenerator.generate({ x: 0, y: 0 });
         this.maps.add(map)

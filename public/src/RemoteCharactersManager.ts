@@ -24,7 +24,7 @@ export class RemoteCharactersManager {
         this.add(remoteCharacter);
     }
 
-    public addAllFromJson(charactersJson: { gridPosition: Phaser.Point, guid: string }[]) {
+    public addAllFromJson(charactersJson: { gridPosition: { x: number, y: number }, mapPosition: { x: number, y: number }, guid: string, hp: number, type: string }[]) {
         _.forEach(charactersJson, function (characterJson: any) {
             this.addFromJson(characterJson);
         }, this);
@@ -33,11 +33,10 @@ export class RemoteCharactersManager {
     public removeByGuid(guid: string) {
         var removeCharacter = this.getByGuid(guid);
 
-        // Character not found
         if (!removeCharacter) {
             console.warn('Character not found: ' + guid);
             return;
-        };
+        }
 
         removeCharacter.destroy();
         this.remoteCharacters.splice(this.remoteCharacters.indexOf(removeCharacter), 1);

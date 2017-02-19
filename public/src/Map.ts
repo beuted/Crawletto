@@ -65,6 +65,7 @@ class Cell {
 export class Map {
     // TODO: should be private once character will be handle by the Map
     public static floorGroup: Phaser.Group;
+    public static itemGroup: Phaser.Group;
     public static sortedGroup: Phaser.Group;
 
     public position: Phaser.Point;
@@ -106,9 +107,11 @@ export class Map {
 
         // init isoGroup
         Map.floorGroup = GameContext.instance.add.group();
+        Map.itemGroup = GameContext.instance.add.group();
         Map.sortedGroup = GameContext.instance.add.group();
 
         Map.floorGroup.enableBody = true;
+        Map.itemGroup.enableBody = true;
         Map.sortedGroup.enableBody = true;
 
         // we won't really be using IsoArcade physics, but I've enabled it anyway so the debug bodies can be seen
