@@ -1,5 +1,3 @@
-/// <reference path="../typings/index.d.ts" />
-
 import * as _ from 'lodash';
 import { Item } from '../Item';
 import { ElementsHandler } from './ElementsHandler';

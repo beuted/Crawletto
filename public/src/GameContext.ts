@@ -1,5 +1,3 @@
-/// <reference path="../typings/index.d.ts" />
-
 import { Character } from './Character';
 import { Map } from './Map';
 import { RemoteCharactersCollection } from './RemoteCharactersCollection';

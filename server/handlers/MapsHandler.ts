@@ -1,5 +1,3 @@
-/// <reference path="../typings/index.d.ts" />
-
 import * as Geo from '../utils/Geo';
 import { CoordDic } from '../utils/CoordDic';
 import { Map } from '../Map';

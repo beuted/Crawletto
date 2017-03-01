@@ -1,5 +1,3 @@
-/// <reference path="../typings/index.d.ts" />
-
 import * as Geo from "./Geo";
 
 export interface ICoordObject {

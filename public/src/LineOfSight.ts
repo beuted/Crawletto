@@ -1,5 +1,3 @@
-/// <reference path="../typings/index.d.ts" />
-
 // Permissiv field of view algorithm
 // source: http://www.roguebasin.com/index.php?title=Permissive_Field_of_View_in_Javascript
 

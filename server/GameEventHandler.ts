@@ -1,5 +1,3 @@
-/// <reference path="typings/index.d.ts" />
-
 import * as util from 'util';
 import * as _ from 'lodash';
 import * as Action from './Action';
@@ -74,7 +72,7 @@ export class GameEventHandler {
 
         // Broadcast removed player to connected socket clients on the same map
         var playersOnSameMap = GameEventHandler.playersHandler.getAllOnMap(playerMapCoord);
-        _.forEach(playersOnSameMap, (player: Player) => {
+        playersOnSameMap.forEach((player: Player) => {
             Server.io.sockets.connected[player.socketId].emit('remove character', { guid: playerGuid });
         });
     }
@@ -88,14 +86,14 @@ export class GameEventHandler {
 
         // Broadcast new player to connected socket clients
         let playersOnSameMap = GameEventHandler.playersHandler.getPlayersOnMapWithIdDifferentFrom({ x: 10, y: 10 }, newPlayer.guid);
-        _.forEach(playersOnSameMap, (player: Player) => {
+        playersOnSameMap.forEach((player: Player) => {
             Server.io.sockets.connected[player.socketId].emit('new character', newPlayer.toMessage());
         });
 
         // Compute ais on map
         let charactersOnSameMap: Character[] = (<Character[]>playersOnSameMap).concat(<Character[]>GameEventHandler.aisHandler.getAll());
         let charactersOnSameMapJson: any[] = [];
-        _.forEach(charactersOnSameMap, (character: Character) => {
+        charactersOnSameMap.forEach((character: Character) => {
             charactersOnSameMapJson.push(character.toMessage());
         });
 

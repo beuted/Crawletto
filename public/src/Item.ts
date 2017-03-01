@@ -1,5 +1,3 @@
-/// <reference path="../typings/index.d.ts" />
-
 import { GameContext } from './GameContext';
 import { Map } from './Map';
 import { Element } from './Element';

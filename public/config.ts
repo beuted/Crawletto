@@ -1,6 +1,3 @@
-declare var requirejs: any;
-declare var require: any;
-
 (<any>requirejs).config({
     paths: {
         'lodash': 'bower_components/lodash/lodash',

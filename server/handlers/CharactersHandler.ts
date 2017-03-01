@@ -1,5 +1,3 @@
-/// <reference path="../typings/index.d.ts" />
-
 import * as _ from 'lodash';
 import { Character } from '../Character';
 import { Player } from '../Player';
@@ -14,7 +12,7 @@ export class CharactersHandler<T extends Character> extends ElementsHandler<T> {
     }
 
     public executeActions() {
-        _.forEach(this.elements, elt => {
+        this.elements.forEach(elt => {
             elt.executeAction();
         });
         this.update();
@@ -24,14 +22,14 @@ export class CharactersHandler<T extends Character> extends ElementsHandler<T> {
         // list of characters to remove
         var charactersToRemove: T[] = [];
 
-        _.forEach(this.elements, character => {
+        this.elements.forEach(character => {
             // Remove characters with hp below 0
             if (character.hp <= 0) {
                 console.log('removing: ' + character.guid);
                 charactersToRemove.push(character);
 
                 var playersToNotify: Player[] = GameEventHandler.playersHandler.getAllOnMap(character.mapPosition);
-                _.forEach(playersToNotify, notifiedPlayer => {
+                playersToNotify.forEach(notifiedPlayer => {
                     Server.io.sockets.connected[notifiedPlayer.socketId].emit('remove character', { guid: character.guid });
                 });
             }

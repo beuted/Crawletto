@@ -1,5 +1,3 @@
-/// <reference path="../../typings/index.d.ts" />
-
 import { GameContext } from "../GameContext";
 
 export class BootState {

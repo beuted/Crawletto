@@ -1,5 +1,3 @@
-/// <reference path="typings/index.d.ts" />
-
 import * as _ from 'lodash';
 import * as Geo from './utils/Geo';
 import { CoordDic, ICoordObject } from './utils/CoordDic';
@@ -75,16 +73,16 @@ export class MapGenerator {
         var diagram = voronoi.compute(sites, bbox);
 
         for (var i = 0; i < diagram.cells.length; i++) {
-            var polygone = Geo.Tools.getCasesInPolygone(diagram.cells[i].halfedges);
+            var polygones = Geo.Tools.getCasesInPolygone(diagram.cells[i].halfedges);
             var edges = Geo.Tools.getCasesInPolygoneEdges(diagram.cells[i].halfedges);
 
-            _.forEach(polygone, (point: Geo.IPoint) => {
+            polygones.forEach((point: Geo.IPoint) => {
                 this.mapSeeds.add(new MapSeed(point, i % 2, false))
-            }, this);
+            });
 
-            _.forEach(edges, (point: Geo.IPoint) => {
+            edges.forEach((point: Geo.IPoint) => {
                 this.mapSeeds.add(new MapSeed(point, i % 2, true))
-            }, this);
+            });
         }
     }
 }

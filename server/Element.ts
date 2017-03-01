@@ -1,5 +1,3 @@
-/// <reference path="typings/index.d.ts" />
-
 import * as Geo from './utils/Geo';
 import { Map } from './Map';
 import { GameEventHandler } from './GameEventHandler';

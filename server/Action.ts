@@ -1,5 +1,3 @@
-/// <reference path="typings/index.d.ts" />
-
 import * as _ from 'lodash';
 import * as Geo from './utils/Geo';
 import { GameEventHandler } from './GameEventHandler';
@@ -55,7 +53,7 @@ export class Move implements IAction {
         char.gridPosition = this.destination;
 
         var playersToNotify: Player[] = GameEventHandler.playersHandler.getAllOnMap(char.mapPosition);
-        _.forEach(playersToNotify, notifiedPlayer => {
+        playersToNotify.forEach(notifiedPlayer => {
             Server.io.sockets.connected[notifiedPlayer.socketId].emit('move player', {
                 guid: char.guid,
                 position: { x: this.destination.x, y: this.destination.y }
@@ -90,7 +88,7 @@ export class Attack implements IAction {
 
         // Notify players on the same map
         var playersToNotify: Player[] = GameEventHandler.playersHandler.getAllOnMap(char.mapPosition);
-        _.forEach(playersToNotify, notifiedPlayer => {
+        playersToNotify.forEach(notifiedPlayer => {
             Server.io.sockets.connected[notifiedPlayer.socketId].emit('attack character', {
                 attackedGuid: this.attackedCharacterGuid,
                 attackingGuid: this.attackingCharacterGuid,

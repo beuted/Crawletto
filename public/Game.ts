@@ -1,4 +1,3 @@
-/// <reference path="typings/index.d.ts" />
 import { GameContext } from './src/GameContext';
 import { BootState } from './src/states/BootState';
 import { LoadState } from './src/states/LoadState';

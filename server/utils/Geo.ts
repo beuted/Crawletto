@@ -1,5 +1,3 @@
-/// <reference path="../typings/index.d.ts" />
-
 // File containing Geometry class to help in the backend code since we are not going
 // to import Phaser.io there
 

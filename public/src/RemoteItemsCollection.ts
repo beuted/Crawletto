@@ -1,5 +1,3 @@
-/// <reference path="../typings/index.d.ts" />
-
 import * as _ from 'lodash';
 import { GameContext } from './GameContext';
 import { Item } from './Item';
@@ -19,8 +17,8 @@ export class RemoteItemsCollection extends RemoteElementsCollection<Item> {
     }
 
     public addAllFromJson(itemsJson: { gridPosition: Phaser.Point, mapPosition: { x: number, y: number }, guid: string, type: string }[]) {
-        _.forEach(itemsJson, function (itemJson: any) {
+        itemsJson.forEach((itemJson: any) => {
             this.addFromJson(itemJson);
-        }, this);
+        });
     }
 }

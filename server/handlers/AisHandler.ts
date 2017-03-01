@@ -1,5 +1,3 @@
-/// <reference path="../typings/index.d.ts" />
-
 import * as _ from 'lodash';
 import { Ai } from '../Ai';
 import { CharactersHandler } from './CharactersHandler';
@@ -15,7 +13,7 @@ export class AisHandler extends CharactersHandler<Ai> {
     }
 
     public calculateNextActions() {
-        _.forEach(this.elements, ai => {
+        this.elements.forEach(ai => {
             ai.calculateNextAction();
         });
     }

@@ -1,5 +1,3 @@
-/// <reference path="typings/index.d.ts" />
-
 import * as _ from 'lodash';
 import * as Geo from './utils/Geo';
 import { Move, Attack } from './Action';
@@ -17,7 +15,7 @@ export class Ai extends Character {
 
         var minDist = Number.MAX_VALUE;
         var closestChar: Character = null;
-        _.forEach(characterOnMap, (char: Character) => {
+        characterOnMap.forEach((char: Character) => {
             var dist = Geo.Tools.distance(char.gridPosition, this.gridPosition);
             if (dist < minDist) {
                 minDist = dist;

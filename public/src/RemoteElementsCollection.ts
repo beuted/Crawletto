@@ -1,5 +1,3 @@
-/// <reference path="../typings/index.d.ts" />
-
 import * as _ from 'lodash';
 import { GameContext } from './GameContext';
 import { Element } from './Element';
@@ -26,7 +24,7 @@ export class RemoteElementsCollection<T extends Element>  {
     //}
 
     //public addAllFromJson(charactersJson: { gridPosition: { x: number, y: number }, mapPosition: { x: number, y: number }, guid: string, hp: number, type: string }[]) {
-    //    _.forEach(charactersJson, function (characterJson: any) {
+    //    _.forEach(charactersJson, (characterJson: any) {
     //        this.addFromJson(characterJson);
     //    }, this);
     //}
@@ -44,7 +42,7 @@ export class RemoteElementsCollection<T extends Element>  {
     }
 
     public removeAll() {
-        _.forEach(this.remoteElements, function (remoteCharacter) {
+        this.remoteElements.forEach((remoteCharacter) => {
             remoteCharacter.destroy();
         });
         this.remoteElements = [];

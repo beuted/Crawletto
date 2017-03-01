@@ -1,6 +1,5 @@
-/// <reference path="../typings/index.d.ts" />
-
 import * as _ from 'lodash';
+import * as SocketIOClient from 'socket.io-client'
 import { GameContext } from './GameContext';
 import { Character } from './Character';
 import { RemoteCharactersCollection } from './RemoteCharactersCollection';
@@ -31,7 +30,7 @@ export class SocketManager {
 
     // Socket connected
     private onSocketConnected() {
-        console.debug('Connected to socket server as ' + this.socket.io.engine.id);
+        console.debug('Connected to socket server as ' + (<any>this.socket.io).engine.id);
 
         // Send local player data to the game server
         this.socket.emit('new player', {});
