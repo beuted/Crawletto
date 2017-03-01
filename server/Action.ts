@@ -8,7 +8,7 @@ import { Player } from './Player';
 import { Server } from './Server';
 
 export interface IAction {
-    execute(char: Character);
+    execute(char: Character): void;
 }
 
 export class Move implements IAction {
@@ -18,7 +18,7 @@ export class Move implements IAction {
         this.destination = destination;
     }
 
-    public execute(char: Character) {
+    public execute(char: Character): void {
         // next case should be walkable
         if (!char.map.isCellWalkable(this.destination))
             return;

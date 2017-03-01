@@ -29,7 +29,7 @@ export class Map implements ICoordObject {
         this.easystar.disableDiagonals();
         var easystarFloorGrid = _.map(this.floors, arrayFloors => _.map(arrayFloors, x => { return _.includes(this.walkables, x) ? 1 : 0; }));
         var easystarStructureGrid = _.map(this.structures, arrayStructures => _.map(arrayStructures, x => { return  x == 0 ? 1 : 0; }));
-        var easystarGrid = _.zipWith(easystarFloorGrid, easystarStructureGrid, (array1, array2) => _.zipWith(array1, array2, (x1, x2) => x1 == 1 && x2 == 1 ? 1 : 0));
+        var easystarGrid = _.zipWith(easystarFloorGrid, easystarStructureGrid, (array1: number[], array2: number[]) => _.zipWith(array1, array2, (x1: number, x2: number) => x1 == 1 && x2 == 1 ? 1 : 0));
         this.easystar.setGrid(<number[][]>easystarGrid);
         this.easystar.setAcceptableTiles([1]);
     }
@@ -75,11 +75,9 @@ export class Map implements ICoordObject {
         return _.pick(this, ['floors', 'structures', 'position']);
     }
 
-    public findPath(start: Geo.IPoint, end: Geo.IPoint) {
-        var resultPath = null;
-        this.easystar.findPath(start.x, start.y, end.x, end.y, function( path ) {
-            resultPath = path;
-        });
+    public findPath(start: Geo.IPoint, end: Geo.IPoint): Geo.IPoint[] {
+        var resultPath: Geo.IPoint[] = null;
+        this.easystar.findPath(start.x, start.y, end.x, end.y, path => resultPath = path);
         this.easystar.calculate();
         return resultPath;
     }

@@ -56,7 +56,7 @@ export class RemoteElementsCollection<T extends Element>  {
     }
 
     // Find element by GUID
-    public get(guid): T {
+    public get(guid: string): T {
         for (var i = 0; i < this.remoteElements.length; i++) {
             if (this.remoteElements[i].guid == guid)
                 return this.remoteElements[i];

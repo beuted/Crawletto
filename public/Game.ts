@@ -5,7 +5,7 @@ import {LoadState} from './src/states/LoadState';
 import {MainState} from './src/states/MainState';
 
 export class Game {
-    constructor(conf) {
+    constructor(conf: any) {
         // using canvas here just because it runs faster for the body debug stuff
         GameContext.instance = new Phaser.Game(992, 512, Phaser.CANVAS, 'gameCanvas', null, true, false);
         GameContext.debugActivated = false;

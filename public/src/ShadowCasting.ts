@@ -51,7 +51,7 @@ export class LightSource {
     }
 
     /// calculates an octant. Called by the this.calculate when calculating lighting
-    private calculateOctant(cx, cy, row, start, end, radius, xx, xy, yx, yy, id) {
+    private calculateOctant(cx: number, cy: number, row: number, start: number, end: number, radius: number, xx: number, xy: number, yx: number, yy: number, id: number) {
         this.enlightedCells.push(new Phaser.Point(cx, cy));
 
         var new_start = 0;

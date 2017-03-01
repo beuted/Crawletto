@@ -22,7 +22,7 @@ export class CharactersHandler<T extends Character> extends ElementsHandler<T> {
 
     private update() {
         // list of characters to remove
-        var charactersToRemove = [];
+        var charactersToRemove: T[] = [];
 
         _.forEach(this.elements, character => {
             // Remove characters with hp below 0

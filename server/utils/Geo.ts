@@ -51,7 +51,7 @@ export class Tools {
 
     // This function might return duplicates values
     static getCasesInPolygone(halfedges: { edge: { vb: IPoint, va: IPoint } }[]): IPoint[] {
-        var polygoneEdges = [];
+        var polygoneEdges: IPoint[] = [];
         var minX: number = Number.MAX_VALUE;
         var maxX: number = Number.MIN_VALUE;
         var minY: number = Number.MAX_VALUE;
@@ -100,7 +100,7 @@ export class Tools {
     }
 
     static getCasesInPolygoneEdges(halfedges: { edge: { vb: IPoint, va: IPoint } }[]): IPoint[] {
-        var polygoneEdges = [];
+        var polygoneEdges: IPoint[] = [];
 
         _.each(halfedges, (halfedge: { edge: { vb: IPoint, va: IPoint } }) => {
             var a = { x: Math.floor(halfedge.edge.va.x), y: Math.floor(halfedge.edge.va.y) };

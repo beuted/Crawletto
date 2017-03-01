@@ -55,7 +55,7 @@ export class Character extends Element {
 
         this.sprite.animations.play(animation, this.charConfig.animationFps, true);
         var tween = GameContext.instance.add.tween(this.sprite).to({ x: destPoint.x * 32, y: destPoint.y * 32 }, this.charConfig.animationTime, Phaser.Easing.Linear.None, true);
-        tween.onComplete.addOnce(item => this.sprite.animations.stop(animation, true));
+        tween.onComplete.addOnce(() => this.sprite.animations.stop(animation, true));
     }
 
     public attack() {

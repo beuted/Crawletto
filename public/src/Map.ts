@@ -50,11 +50,11 @@ class Cell {
         if (this.structureTile) this.structureTile.destroy();
     }
 
-    public isWalkable(walkables): boolean {
+    public isWalkable(walkables: number[]): boolean {
         return _.includes(walkables, this.floorId) && !this.structureId;
     }
 
-    public isOpaque(opaques): boolean {
+    public isOpaque(opaques: number[]): boolean {
         if (_.includes(opaques, this.structureId)) {
             return true;
         }

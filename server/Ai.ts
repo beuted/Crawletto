@@ -16,8 +16,8 @@ export class Ai extends Character {
         var characterOnMap = GameEventHandler.playersHandler.getAllOnMap(this.mapPosition);
 
         var minDist = Number.MAX_VALUE;
-        var closestChar = null;
-        _.forEach(characterOnMap, char => {
+        var closestChar: Character = null;
+        _.forEach(characterOnMap, (char: Character) => {
             var dist = Geo.Tools.distance(char.gridPosition, this.gridPosition);
             if (dist < minDist) {
                 minDist = dist;
@@ -31,7 +31,7 @@ export class Ai extends Character {
             return;
         }
 
-        var path = null;
+        var path: {x: number, y: number}[] = null;
         if (closestChar) {
             path = GameEventHandler.mapsHandler.getMap(this.mapPosition).findPath(this.gridPosition, closestChar.gridPosition);
         }

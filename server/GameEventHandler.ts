@@ -37,7 +37,7 @@ export class GameEventHandler {
     }
 
     // New socket connection
-    private onSocketConnection(socket/*: SocketIO.Socket*/) {
+    private onSocketConnection(socket: SocketIO.Socket) {
         util.log('New player has connected: ' + socket.id);
 
         // Listen for client disconnected

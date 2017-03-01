@@ -3,13 +3,15 @@ module.exports = function(grunt) {
         ts: {
             public : {
                 options: {
-                    module: 'amd'
+                    module: 'amd',
+                    noImplicitAny: true
                 },
                 src: ['public/**/*.ts', '!**/*.d.ts']
             },
             server : {
                 options: {
-                    module: 'commonjs'
+                    module: 'commonjs',
+                    noImplicitAny: true
                 },
                 src: ['app.ts', 'server/**/*.ts','!**/*.d.ts']
             }
