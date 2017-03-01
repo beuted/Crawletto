@@ -138,13 +138,13 @@ export class ChangeMap implements IAction {
             });
 
         // Notify players from previous map
-        _.forEach(playersOnPrevMap, (notifiedPlayer: Player) => {
+        playersOnPrevMap.forEach((notifiedPlayer: Player) => {
             Server.io.sockets.connected[notifiedPlayer.socketId].emit('remove character', char.toMessage());
-        }, this);
+        });
 
         // Notify players from detination map
-        _.forEach(playersOnDestMap, (notifiedPlayer: Player) => {
+        playersOnDestMap.forEach((notifiedPlayer: Player) => {
             Server.io.sockets.connected[notifiedPlayer.socketId].emit('new character', char.toMessage());
-        }, this);
+        });
     }
 }
