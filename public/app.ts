@@ -1,4 +1,4 @@
-import {Game} from './Game';
+import { Game } from './Game';
 
 var conf = require('json!shared/config.json');
 
