@@ -24,10 +24,11 @@ export class RemoteCharactersCollection extends RemoteElementsCollection<Charact
     }
 
     public removeAllButPlayer() {
-        _.forEach(this.remoteElements, function (remoteCharacter) {
+        this.remoteElements.forEach(remoteCharacter => {
             if (remoteCharacter.guid != GameContext.player.guid)
                 remoteCharacter.destroy();
         });
+        this.remoteElements = [];
         this.add(GameContext.player);
     }
 

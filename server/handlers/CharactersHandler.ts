@@ -33,7 +33,6 @@ export class CharactersHandler<T extends Character> extends ElementsHandler<T> {
                     Server.io.sockets.connected[notifiedPlayer.socketId].emit('remove character', { guid: character.guid });
                 });
             }
-
         });
 
         this.removeSeveral(_.map(charactersToRemove, c => c.guid));
