@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+        "module": "amd",
+        "noImplicitAny": true,
+        "types": [ "requirejs", "phaser" ],
+        "typeRoots": [
+            "./node_modules/@types",
+            "./public/typings",
+            "../node_modules/@types",
+            "./typings"
+        ],
+        "target": "es5"
+    },
+    "files": ["app.ts"]
+}

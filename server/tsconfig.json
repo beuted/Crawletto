@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "noImplicitAny": true,
+        "typeRoots": [
+            "./node_modules/@types",
+            "./server/typings/",
+            "../node_modules/@types",
+            "./typings/"
+        ],
+        "types": [ "node", "socket.io", "seedrandom", "voronoi" ],
+        "target": "es5"
+    },
+    "files": ["../app.ts"]
+}

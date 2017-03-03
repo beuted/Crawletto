@@ -2,28 +2,10 @@ module.exports = function(grunt) {
     grunt.initConfig({
         ts: {
             public : {
-                options: {
-                    module: 'amd',
-                    noImplicitAny: true,
-                    types: [ "requirejs", "phaser" ],
-                    "typeRoots": [
-                        "./node_modules/@types",
-                        "./public/typings/"
-                    ]
-                },
-                src: ['public/**/*.ts', '!**/*.d.ts']
+                tsconfig: "./public/tsconfig.json"
             },
             server : {
-                options: {
-                    module: 'commonjs',
-                    noImplicitAny: true,
-                    "typeRoots": [
-                        "./node_modules/@types",
-                        "./server/typings/"
-                    ],
-                    types: [ "node", "socket.io", "seedrandom", "voronoi" ],
-                },
-                src: ['app.ts']
+                tsconfig: "./server/tsconfig.json"
             }
         },
 
