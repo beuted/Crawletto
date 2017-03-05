@@ -5,6 +5,7 @@ import { Map } from './Map';
 import { GameEventHandler } from './GameEventHandler';
 import { Server } from './Server';
 import { Element } from './Element';
+import { Item } from './Item';
 
 var config = require('../public/shared/config');
 
@@ -12,6 +13,7 @@ export class Character extends Element {
     public hp: number;
     public maxHp: number;
     public type: string;
+    public inventory: Item[];
 
     private turnAction: Action.IAction = null;
 
@@ -21,6 +23,7 @@ export class Character extends Element {
         this.type = type;
         this.hp = config.characters[type].maxHp;
         this.maxHp = config.characters[type].maxHp;
+        this.inventory = [];
     }
 
     public toMessage(): { guid: string, gridPosition: Geo.IPoint, hp: number } {

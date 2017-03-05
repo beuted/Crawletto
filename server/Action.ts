@@ -4,6 +4,7 @@ import { GameEventHandler } from './GameEventHandler';
 import { Character } from './Character';
 import { Player } from './Player';
 import { Server } from './Server';
+import { Item } from './Item';
 
 export interface IAction {
     execute(char: Character): void;
@@ -99,7 +100,6 @@ export class Attack implements IAction {
     }
 }
 
-
 export class ChangeMap implements IAction {
     public destMapPosition: Geo.IPoint;
     public destCharacterPosition: Geo.IPoint;
@@ -144,5 +144,28 @@ export class ChangeMap implements IAction {
         playersOnDestMap.forEach((notifiedPlayer: Player) => {
             Server.io.sockets.connected[notifiedPlayer.socketId].emit('new character', char.toMessage());
         });
+    }
+}
+
+export class Pickup implements IAction {
+    public objectGuid: string;
+
+    constructor(objectGuid: string) {
+        this.objectGuid = objectGuid;
+    }
+
+    public execute(char: Character) {
+        var item: Item = GameEventHandler.itemsCollection.get(this.objectGuid);
+        char.inventory.push(item);
+        GameEventHandler.itemsCollection.remove(this.objectGuid);
+
+        // Notify players on the same map
+        var playersToNotify: Player[] = GameEventHandler.playersCollection.getAllOnMap(char.mapPosition);
+        playersToNotify.forEach(notifiedPlayer => {
+            Server.io.sockets.connected[notifiedPlayer.socketId].emit('update items', {
+                items: GameEventHandler.itemsCollection.toMessage()
+            });
+        });
+        
     }
 }

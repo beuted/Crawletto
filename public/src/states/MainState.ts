@@ -56,6 +56,14 @@ export class MainState {
         GameContext.socketManager.requestCharacterAttack(aimedPlayer[0].guid);
     }
 
+    private pickUpObject() {
+        let point = GameContext.player.gridPosition;
+        let items = GameContext.remoteItemsCollection.getAt(point);
+        if (!items[0]) { return; }
+
+        GameContext.socketManager.requestCharacterPickup(items[0].guid);
+    }
+
     private initKeyboardInteraction() {
         GameContext.instance.input.keyboard.addKeyCapture([
             Phaser.Keyboard.D,
@@ -63,7 +71,8 @@ export class MainState {
             Phaser.Keyboard.RIGHT,
             Phaser.Keyboard.UP,
             Phaser.Keyboard.DOWN,
-            Phaser.Keyboard.SPACEBAR
+            Phaser.Keyboard.SPACEBAR,
+            Phaser.Keyboard.COMMA
         ]);
 
         var leftKey = GameContext.instance.input.keyboard.addKey(Phaser.Keyboard.LEFT);
@@ -78,10 +87,15 @@ export class MainState {
         var downKey = GameContext.instance.input.keyboard.addKey(Phaser.Keyboard.DOWN);
         downKey.onDown.add(() => this.movePlayer(new Phaser.Point(0, 1)));
 
+        // Press "spacebar" to attack in front of you
         var spacebarKey = GameContext.instance.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
         spacebarKey.onDown.add(() => this.fightCharacter());
 
-        // press D to enter debugmode
+        // press "," to pick up an object
+        var spacebarKey = GameContext.instance.input.keyboard.addKey(Phaser.Keyboard.COMMA);
+        spacebarKey.onDown.add(() => this.pickUpObject());
+
+        // press "D" to enter debugmode
         var dKey = GameContext.instance.input.keyboard.addKey(Phaser.Keyboard.D);
         dKey.onDown.add(() => GameContext.debugActivated = !GameContext.debugActivated);
     }

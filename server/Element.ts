@@ -1,3 +1,4 @@
+import * as _ from 'lodash';
 import * as Geo from './utils/Geo';
 import { Map } from './Map';
 import { GameEventHandler } from './GameEventHandler';
@@ -25,5 +26,9 @@ export class Element {
         }
         return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
             s4() + '-' + s4() + s4() + s4();
+    }
+
+    public toMessage(): Object {
+        return <{ guid: string, gridPosition: Geo.IPoint, mapPosition: Geo.IPoint}>_.pick(this, ["guid", "gridPosition", "mapPosition"]);
     }
 }

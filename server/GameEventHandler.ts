@@ -41,14 +41,17 @@ export class GameEventHandler {
         // Listen for client disconnected
         socket.on('disconnect', GameEventHandler.onClientDisconnect);
 
-        // Listen for new character message
+        // Listen for new character messages
         socket.on('new player', GameEventHandler.onNewPlayer);
 
-        // Listen for move character message
+        // Listen for move character messages
         socket.on('move player', GameEventHandler.onMoveRequest);
 
-        // Listen for attack character message
+        // Listen for attack character messages
         socket.on('attack character', GameEventHandler.onAttackRequest);
+
+        // Listen for item pickUp messages
+        socket.on('pickup item', GameEventHandler.onPickUpRequest);
     }
 
     // Socket client has disconnected
@@ -147,5 +150,26 @@ export class GameEventHandler {
 
         // request move
         attackingPlayer.planAction(new Action.Attack(msg.guid, attackingPlayer.guid));
+    }
+
+    private static onPickUpRequest(msg: { guid: string }) {
+        var socket: SocketIO.Socket = <any>this;
+
+        // Find player in array
+        var pickingUpPlayer: Player = GameEventHandler.playersCollection.getPlayerBySocketId(socket.id);
+
+        // Player should exist
+        if (!pickingUpPlayer) {
+            util.log('[Error: "pickup object"] Player not found sId: ' + socket.id);
+            return;
+        }
+
+        if (!msg.guid) {
+            util.log('[Error: "pickup object"] invalid guid: ' + msg.guid);
+            return;
+        }
+
+        // request move
+        pickingUpPlayer.planAction(new Action.Pickup(msg.guid));
     }
 }

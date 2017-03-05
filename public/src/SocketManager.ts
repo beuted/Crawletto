@@ -18,7 +18,10 @@ export class SocketManager {
         this.socket.on('change map player', this.onChangeMapCharacter.bind(this));       // Character removed message received
         this.socket.on('remove character', this.onRemoveCharacter.bind(this));           // Character removed message received
         this.socket.on('attack character', this.onAttackCharacter.bind(this));           // Character removed message received
+        this.socket.on('update items', this.onUpdateItems.bind(this));           // Character removed message received
     }
+
+    // ######## Socket messages sent########
 
     public requestCharacterMove(vector: { x: number, y: number }) {
         this.socket.emit('move player', { vector: vector });
@@ -27,6 +30,12 @@ export class SocketManager {
     public requestCharacterAttack(guid: string) {
         this.socket.emit('attack character', { guid: guid });
     }
+
+    public requestCharacterPickup(guid: string) {
+        this.socket.emit('pickup item', { guid: guid })
+    }
+
+    // ######## Socket messages received ########
 
     // Socket connected
     private onSocketConnected() {
@@ -121,6 +130,13 @@ export class SocketManager {
         attackingPlayer.changeDirection(vector);
         attackingPlayer.attack();
         attackedlayer.hp -= data.hp;
+    }
+
+    // Update items on map
+    public onUpdateItems(data: { items: any[]}) {
+        // refresh items on map
+        GameContext.remoteItemsCollection.removeAll();
+        GameContext.remoteItemsCollection.addAllFromJson(data.items);
     }
 
 }

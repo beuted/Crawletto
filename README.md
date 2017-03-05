@@ -2,20 +2,21 @@
 
 ### *Work in progress*
 
-Phaser project of a turn based multiplayer games inspred by nethack
+Phaser project of a turn based multiplayer game inspired by nethack
 
 ## Play the [Demo on Heroku](https://crawletto.herokuapp.com/) or [![Deploy](https://beuted.github.io/Crawletto/deploy-to-heroku.svg)](https://heroku.com/deploy)
 
 ## Commands
 * **D**: enter debug-mode
-* **SPACEBAR**: Attack
+* **SPACEBAR**: Attack in front of you
 * **Arrow keys:** move around
 
 ## Features
-* _Randomly generated maps_ based on a seed ([Seedrandom](https://github.com/davidbau/seedrandom))
 * _Multiplayer_ enabled using [Socket.io](http://socket.io/) (the players can see eachothers moving on the different maps)
 * Feild of view of the player computed with a _recursive shadowcasting_
-* _AI_ of mobs
+* basic _AI_ for mobs
+* _infinite world_ with Maps generated as the user moves
+* _Randomly generated maps_ based on a seed ([Seedrandom](https://github.com/davidbau/seedrandom)) _(removed atm for the infinite world feature)_
 
 ## Setup project
 * [Install node](https://nodejs.org/)

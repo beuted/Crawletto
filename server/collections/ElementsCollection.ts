@@ -52,4 +52,8 @@ export class ElementsCollection<T extends Element> {
             return elt.mapPosition.x == mapCoord.x && elt.mapPosition.y == mapCoord.y;
         });
     }
+
+    public toMessage(): Object[] {
+        return this.elements.map(e => e.toMessage())
+    }
 }
