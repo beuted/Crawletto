@@ -156,7 +156,7 @@ export class Pickup implements IAction {
 
     public execute(char: Character) {
         var item: Item = GameEventHandler.itemsCollection.get(this.objectGuid);
-        char.inventory.push(item);
+        char.inventory.add(item);
         GameEventHandler.itemsCollection.remove(this.objectGuid);
 
         // Notify players on the same map

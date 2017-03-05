@@ -9,11 +9,28 @@ import { Item } from './Item';
 
 var config = require('../public/shared/config');
 
+class Inventory {
+    public items: Item[];
+
+    public head: Item = null;
+    public body: Item = null;
+    public rightHand: Item = null;
+    public leftHand: Item = null;
+
+    constructor() {
+        this.items = [];
+    }
+
+    public add(item: Item) {
+        this.items.push(item);
+    }
+}
+
 export class Character extends Element {
     public hp: number;
     public maxHp: number;
     public type: string;
-    public inventory: Item[];
+    public inventory: Inventory;
 
     private turnAction: Action.IAction = null;
 
@@ -23,7 +40,7 @@ export class Character extends Element {
         this.type = type;
         this.hp = config.characters[type].maxHp;
         this.maxHp = config.characters[type].maxHp;
-        this.inventory = [];
+        this.inventory = new Inventory();
     }
 
     public toMessage(): { guid: string, gridPosition: Geo.IPoint, hp: number } {
