@@ -16,6 +16,6 @@ export class Player extends Character {
 
     public planAction(action: Action.IAction) {
         super.planAction(action);
-        GameEventHandler.actionHandler.tryExecuteTurn()
+        GameEventHandler.actionCollection.tryExecuteTurn()
     }
 }

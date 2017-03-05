@@ -14,7 +14,7 @@ export class Element {
     }
 
     public get map(): Map {
-        return GameEventHandler.mapsHandler.getMap(this.mapPosition)
+        return GameEventHandler.mapsCollection.getMap(this.mapPosition)
     }
 
     private static generateGuid() {

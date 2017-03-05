@@ -3,10 +3,10 @@ import { Character } from '../Character';
 import { Player } from '../Player';
 import { Move } from '../Action';
 import { GameEventHandler } from '../GameEventHandler';
-import { ElementsHandler } from './ElementsHandler';
+import { ElementsCollection } from './ElementsCollection';
 import { Server } from '../Server';
 
-export class CharactersHandler<T extends Character> extends ElementsHandler<T> {
+export class CharactersCollection<T extends Character> extends ElementsCollection<T> {
     constructor() {
         super();
     }
@@ -28,7 +28,7 @@ export class CharactersHandler<T extends Character> extends ElementsHandler<T> {
                 console.log('removing: ' + character.guid);
                 charactersToRemove.push(character);
 
-                var playersToNotify: Player[] = GameEventHandler.playersHandler.getAllOnMap(character.mapPosition);
+                var playersToNotify: Player[] = GameEventHandler.playersCollection.getAllOnMap(character.mapPosition);
                 playersToNotify.forEach(notifiedPlayer => {
                     Server.io.sockets.connected[notifiedPlayer.socketId].emit('remove character', { guid: character.guid });
                 });

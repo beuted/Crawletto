@@ -3,7 +3,7 @@ import { CoordDic } from '../utils/CoordDic';
 import { Map } from '../Map';
 import { MapGenerator } from '../MapGenerator';
 
-export class MapsHandler {
+export class MapsCollection {
     private maps: CoordDic<Map>;
     private mapGenerator: MapGenerator;
 

@@ -1,8 +1,8 @@
 import * as _ from 'lodash';
 import { Ai } from '../Ai';
-import { CharactersHandler } from './CharactersHandler';
+import { CharactersCollection } from './CharactersCollection';
 
-export class AisHandler extends CharactersHandler<Ai> {
+export class AisCollection extends CharactersCollection<Ai> {
     constructor() {
         super();
 

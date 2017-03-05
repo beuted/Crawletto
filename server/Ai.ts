@@ -11,7 +11,7 @@ export class Ai extends Character {
     }
 
     public calculateNextAction() {
-        var characterOnMap = GameEventHandler.playersHandler.getAllOnMap(this.mapPosition);
+        var characterOnMap = GameEventHandler.playersCollection.getAllOnMap(this.mapPosition);
 
         var minDist = Number.MAX_VALUE;
         var closestChar: Character = null;
@@ -31,7 +31,7 @@ export class Ai extends Character {
 
         var path: {x: number, y: number}[] = null;
         if (closestChar) {
-            path = GameEventHandler.mapsHandler.getMap(this.mapPosition).findPath(this.gridPosition, closestChar.gridPosition);
+            path = GameEventHandler.mapsCollection.getMap(this.mapPosition).findPath(this.gridPosition, closestChar.gridPosition);
         }
         
         // If we can't find a way to a player just randomly walk

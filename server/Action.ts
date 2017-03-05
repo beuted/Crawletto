@@ -42,7 +42,7 @@ export class Move implements IAction {
             newGridPosition.y = 1;
         }
 
-        var map = GameEventHandler.mapsHandler.getMap(newMapPosition);
+        var map = GameEventHandler.mapsCollection.getMap(newMapPosition);
 
         if ((char.mapPosition.x != newMapPosition.x || char.mapPosition.y != newMapPosition.y) && !!map) {
             var changeMapAction = new ChangeMap(newMapPosition, newGridPosition);
@@ -52,7 +52,7 @@ export class Move implements IAction {
 
         char.gridPosition = this.destination;
 
-        var playersToNotify: Player[] = GameEventHandler.playersHandler.getAllOnMap(char.mapPosition);
+        var playersToNotify: Player[] = GameEventHandler.playersCollection.getAllOnMap(char.mapPosition);
         playersToNotify.forEach(notifiedPlayer => {
             Server.io.sockets.connected[notifiedPlayer.socketId].emit('move player', {
                 guid: char.guid,
@@ -72,8 +72,8 @@ export class Attack implements IAction {
     }
 
     public execute(char: Character) {
-        var attackedCharacter: Character = <Character>GameEventHandler.playersHandler.get(this.attackedCharacterGuid)
-                                        || <Character>GameEventHandler.aisHandler.get(this.attackedCharacterGuid);
+        var attackedCharacter: Character = <Character>GameEventHandler.playersCollection.get(this.attackedCharacterGuid)
+                                        || <Character>GameEventHandler.aisCollection.get(this.attackedCharacterGuid);
 
         // Compute damage
         var damage = 10;
@@ -87,7 +87,7 @@ export class Attack implements IAction {
         attackedCharacter.hp -= damage;
 
         // Notify players on the same map
-        var playersToNotify: Player[] = GameEventHandler.playersHandler.getAllOnMap(char.mapPosition);
+        var playersToNotify: Player[] = GameEventHandler.playersCollection.getAllOnMap(char.mapPosition);
         playersToNotify.forEach(notifiedPlayer => {
             Server.io.sockets.connected[notifiedPlayer.socketId].emit('attack character', {
                 attackedGuid: this.attackedCharacterGuid,
@@ -110,12 +110,12 @@ export class ChangeMap implements IAction {
     }
 
     public execute(char: Character) {
-        let newMap = GameEventHandler.mapsHandler.getMap(this.destMapPosition);
+        let newMap = GameEventHandler.mapsCollection.getMap(this.destMapPosition);
 
-        let playersOnPrevMap = GameEventHandler.playersHandler.getPlayersOnMapWithIdDifferentFrom(char.mapPosition, char.guid);
-        let playersOnDestMap = GameEventHandler.playersHandler.getPlayersOnMapWithIdDifferentFrom(this.destMapPosition, char.guid);
-        let aisOnDestMap = GameEventHandler.aisHandler.getAllOnMap(this.destMapPosition);
-        let itemsOnDestMap = GameEventHandler.itemsHandler.getAllOnMap(this.destMapPosition);
+        let playersOnPrevMap = GameEventHandler.playersCollection.getPlayersOnMapWithIdDifferentFrom(char.mapPosition, char.guid);
+        let playersOnDestMap = GameEventHandler.playersCollection.getPlayersOnMapWithIdDifferentFrom(this.destMapPosition, char.guid);
+        let aisOnDestMap = GameEventHandler.aisCollection.getAllOnMap(this.destMapPosition);
+        let itemsOnDestMap = GameEventHandler.itemsCollection.getAllOnMap(this.destMapPosition);
 
         char.gridPosition = this.destCharacterPosition;
         char.mapPosition = this.destMapPosition;

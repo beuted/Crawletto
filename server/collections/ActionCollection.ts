@@ -1,7 +1,7 @@
 import * as _ from 'lodash';
 import { GameEventHandler } from '../GameEventHandler';
 
-export class ActionHandler {
+export class ActionCollection {
     private turnTime: number;  // time it takes to perform an action in ms
     private actionScheduler: NodeJS.Timer;
     private isNextActionReady: boolean;
@@ -12,12 +12,12 @@ export class ActionHandler {
     }
 
     public tryExecuteTurn() {
-        if (!GameEventHandler.playersHandler.allPlayersPlannedAction() || ! this.isNextActionReady)
+        if (!GameEventHandler.playersCollection.allPlayersPlannedAction() || ! this.isNextActionReady)
             return;
 
-        GameEventHandler.playersHandler.executeActions();
-        GameEventHandler.aisHandler.calculateNextActions();
-        GameEventHandler.aisHandler.executeActions();
+        GameEventHandler.playersCollection.executeActions();
+        GameEventHandler.aisCollection.calculateNextActions();
+        GameEventHandler.aisCollection.executeActions();
 
         this.isNextActionReady = false;
         setTimeout(() => { this.isNextActionReady = true; }, this.turnTime);

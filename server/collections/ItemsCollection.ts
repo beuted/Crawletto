@@ -1,8 +1,8 @@
 import * as _ from 'lodash';
 import { Item } from '../Item';
-import { ElementsHandler } from './ElementsHandler';
+import { ElementsCollection } from './ElementsCollection';
 
-export class ItemsHandler extends ElementsHandler<Item> {
+export class ItemsCollection extends ElementsCollection<Item> {
     constructor() {
         super();
 

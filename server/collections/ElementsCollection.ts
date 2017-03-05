@@ -2,7 +2,7 @@ import * as _ from 'lodash';
 import * as Geo from '../utils/Geo';
 import { Element } from '../Element';
 
-export class ElementsHandler<T extends Element> {
+export class ElementsCollection<T extends Element> {
 
     public elements: T[];
 

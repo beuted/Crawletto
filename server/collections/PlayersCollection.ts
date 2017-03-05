@@ -1,9 +1,9 @@
 import * as _ from 'lodash';
 import * as Geo from '../utils/Geo';
 import { Player } from '../Player';
-import { CharactersHandler } from './CharactersHandler';
+import { CharactersCollection } from './CharactersCollection';
 
-export class PlayersHandler extends CharactersHandler<Player> {
+export class PlayersCollection extends CharactersCollection<Player> {
     constructor() {
         super();
     }

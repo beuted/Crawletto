@@ -6,27 +6,27 @@ import { Player } from './Player';
 import { Character } from './Character';
 import { Item } from './Item';
 import { Map } from './Map';
-import { ActionHandler } from './handlers/ActionHandler';
-import { AisHandler } from './handlers/AisHandler';
-import { MapsHandler } from './handlers/MapsHandler';
-import { PlayersHandler } from './handlers/PlayersHandler';
-import { ItemsHandler } from './handlers/ItemsHandler';
+import { ActionCollection } from './collections/ActionCollection';
+import { AisCollection } from './collections/AisCollection';
+import { MapsCollection } from './collections/MapsCollection';
+import { PlayersCollection } from './collections/PlayersCollection';
+import { ItemsCollection } from './collections/ItemsCollection';
 import { Server } from './Server';
 
 export class GameEventHandler {
-    public static mapsHandler: MapsHandler;
-    public static playersHandler: PlayersHandler;
-    public static aisHandler: AisHandler;
-    public static itemsHandler: ItemsHandler;
-    public static actionHandler: ActionHandler;
+    public static mapsCollection: MapsCollection;
+    public static playersCollection: PlayersCollection;
+    public static aisCollection: AisCollection;
+    public static itemsCollection: ItemsCollection;
+    public static actionCollection: ActionCollection;
 
     constructor() {
         // Init Handlers
-        GameEventHandler.mapsHandler = new MapsHandler();
-        GameEventHandler.playersHandler = new PlayersHandler();
-        GameEventHandler.aisHandler = new AisHandler();
-        GameEventHandler.itemsHandler = new ItemsHandler();
-        GameEventHandler.actionHandler = new ActionHandler();
+        GameEventHandler.mapsCollection = new MapsCollection();
+        GameEventHandler.playersCollection = new PlayersCollection();
+        GameEventHandler.aisCollection = new AisCollection();
+        GameEventHandler.itemsCollection = new ItemsCollection();
+        GameEventHandler.actionCollection = new ActionCollection();
     }
 
     public setEventHandlers() {
@@ -56,7 +56,7 @@ export class GameEventHandler {
         var socket: SocketIO.Socket = <any>this;
 
         util.log('Player has disconnected: ' + socket.id);
-        var player = GameEventHandler.playersHandler.getPlayerBySocketId(socket.id);
+        var player = GameEventHandler.playersCollection.getPlayerBySocketId(socket.id);
 
         //TODO understand and fix this bug
         if (!player) {
@@ -68,10 +68,10 @@ export class GameEventHandler {
         var playerGuid = player.guid;
 
         // Remove character from playersHandler
-        GameEventHandler.playersHandler.remove(playerGuid);
+        GameEventHandler.playersCollection.remove(playerGuid);
 
         // Broadcast removed player to connected socket clients on the same map
-        var playersOnSameMap = GameEventHandler.playersHandler.getAllOnMap(playerMapCoord);
+        var playersOnSameMap = GameEventHandler.playersCollection.getAllOnMap(playerMapCoord);
         playersOnSameMap.forEach((player: Player) => {
             Server.io.sockets.connected[player.socketId].emit('remove character', { guid: playerGuid });
         });
@@ -85,28 +85,28 @@ export class GameEventHandler {
         let newPlayer: Player = new Player(socket.id, { x: 7, y: 7 }, { x: 10, y: 10 }, 'knight');
 
         // Broadcast new player to connected socket clients
-        let playersOnSameMap = GameEventHandler.playersHandler.getPlayersOnMapWithIdDifferentFrom({ x: 10, y: 10 }, newPlayer.guid);
+        let playersOnSameMap = GameEventHandler.playersCollection.getPlayersOnMapWithIdDifferentFrom({ x: 10, y: 10 }, newPlayer.guid);
         playersOnSameMap.forEach((player: Player) => {
             Server.io.sockets.connected[player.socketId].emit('new character', newPlayer.toMessage());
         });
 
         // Compute ais on map
-        let charactersOnSameMap: Character[] = (<Character[]>playersOnSameMap).concat(<Character[]>GameEventHandler.aisHandler.getAll());
+        let charactersOnSameMap: Character[] = (<Character[]>playersOnSameMap).concat(<Character[]>GameEventHandler.aisCollection.getAll());
         let charactersOnSameMapJson: any[] = [];
         charactersOnSameMap.forEach((character: Character) => {
             charactersOnSameMapJson.push(character.toMessage());
         });
 
         // Compute items on map
-        let itemsOnSameMap = GameEventHandler.itemsHandler.getAll();
+        let itemsOnSameMap = GameEventHandler.itemsCollection.getAll();
         let itemsOnSameMapJson = _.map(itemsOnSameMap, item => item.toMessage());
 
         // Send existing characters & existing items & map to the new player
-        let map = GameEventHandler.mapsHandler.getMap({ x: 0, y: 0 });
+        let map = GameEventHandler.mapsCollection.getMap({ x: 0, y: 0 });
         socket.emit('init player', { player: newPlayer.toMessage(), characters: charactersOnSameMapJson, items: itemsOnSameMapJson, map: map })
 
         // Add new player to the players array
-        GameEventHandler.playersHandler.add(newPlayer);
+        GameEventHandler.playersCollection.add(newPlayer);
     }
 
     // Player has moved
@@ -114,7 +114,7 @@ export class GameEventHandler {
         var socket: SocketIO.Socket = <any>this;
 
         // Find player in array
-        var movedPlayer: Player = GameEventHandler.playersHandler.getPlayerBySocketId(socket.id);
+        var movedPlayer: Player = GameEventHandler.playersCollection.getPlayerBySocketId(socket.id);
 
         // Player should exist
         if (!movedPlayer) {
@@ -132,7 +132,7 @@ export class GameEventHandler {
         var socket: SocketIO.Socket = <any>this;
 
         // Find player in array
-        var attackingPlayer: Player = GameEventHandler.playersHandler.getPlayerBySocketId(socket.id);
+        var attackingPlayer: Player = GameEventHandler.playersCollection.getPlayerBySocketId(socket.id);
 
         // Player should exist
         if (!attackingPlayer) {
