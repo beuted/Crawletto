@@ -5,24 +5,34 @@ import { Map } from './Map';
 import { GameEventHandler } from './GameEventHandler';
 import { Server } from './Server';
 import { Element } from './Element';
-import { Item } from './Item';
+import { Item, Slot, Bonuses } from './Item';
 
 var config = require('../public/shared/config');
 
 class Inventory {
     public items: Item[];
 
-    public head: Item = null;
-    public body: Item = null;
-    public rightHand: Item = null;
-    public leftHand: Item = null;
+    private equiped: { [key: number]: Item };
 
     constructor() {
         this.items = [];
+        this.equiped = {};
     }
 
     public add(item: Item) {
         this.items.push(item);
+
+        // auto-equip if nothing
+        if (!this.equiped[item.slot]) {
+            this.equiped[item.slot] = item;
+        }
+    }
+
+    public getBonuses(): Bonuses {
+        return _.map<Item, Bonuses>(this.equiped, (i: Item) => i.bonuses)
+                .reduce<Bonuses>(
+                    (b1, b2) => { return { armorBonus: b1.armorBonus + b2.armorBonus, damageBonus: b1.damageBonus + b2.damageBonus } },
+                    { armorBonus: 0, damageBonus: 0 });
     }
 }
 
@@ -31,6 +41,8 @@ export class Character extends Element {
     public maxHp: number;
     public type: string;
     public inventory: Inventory;
+    public baseDamage: number;
+    public baseArmor: number;
 
     private turnAction: Action.IAction = null;
 
@@ -41,6 +53,9 @@ export class Character extends Element {
         this.hp = config.characters[type].maxHp;
         this.maxHp = config.characters[type].maxHp;
         this.inventory = new Inventory();
+
+        this.baseDamage = 0;
+        this.baseArmor = 0;
     }
 
     public toMessage(): { guid: string, gridPosition: Geo.IPoint, hp: number } {
@@ -66,5 +81,13 @@ export class Character extends Element {
     }
 
     public update() {
+    }
+
+    public getDamage() {
+        return this.baseDamage + this.inventory.getBonuses().damageBonus;
+    }
+
+    public getArmor() {
+        return this.baseArmor + this.inventory.getBonuses().armorBonus;
     }
 }

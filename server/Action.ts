@@ -77,7 +77,10 @@ export class Attack implements IAction {
                                         || <Character>GameEventHandler.aisCollection.get(this.attackedCharacterGuid);
 
         // Compute damage
-        var damage = 10;
+        var damage = 10 + char.getDamage() - attackedCharacter.getArmor();
+        if (damage < 0) {
+            damage = 0;
+        }
 
         if (!attackedCharacter) {
             console.error('Can\'t find attacked character: ' + this.attackedCharacterGuid);
@@ -86,6 +89,7 @@ export class Attack implements IAction {
 
         // Impact player aimed 
         attackedCharacter.hp -= damage;
+        console.log("[Action:Attack] damage dealt to " + attackedCharacter.guid + ": " + damage)
 
         // Notify players on the same map
         var playersToNotify: Player[] = GameEventHandler.playersCollection.getAllOnMap(char.mapPosition);
