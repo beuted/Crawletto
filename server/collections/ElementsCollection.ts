@@ -19,7 +19,7 @@ export class ElementsCollection<T extends Element> {
     }
 
     /// Find element by GUID
-    public get(guid: string): T {
+    public get(guid: string): T | null {
         for (var i = 0; i < this.elements.length; i++) {
             if (this.elements[i].guid == guid)
                 return this.elements[i];

@@ -36,7 +36,7 @@ class Inventory {
     }
 }
 
-export class Character extends Element {
+export abstract class Character extends Element {
     public hp: number;
     public maxHp: number;
     public type: string;
@@ -90,4 +90,7 @@ export class Character extends Element {
     public getArmor() {
         return this.baseArmor + this.inventory.getBonuses().armorBonus;
     }
+
+    // Implemented in implementing classes
+    public abstract reactToAttack(attackerGuid: string): void;
 }

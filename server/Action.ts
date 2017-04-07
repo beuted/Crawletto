@@ -89,6 +89,7 @@ export class Attack implements IAction {
 
         // Impact player aimed 
         attackedCharacter.hp -= damage;
+        attackedCharacter.reactToAttack(this.attackingCharacterGuid);
         console.log("[Action:Attack] damage dealt to " + attackedCharacter.guid + ": " + damage)
 
         // Notify players on the same map

@@ -18,4 +18,8 @@ export class Player extends Character {
         super.planAction(action);
         GameEventHandler.actionCollection.tryExecuteTurn()
     }
+
+    public reactToAttack(attackerGuid: string): void {
+        // Implemented in implementing classes
+    }
 }
