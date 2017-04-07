@@ -20,7 +20,8 @@
                 "fightUp": [28,29,30,31,28]
             },
             "animationFps": 16,
-            "animationTime": 250
+            "animationTime": 250,
+            "isAggressive": true
         },
         "monk": {
             "maxHp": 50,
@@ -37,7 +38,8 @@
                 "fightLeft": [4,5,6,7]
             },
             "animationFps": 16,
-            "animationTime": 250
+            "animationTime": 250,
+            "isAggressive": false
         },
         "knight": {
             "maxHp": 100,
@@ -54,7 +56,8 @@
                 "fightLeft": [4,5,6,7]
             },
             "animationFps": 16,
-            "animationTime": 250
+            "animationTime": 250,
+            "isAggressive": false
         }
     }
 }
