@@ -161,6 +161,10 @@ export class Pickup implements IAction {
 
     public execute(char: Character) {
         var item: Item = GameEventHandler.itemsCollection.get(this.objectGuid);
+        // In case sbdy else took the object before you
+        if (item === null)
+            return;
+
         char.inventory.add(item);
         GameEventHandler.itemsCollection.remove(this.objectGuid);
 

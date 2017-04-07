@@ -1,7 +1,8 @@
 import * as _ from 'lodash';
 import * as Geo from './utils/Geo';
-import { Move, Attack, IAction } from './Action';
+import { Move, Attack, Pickup, IAction } from './Action';
 import { Character } from './Character';
+import { Item } from './Item';
 import { GameEventHandler } from './GameEventHandler';
 
 var config = require('../public/shared/config');
@@ -20,12 +21,17 @@ export class Ai extends Character {
     }
 
     public calculateNextAction() {
-        let action: IAction;
-        if (this.isAggressive)
+        let action: IAction = null;
+        if (true) {
+            action = this.getGreedyAction();
+        }
+
+        if (action === null && this.isAggressive) {
             action = this.getAggressiveAction();
-        else
+        } else if (action === null){
             action = this.getPeacefulAction();
-            
+        }
+
         this.planAction(action);
     }
 
@@ -64,6 +70,34 @@ export class Ai extends Character {
         var XorY: boolean = !!Math.round(Math.random());
         var moveDirection = Math.floor(Math.random() * 3) - 1;
         return new Move({ x: this.gridPosition.x + (XorY ? moveDirection : 0), y: this.gridPosition.y + (!XorY ? moveDirection : 0) });
+    }
+
+    private getGreedyAction(): IAction | null {
+        let itemsOnMap = GameEventHandler.itemsCollection.getAllOnMap(this.mapPosition);
+        let minDist = Number.MAX_VALUE;
+        let closestItem: Item | null = null;
+        itemsOnMap.forEach((item: Item) => {
+            let dist = Geo.Tools.distance(item.gridPosition, this.gridPosition);
+            if (dist < minDist) {
+                minDist = dist;
+                closestItem = item;
+            }
+        });
+        
+        if (closestItem === null)
+            return null;
+
+        // If object is on your feets pick it up
+        if (Geo.Tools.areEqual(closestItem.gridPosition, this.gridPosition))
+            return new Pickup(closestItem.guid);
+        
+        let path: { x: number, y: number }[] | null = GameEventHandler.mapsCollection.getMap(this.mapPosition).findPath(this.gridPosition, closestItem.gridPosition);
+        // If we can't find a way to a player return null        
+        if (!path || !path[1])
+            return null;
+
+        // Else move to the nearest player
+        return new Move({ x: path[1].x, y: path[1].y });
     }
 
     private getTarget(): Character | null {

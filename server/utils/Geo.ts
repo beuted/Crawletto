@@ -13,6 +13,10 @@ export class Tools {
 		return Math.abs((a.x - b.x)) + Math.abs((a.y - b.y));
 	}
 
+    static areEqual(a: IPoint, b: IPoint) {
+        return a.x === b.x && a.y === b.y;
+    }
+
     // simple Bresenham implementation
     static getLine(A: IPoint, B: IPoint): IPoint[] {
         var linePoints: IPoint[] = [];
