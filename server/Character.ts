@@ -93,4 +93,13 @@ export abstract class Character extends Element {
 
     // Implemented in implementing classes
     public abstract reactToAttack(attackerGuid: string): void;
+
+    public die() {
+        this.inventory.items.forEach(item => {
+            item.mapPosition = this.mapPosition;
+            item.gridPosition = this.gridPosition;
+
+            GameEventHandler.itemsCollection.add(item);
+        });
+    }
 }

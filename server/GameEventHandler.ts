@@ -70,7 +70,7 @@ export class GameEventHandler {
         var playerMapCoord = player.mapPosition;
         var playerGuid = player.guid;
 
-        // Remove character from playersHandler
+        // Remove character from playersCollection
         GameEventHandler.playersCollection.remove(playerGuid);
 
         // Broadcast removed player to connected socket clients on the same map
@@ -148,7 +148,7 @@ export class GameEventHandler {
             return;
         }
 
-        // request move
+        // request attack
         attackingPlayer.planAction(new Action.Attack(msg.guid, attackingPlayer.guid));
     }
 

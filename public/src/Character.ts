@@ -64,9 +64,6 @@ export class Character extends Element {
         this.gridPosition = destPoint;
         this.sprite.x = destPoint.x * 32;
         this.sprite.y = destPoint.y * 32;
-
-        // TODO: b.jehanno (hack to move instant because I can't make it work without this T_T )
-        //GameContext.instance.add.tween(this.sprite).to({ x: destPoint.x * 32, y: destPoint.y * 32 }, 1, Phaser.Easing.Linear.None, true);
     }
 
     public changeDirection(vector: any) {

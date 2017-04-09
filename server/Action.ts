@@ -72,6 +72,7 @@ export class Attack implements IAction {
         this.attackingCharacterGuid = attackingGuid;
     }
 
+    //TODO (b.jehanno): Move socket emissions and block in this function to matching collections (same for other action classes) 
     public execute(char: Character) {
         var attackedCharacter: Character = <Character>GameEventHandler.playersCollection.get(this.attackedCharacterGuid)
                                         || <Character>GameEventHandler.aisCollection.get(this.attackedCharacterGuid);
@@ -90,7 +91,30 @@ export class Attack implements IAction {
         // Impact player aimed 
         attackedCharacter.hp -= damage;
         attackedCharacter.reactToAttack(this.attackingCharacterGuid);
-        console.log("[Action:Attack] damage dealt to " + attackedCharacter.guid + ": " + damage)
+        console.log('[Action:Attack] damage dealt to ' + attackedCharacter.guid + ': ' + damage);
+
+        // Remove characters with hp below 0 and drop its items on the floor
+        if (attackedCharacter.hp <= 0) {
+            var playersToNotify: Player[] = GameEventHandler.playersCollection.getAllOnMap(attackedCharacter.mapPosition);
+            playersToNotify.forEach(notifiedPlayer => {
+                Server.io.sockets.connected[notifiedPlayer.socketId].emit('remove character', { guid: attackedCharacter.guid });
+            });
+
+            attackedCharacter.die();
+
+            // Notify players on the same map
+            var playersToNotify: Player[] = GameEventHandler.playersCollection.getAllOnMap(char.mapPosition);
+            playersToNotify.forEach(notifiedPlayer => {
+                Server.io.sockets.connected[notifiedPlayer.socketId].emit('update items', {
+                    items: GameEventHandler.itemsCollection.toMessage()
+                });
+            });
+
+            if (GameEventHandler.playersCollection.get(this.attackedCharacterGuid) !== null)
+                GameEventHandler.playersCollection.remove(attackedCharacter.guid);
+            else
+                GameEventHandler.aisCollection.remove(attackedCharacter.guid);
+        }
 
         // Notify players on the same map
         var playersToNotify: Player[] = GameEventHandler.playersCollection.getAllOnMap(char.mapPosition);
@@ -101,7 +125,6 @@ export class Attack implements IAction {
                 hp: attackedCharacter.hp
             });
         });
-        
     }
 }
 
