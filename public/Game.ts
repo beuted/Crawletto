@@ -1,7 +1,9 @@
 import { GameContext } from './src/GameContext';
 import { BootState } from './src/states/BootState';
 import { LoadState } from './src/states/LoadState';
+import { MenuState } from './src/states/MenuState';
 import { MainState } from './src/states/MainState';
+import { AboutState } from './src/states/AboutState';
 
 export class Game {
     constructor(conf: any) {
@@ -12,6 +14,8 @@ export class Game {
 
         GameContext.instance.state.add('Boot', new BootState());
         GameContext.instance.state.add('Load', new LoadState());
+        GameContext.instance.state.add('Menu', new MenuState());
+        GameContext.instance.state.add('About', new AboutState());
         GameContext.instance.state.add('Main', new MainState());
 
         GameContext.instance.state.start('Boot');

@@ -1,19 +1,19 @@
 import { GameContext } from "../GameContext";
 
 export class BootState {
-    public preload() {
+    public preload(game: Phaser.Game) {
         console.debug('Entering BootState');
     }
 
-    public create() {
-        //GameContext.instance.plugins.add(Phaser.Plugin.Isometric, GameContext.instance);
-        GameContext.instance.physics.startSystem(Phaser.Physics.ARCADE);
-        //GameContext.instance.iso.anchor.setTo(0.5, 0.1);
+    public create(game: Phaser.Game) {
+        //game.plugins.add(Phaser.Plugin.Isometric, game);
+        game.physics.startSystem(Phaser.Physics.ARCADE);
+        //game.iso.anchor.setTo(0.5, 0.1);
 
-        GameContext.instance.state.start('Load');
+        game.state.start('Load');
     }
 
-    public update() { }
+    public update(game: Phaser.Game) { }
 
-    public render() { }
+    public render(game: Phaser.Game) { }
 }

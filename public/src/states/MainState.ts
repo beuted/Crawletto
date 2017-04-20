@@ -3,29 +3,30 @@ import { Map } from '../Map';
 import { Character } from '../Character';
 
 export class MainState {
-    public preload() {
+    public preload(game: Phaser.Game) {
         console.debug('Entering MainState');
     }
 
-    public create() {
+    public create(game: Phaser.Game) {
         // init GameContext (map, keyboard controls, socketManager, remote players, ...TODO)
         GameContext.create();
 
-        this.initKeyboardInteraction();
+        this.initKeyboardInteraction(game);
         this.initMouseInteraction();
     }
 
-    public update() {
+    public update(game: Phaser.Game) {
         GameContext.update();
     }
 
-    public render() {
+    public render(game: Phaser.Game) {
         if (GameContext.debugActivated) {
             Map.sortedGroup.forEach((tile: Phaser.Sprite) => {
-                GameContext.instance.debug.body(tile, 'rgba(189, 221, 235, 0.6)', false);
+                game.debug.body(tile, 'rgba(189, 221, 235, 0.6)', false);
+
             }, this);
-            GameContext.instance.debug.text(!!GameContext.instance.time.fps ? GameContext.instance.time.fps + ' fps' : '--', 2, 14, "#a7aebe");
-            GameContext.instance.debug.cameraInfo(GameContext.instance.camera, 32, 32);
+            game.debug.text(!!game.time.fps ? game.time.fps + ' fps' : '--', 2, 14, "#a7aebe");
+            game.debug.cameraInfo(game.camera, 32, 32);
         }
     }
 
@@ -64,8 +65,8 @@ export class MainState {
         GameContext.socketManager.requestCharacterPickup(items[0].guid);
     }
 
-    private initKeyboardInteraction() {
-        GameContext.instance.input.keyboard.addKeyCapture([
+    private initKeyboardInteraction(game: Phaser.Game) {
+        game.input.keyboard.addKeyCapture([
             Phaser.Keyboard.D,
             Phaser.Keyboard.LEFT,
             Phaser.Keyboard.RIGHT,
@@ -75,33 +76,33 @@ export class MainState {
             Phaser.Keyboard.COMMA
         ]);
 
-        var leftKey = GameContext.instance.input.keyboard.addKey(Phaser.Keyboard.LEFT);
+        var leftKey = game.input.keyboard.addKey(Phaser.Keyboard.LEFT);
         leftKey.onDown.add(() => this.movePlayer(new Phaser.Point(-1, 0)));
 
-        var rightKey = GameContext.instance.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
+        var rightKey = game.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
         rightKey.onDown.add(() => this.movePlayer(new Phaser.Point(1, 0)));
 
-        var upKey = GameContext.instance.input.keyboard.addKey(Phaser.Keyboard.UP);
+        var upKey = game.input.keyboard.addKey(Phaser.Keyboard.UP);
         upKey.onDown.add(() => this.movePlayer(new Phaser.Point(0, -1)));
 
-        var downKey = GameContext.instance.input.keyboard.addKey(Phaser.Keyboard.DOWN);
+        var downKey = game.input.keyboard.addKey(Phaser.Keyboard.DOWN);
         downKey.onDown.add(() => this.movePlayer(new Phaser.Point(0, 1)));
 
         // Press "spacebar" to attack in front of you
-        var spacebarKey = GameContext.instance.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+        var spacebarKey = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
         spacebarKey.onDown.add(() => this.fightCharacter());
 
         // press "," to pick up an object
-        var spacebarKey = GameContext.instance.input.keyboard.addKey(Phaser.Keyboard.COMMA);
+        var spacebarKey = game.input.keyboard.addKey(Phaser.Keyboard.COMMA);
         spacebarKey.onDown.add(() => this.pickUpObject());
 
         // press "D" to enter debugmode
-        var dKey = GameContext.instance.input.keyboard.addKey(Phaser.Keyboard.D);
+        var dKey = game.input.keyboard.addKey(Phaser.Keyboard.D);
         dKey.onDown.add(() => GameContext.debugActivated = !GameContext.debugActivated);
     }
 
     private initMouseInteraction() {
         // Capture click
-        //GameContext.instance.input.onUp.add(() => this.movePlayer(GameContext.map.selectedTileGridCoord), this);
+        //game.input.onUp.add(() => this.movePlayer(GameContext.map.selectedTileGridCoord), this);
     }
 }
