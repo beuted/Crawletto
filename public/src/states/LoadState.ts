@@ -1,4 +1,6 @@
-export class LoadState
+import { State } from './State';
+
+export class LoadState extends State
 {
     public preload(game: Phaser.Game) {
         console.debug('Entering LoadState');
@@ -17,9 +19,9 @@ export class LoadState
         game.state.start('Menu');
     }
 
-    public update() {}
+    public update(game: Phaser.Game) {}
 
-    public render() {}
+    public render(game: Phaser.Game) {}
 
     private preloadAssets(game: Phaser.Game) {
         game.load.json('map.0.0', 'maps/map.0.0.json');

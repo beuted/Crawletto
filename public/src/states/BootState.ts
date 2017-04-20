@@ -1,6 +1,6 @@
-import { GameContext } from "../GameContext";
+import { State } from './State';
 
-export class BootState {
+export class BootState extends State {
     public preload(game: Phaser.Game) {
         console.debug('Entering BootState');
     }

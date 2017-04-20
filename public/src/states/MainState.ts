@@ -1,8 +1,9 @@
+import { State } from './State';
 import { GameContext } from '../GameContext';
 import { Map } from '../Map';
 import { Character } from '../Character';
 
-export class MainState {
+export class MainState extends State {
     public preload(game: Phaser.Game) {
         console.debug('Entering MainState');
     }
