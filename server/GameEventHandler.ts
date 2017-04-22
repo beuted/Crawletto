@@ -93,15 +93,17 @@ export class GameEventHandler {
             Server.io.sockets.connected[player.socketId].emit('new character', newPlayer.toMessage());
         });
 
+        let aisOnSameMap = GameEventHandler.aisCollection.getAllOnMap({ x: 10, y: 10 });
+
         // Compute ais on map
-        let charactersOnSameMap: Character[] = (<Character[]>playersOnSameMap).concat(<Character[]>GameEventHandler.aisCollection.getAll());
+        let charactersOnSameMap: Character[] = (<Character[]>playersOnSameMap).concat(<Character[]>aisOnSameMap);
         let charactersOnSameMapJson: any[] = [];
         charactersOnSameMap.forEach((character: Character) => {
             charactersOnSameMapJson.push(character.toMessage());
         });
 
         // Compute items on map
-        let itemsOnSameMap = GameEventHandler.itemsCollection.getAll();
+        let itemsOnSameMap = GameEventHandler.itemsCollection.getAllOnMap({ x: 10, y: 10 });
         let itemsOnSameMapJson = _.map(itemsOnSameMap, item => item.toMessage());
 
         // Send existing characters & existing items & map to the new player
