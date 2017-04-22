@@ -10,6 +10,8 @@ export class AisCollection extends CharactersCollection<Ai> {
         this.elements.push(new Ai({ x: 10, y: 15 }, { x: 10,  y: 10  }, 'zombie'));
         this.elements.push(new Ai({ x: 15, y: 15 }, { x: 10,  y: 10  }, 'zombie'));
         this.elements.push(new Ai({ x: 15, y: 14 }, { x: 10,  y: 10  }, 'monk'));
+        this.elements.push(new Ai({ x: 15, y: 14 }, { x: 10,  y: 9   }, 'monk'));
+        this.elements.push(new Ai({ x: 15, y: 14 }, { x: 9,   y: 10  }, 'monk'));
     }
 
     public calculateNextActions() {
