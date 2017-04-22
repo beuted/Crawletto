@@ -9,4 +9,6 @@
         "public/**/*.js.map": true,
         "public_iso/": true
     }
+,
+"typescript.tsdk": "./node_modules/typescript/lib"
 }
