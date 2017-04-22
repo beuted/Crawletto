@@ -122,14 +122,14 @@ export class SocketManager {
 
     // Attack character
     private onAttackCharacter(data: { attackedGuid: string, attackingGuid: string, hp: number}) {
-        console.debug('Character attacked : ' + data.attackingGuid);
+        console.debug('Character attacked : ' + data.attackingGuid + ', final hp: ' + data.hp);
         var attackedlayer = GameContext.remoteCharactersCollection.get(data.attackedGuid);
         var attackingPlayer = GameContext.remoteCharactersCollection.get(data.attackingGuid);
 
         var vector = Phaser.Point.subtract(attackedlayer.gridPosition, attackingPlayer.gridPosition)
         attackingPlayer.changeDirection(vector);
         attackingPlayer.attack();
-        attackedlayer.hp -= data.hp;
+        attackedlayer.hp = data.hp;
     }
 
     // Update items on map

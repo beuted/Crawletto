@@ -3,6 +3,7 @@ import { Map } from './Map';
 import { RemoteCharactersCollection } from './RemoteCharactersCollection';
 import { RemoteItemsCollection } from './RemoteItemsCollection';
 import { SocketManager } from './SocketManager';
+import { Gui } from './Gui';
 
 export interface IConfig {
     map: {
@@ -40,6 +41,7 @@ export class GameContext {
     static map: Map;
     static socketManager: SocketManager;
     static config: IConfig;
+    static gui: Gui;
 
     static debugActivated: boolean;
 
@@ -48,6 +50,7 @@ export class GameContext {
         if (!this.map) this.map = new Map();
         if (!this.remoteCharactersCollection) this.remoteCharactersCollection = new RemoteCharactersCollection();
         if (!this.remoteItemsCollection) this.remoteItemsCollection = new RemoteItemsCollection();
+        if (!this.gui) this.gui = new Gui(GameContext.instance);
 
         // TODO: (wip) Add loader callbacks
         /*        GameContext.instance.load.onLoadComplete.add(() => {
@@ -60,5 +63,6 @@ export class GameContext {
     static update() {
         // update the map
         this.map.update();
+        this.gui.update(GameContext.instance, GameContext.player);
     }
 }
