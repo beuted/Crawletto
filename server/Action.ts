@@ -76,16 +76,15 @@ export class Attack implements IAction {
     public execute(char: Character) {
         var attackedCharacter: Character = <Character>GameEventHandler.playersCollection.get(this.attackedCharacterGuid)
                                         || <Character>GameEventHandler.aisCollection.get(this.attackedCharacterGuid);
+        if (!attackedCharacter) {
+            console.error('Can\'t find attacked character: ' + this.attackedCharacterGuid);
+            return;
+        }
 
         // Compute damage
         var damage = 10 + char.getDamage() - attackedCharacter.getArmor();
         if (damage < 0) {
             damage = 0;
-        }
-
-        if (!attackedCharacter) {
-            console.error('Can\'t find attacked character: ' + this.attackedCharacterGuid);
-            return;
         }
 
         // Impact player aimed 
